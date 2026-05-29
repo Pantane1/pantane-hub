@@ -112,7 +112,7 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, provider }
 
   const handleDirectPay = async () => {
     if (provider === SupportProvider.BUymeACoffee) {
-      window.open(`https://buymeacoffee.com/Pantane4`, '_blank');
+      window.open(`buymeacoffee.com/Pantane4`, '_blank');
       onClose();
     } else if (provider === SupportProvider.Paystack) {
       if (typeof PaystackPop !== 'undefined') {
