@@ -1,15 +1,12 @@
-
 import React, { useState } from 'react';
 import { CoffeeIcon, WalletIcon, MpesaIcon } from '../components/Icons';
 import SupportModal from '../components/SupportModal';
+import MpesaModal from '../components/MpesaModal';
 import { SupportProvider } from '../types';
 
 const Support: React.FC = () => {
   const [selectedProvider, setSelectedProvider] = useState<SupportProvider | null>(null);
-
-  const handleMpesaClick = () => {
-    window.open('https://lipana.dev/pay/pantane', '_blank');
-  };
+  const [mpesaOpen, setMpesaOpen] = useState(false);
 
   return (
     <div className="fade-in max-w-6xl mx-auto space-y-12">
@@ -21,7 +18,7 @@ const Support: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-        {/* Buy Me a Coffee */}
+        {/* Buy Me a Coffee — unchanged */}
         <button
           onClick={() => setSelectedProvider(SupportProvider.BUymeACoffee)}
           className="group bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all flex flex-col items-center text-center space-y-6"
@@ -38,9 +35,9 @@ const Support: React.FC = () => {
           </div>
         </button>
 
-        {/* Lipa na M-Pesa - Direct Redirect */}
+        {/* Lipa na M-Pesa — now opens MpesaModal */}
         <button
-          onClick={handleMpesaClick}
+          onClick={() => setMpesaOpen(true)}
           className="group bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all flex flex-col items-center text-center space-y-6"
         >
           <div className="w-20 h-20 bg-[#28a745] rounded-3xl flex items-center justify-center text-white shadow-xl group-hover:rotate-6 transition-transform">
@@ -55,7 +52,7 @@ const Support: React.FC = () => {
           </div>
         </button>
 
-        {/* PayPal */}
+        {/* PayPal — unchanged */}
         <button
           onClick={() => setSelectedProvider(SupportProvider.PayPal)}
           className="group bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all flex flex-col items-center text-center space-y-6"
@@ -72,7 +69,7 @@ const Support: React.FC = () => {
           </div>
         </button>
 
-        {/* Paystack */}
+        {/* Paystack — unchanged */}
         <button
           onClick={() => setSelectedProvider(SupportProvider.Paystack)}
           className="group bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all flex flex-col items-center text-center space-y-6"
@@ -90,10 +87,17 @@ const Support: React.FC = () => {
         </button>
       </div>
 
+      {/* Existing modal for BuyMeACoffee, PayPal, Paystack — unchanged */}
       <SupportModal
         isOpen={!!selectedProvider}
         onClose={() => setSelectedProvider(null)}
         provider={selectedProvider}
+      />
+
+      {/* New M-Pesa STK Push modal */}
+      <MpesaModal
+        isOpen={mpesaOpen}
+        onClose={() => setMpesaOpen(false)}
       />
     </div>
   );

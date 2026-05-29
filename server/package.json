@@ -1,0 +1,20 @@
+{
+  "name": "pantane-hub-server",
+  "version": "1.0.0",
+  "description": "Pantane Hub backend - Lipana STK Push",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@lipana/sdk": "^1.0.2",
+    "axios": "^1.7.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
