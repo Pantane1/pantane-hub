@@ -33,7 +33,7 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, provider }
       script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
       document.body.appendChild(script);
     });
-  );
+  };
 
   useEffect(() => {
     if (!isOpen || !provider) return;
@@ -48,8 +48,10 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, provider }
           if (paypalContainerRef.current) {
             paypalContainerRef.current.innerHTML = '';
           }
-          // PLACEHOLDER: Replace client-id=YOUR_LIVE_PAYPAL_CLIENT_ID in the URL string below when you get your live key
-          await loadScript('https://www.paypal.com/sdk/js?client-id=YOUR_LIVE_PAYPAL_CLIENT_ID&currency=USD&components=buttons', 'paypal-sdk');
+          
+          // Pulls the Client ID directly from your secure .env file
+          const paypalClientId = import.meta.env.VITE_PAYPAL_LIVE_CLIENT_ID || 'live';
+          await loadScript(`https://www.paypal.com/sdk/js?client-id=${paypalClientId}&currency=USD&components=buttons`, 'paypal-sdk');
           
           if (!isMounted) return;
 
@@ -79,11 +81,11 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, provider }
               },
               onError: (err: any) => {
                 console.error("PayPal Error:", err);
-                setError("PayPal script validation issue or transaction cancelled.");
+                setError("Transaction could not be completed.");
               }
             }).render(paypalContainerRef.current);
           } else {
-            throw new Error("PayPal object not found");
+            throw new Error("PayPal SDK failed to map to global namespace.");
           }
         } else if (provider === SupportProvider.Paystack) {
           await loadScript('https://js.paystack.co/v2/inline.js', 'paystack-sdk');
@@ -94,7 +96,7 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, provider }
       } catch (err: any) {
         console.error(err);
         if (isMounted) {
-          setError(err.message || "Failed to initialize payment gateway.");
+          setError(err.message || "Failed to initialize payment interface.");
         }
       }
     };
@@ -116,10 +118,10 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, provider }
       if (typeof PaystackPop !== 'undefined') {
         const paystack = new PaystackPop();
         paystack.newTransaction({
-          // PLACEHOLDER: Replace with your actual Live Public Key from Paystack Dashboard
-          key: 'YOUR_LIVE_PAYSTACK_PUBLIC_KEY',
+          // Pulls your live Paystack public key dynamically from .env
+          key: import.meta.env.VITE_PAYSTACK_LIVE_PUBLIC_KEY,
           email: 'pantane254@gmail.com',
-          amount: Math.round(parseFloat(amount) * 100), // Converts KSh to cents safely
+          amount: Math.round(parseFloat(amount) * 100), // Converts KSh to subunits (cents) safely
           currency: 'KES',
           metadata: {
             custom_fields: [
@@ -135,17 +137,22 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, provider }
             onClose();
           },
           onCancel: () => {
-            console.log("Paystack widget closed.");
+            console.log("Paystack interface dismissed.");
           }
         });
       } else {
-        alert("Paystack secure engine is still loading. Please try again in a moment.");
+        alert("Paystack engine is initializing. Please try again.");
       }
     } else if (provider === SupportProvider.MPESA) {
       try {
-        // PLACEHOLDER: Replace this target URL with your real backend Express payment endpoint
-        const backendEndpoint = 'https://your-backend-server.com/api/v1/payments/stkpush';
+        // Pulls your Express server URL dynamically from .env
+        const backendEndpoint = import.meta.env.VITE_MPESA_BACKEND_URL;
         
+        if (!backendEndpoint) {
+          alert("M-Pesa backend URL gateway context is unconfigured.");
+          return;
+        }
+
         const response = await fetch(backendEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -157,14 +164,14 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, provider }
         });
         const result = await response.json();
         if (result.success || result.ResponseCode === "0") {
-          alert("STK Push request initialized successfully! Check your phone to complete the transaction.");
+          alert("STK Push triggered successfully! Check your phone for the PIN prompt.");
           onClose();
         } else {
-          alert(result.message || "Could not execute STK Push. Double check phone format.");
+          alert(result.message || "Failed to process STK Push request.");
         }
       } catch (err) {
-        console.error("M-Pesa automation pipeline error:", err);
-        alert("Failed to reach payment gateway orchestration layer.");
+        console.error("M-Pesa execution error:", err);
+        alert("Could not reach your automated billing server execution layer.");
       }
     }
   };

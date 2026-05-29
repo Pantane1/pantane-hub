@@ -33,7 +33,7 @@ const Support: React.FC = () => {
           </div>
         </button>
 
-        {/* M-Pesa Hooked to Native Modal Component Flow */}
+        {/* M-Pesa Integration Wrapper */}
         <button
           onClick={() => setSelectedProvider(SupportProvider.MPESA)}
           className="group bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all flex flex-col items-center text-center space-y-6"
