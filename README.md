@@ -94,7 +94,7 @@ This project uses **ES Modules** and modern web standards. Because of browser se
 
 ## 🤝 Connect With Me
 
-*   **[Pantane Hub](https://nf.d.netlify.app)**
+*   **[Pantane Hub](https://www.pantane.is-a.dev/#contact)**
 
 
 ---
