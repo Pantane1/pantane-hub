@@ -7,18 +7,24 @@ const webhookRoute = require('./routes/webhook');
 
 const app = express();
 
-// Allow requests from your Vercel frontend
-const allowedOrigins = [
-  process.env.FRONTEND_URL, // e.g. https://pantane-hub.vercel.app
-  'http://localhost:5173',   // local dev
-];
-
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (Postman, curl, etc.)
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow no-origin requests (Postman, curl)
+    if (!origin) return callback(null, true);
+
+    const allowed = [
+      process.env.FRONTEND_URL,
+      // Also allow www. and non-www. variants automatically
+      process.env.FRONTEND_URL?.replace('https://www.', 'https://'),
+      process.env.FRONTEND_URL?.replace('https://', 'https://www.'),
+      'http://localhost:3000',
+      'http://localhost:5173',
+    ].filter(Boolean);
+
+    if (allowed.includes(origin)) {
       callback(null, true);
     } else {
+      console.warn(`CORS blocked origin: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
