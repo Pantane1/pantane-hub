@@ -10,9 +10,9 @@
 
 > **Where curiosity meets clean systems.**
 
-**Pantane Hub** is a high-performance, minimalist professional portfolio built for **[W.Martin](https://nf-d.netlify.app/)**. It serves as a central showcase for software projects, professional connections, and technical explorations.
+**Pantane Hub** is a high-performance, minimalist professional portfolio built for **[W.Martin](https://www.pantane.is-a.dev/contact)**. It serves as a central showcase for software projects, professional connections, and technical explorations.
 
-[**Explore the Live Site ↗**](https://wamuhu-martin.vercel.app/)
+[**Explore the Live Site ↗**](https://www.pantane.is-a.dev/)
 
 ---
 
