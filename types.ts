@@ -1,6 +1,3 @@
-
-import React from 'react';
-
 export interface GithubRepo {
   id: number;
   name: string;
@@ -15,7 +12,6 @@ export interface GithubRepo {
 
 export interface SocialLink {
   platform: string;
-  icon: React.ReactNode;
   username: string;
   url: string;
   color: string;
@@ -23,7 +19,7 @@ export interface SocialLink {
 
 export enum SupportProvider {
   BUymeACoffee = 'Buy Me a Coffee',
-  PayPal = 'PayPal',
-  Paystack = 'Paystack',
-  MPesa = 'Lipa na M-Pesa'
+  PayPal       = 'PayPal',
+  Paystack     = 'Paystack',
+  MPesa        = 'Lipa na M-Pesa',
 }
