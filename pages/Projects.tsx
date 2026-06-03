@@ -11,8 +11,27 @@ const ProjectCard: React.FC<{ repo: GithubRepo }> = ({ repo }) => (
         loading="lazy"
         decoding="async"
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-        onError={(e) => { (e.target as HTMLImageElement).src = `https://picsum.photos/400/225?random=${repo.id}`; }}
-      />
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.style.display = 'none';
+          const parent = target.parentElement;
+          if (!parent || parent.querySelector('.fallback-card')) return;
+          const lang = repo.language || 'Code';
+          const desc = repo.description
+            ? repo.description.slice(0, 72) + (repo.description.length > 72 ? '…' : '')
+            : 'A project built with precision and care.';
+         const fallback = document.createElement('div');
+         fallback.className = 'fallback-card';
+         fallback.style.cssText = 'width:100%;height:100%;background:#0f172a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px;position:relative;box-sizing:border-box;';
+         fallback.innerHTML = `
+           <div style="position:absolute;top:10px;right:12px;background:rgba(255,255,255,0.08);border-radius:6px;padding:2px 8px;font-size:10px;color:#94a3b8;font-weight:700;letter-spacing:0.05em;">${lang}</div>
+           <div style="width:34px;height:34px;background:#1e293b;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">⚡</div>
+           <p style="margin:0;font-size:13px;font-weight:700;color:#f1f5f9;text-align:center;font-family:Syne,sans-serif;">${repo.name}</p>
+           <p style="margin:0;font-size:10px;color:#64748b;text-align:center;line-height:1.5;max-width:200px;">${desc}</p>
+        `;
+        parent.appendChild(fallback);
+      }}
+     />
       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
         <a
           href={repo.html_url}
