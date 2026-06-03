@@ -50,82 +50,8 @@
 | **Payments** | M-Pesa via Lipana, PayPal, Paystack |
 | **Email** | EmailJS |
 | **Data** | GitHub REST API |
-| **Deployment** | Vercel (frontend) + Render (backend) |
+| **Hiosted-On** | Vercel |
 
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18+
-- npm 9+
-
-### Local Development
-
-1. **Clone the repo:**
-   ```bash
-   git clone https://github.com/pantane1/pantane-hub.git
-   cd pantane-hub
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables:**
-   ```bash
-   cp .env.example .env
-   # Fill in your values
-   ```
-
-4. **Start the dev server:**
-   ```bash
-   npm run dev
-   ```
-   Site runs at `http://localhost:3000`
-
-### Backend (separate)
-
-```bash
-cd server
-npm install
-cp .env.example .env
-# Fill in Lipana keys and FRONTEND_URL
-node index.js
-```
-
-### Production Build
-
-```bash
-npm run build
-```
-
----
-
-## 🔑 Environment Variables
-
-### Frontend (`.env`)
-
-| Variable | Description |
-| :--- | :--- |
-| `VITE_API_URL` | Your Render backend URL |
-| `VITE_EMAILJS_SERVICE_ID` | EmailJS service ID |
-| `VITE_EMAILJS_TEMPLATE_ID` | EmailJS template ID |
-| `VITE_EMAILJS_PUBLIC_KEY` | EmailJS public key |
-| `VITE_GITHUB_TOKEN` | GitHub fine-grained token (optional, prevents rate limiting) |
-
-### Backend (`server/.env`)
-
-| Variable | Description |
-| :--- | :--- |
-| `LIPANA_SECRET_KEY` | Lipana API secret key |
-| `LIPANA_WEBHOOK_SECRET` | Lipana webhook signing secret |
-| `FRONTEND_URL` | Your Vercel frontend URL (no trailing slash) |
-| `PORT` | Server port (default: 3000) |
-| `NODE_ENV` | `production` or `development` |
-
----
 
 ## 📂 Structure
 
