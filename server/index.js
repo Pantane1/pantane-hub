@@ -20,8 +20,7 @@ app.use(cors({
       'http://localhost:3000',
       'http://localhost:5173',
     ].filter(Boolean);
-    console.log('Allowed origins:', allowed);
-    console.log('Incoming origin:', origin); 
+    
 
     if (allowed.includes(origin)) {
       callback(null, true);
