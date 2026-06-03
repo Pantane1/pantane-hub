@@ -34,7 +34,7 @@ const Home: React.FC = () => {
             Welcome to <span className="text-blue-600">Pantane Hub.</span>
           </h1>
           <p className="text-xl text-slate-600 leading-relaxed max-w-2xl">
-            I'm W.Martin — driven by curiosity, clean systems, and building things that actually work.
+            I'm Pantane — driven by curiosity, clean systems, and building things that actually work.
             This space is where I share what I’m building, what I’m learning, and what I’m exploring next.
             Feel free to look around, check out my projects, connect with me, or reach out if you'd like us to build something together.
           </p>
