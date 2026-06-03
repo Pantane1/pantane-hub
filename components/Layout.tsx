@@ -29,11 +29,6 @@ const TechMarquee = () => {
   ];
   return (
     <div className="w-full bg-white py-5 border-y border-slate-100 overflow-hidden relative">
-      <style>{`
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .marquee-track { display: flex; width: max-content; animation: marquee 50s linear infinite; }
-        .marquee-track:hover { animation-play-state: paused; }
-      `}</style>
       <div className="marquee-track">
         {[...techs, ...techs].map((t, i) => (
           <div key={i} className="flex items-center space-x-2.5 px-7 group">
