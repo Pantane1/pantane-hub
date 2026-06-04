@@ -1,0 +1,16 @@
+name: Greetings
+
+on: [pull_request_target, issues]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: "Hey! Thanks for opening an issue on Pantane Hub. I'll look into it and get back to you shortly. — Pantane 🚀"
+        pr-message: "Thanks for the pull request! I'll review it as soon as possible. — Pantane 🚀"
