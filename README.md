@@ -4,50 +4,38 @@
 </h1>
 
 [![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://reactjs.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite)](https://vitejs.dev/)
 [![Status](https://img.shields.io/badge/Status-Live-success)](#)
 
-> **Where curiosity meets clean systems.**
+> **Built different. Built in Kenya.**
 
-**Pantane Hub** is a high-performance, minimalist professional portfolio built for **[W.Martin](https://www.pantane.is-a.dev/contact)**. It serves as a central showcase for software projects, professional connections, and technical explorations.
+**Pantane Hub** is a high-performance professional portfolio built by **[Pantane](https://www.pantane.is-a.dev)**. A central showcase for software projects, professional connections, and technical explorations — with deep integrations for the East African market.
 
-[**Explore the Live Site ↗**](https://www.pantane.is-a.dev/)
+[**Explore the Live Site ↗**](https://www.pantane.is-a.dev)
 
 ---
 
 ## ✨ Key Features
 
-*   **⚡ Real-Time GitHub Sync:** Automatically fetches and displays repositories using the GitHub REST API. Includes dynamic topic chips and language detection.
-*   **💳 Integrated Payment Ecosystem:** A multi-channel support system for global and local transactions featuring direct M-Pesa integration.
-*   **💨 Optimized UX:** Streamlined navigation with a "Direct-to-Action" philosophy, especially for local mobile payments.
-*   **🛡️ Resilient Architecture:** Custom-built script loading logic to prevent crashes in restricted environments and handle SDK failures (like PayPal/Paystack) gracefully.
-*   **📱 Mobile-First Design:** Fully responsive layout with fluid animations and a high-contrast, professional "Bright Mode" aesthetic.
-*   **🎨 Custom Branding:** Unique SVG iconography and consistent design language built from scratch.
+- **⚡ Real-Time GitHub Sync** — Automatically fetches and displays repositories using the GitHub REST API, with dynamic topic chips, language detection, and branded fallback cards.
+- **💳 Multi-Channel Payment Ecosystem** — Support system featuring direct M-Pesa STK Push, PayPal, Paystack, and Buy Me a Coffee.
+- **🛣️ Clean URL Routing** — Powered by React Router v6 with proper browser history (`/projects`, `/contact`, `/support`) — no hash URLs.
+- **📱 Mobile-First Design** — Fully responsive with a hamburger menu, fluid animations, and a clean bright aesthetic.
+- **🎨 Custom Branding** — Unique SVG iconography, consistent design language, and branded project card fallbacks.
+- **🛡️ Production-Ready** — CORS-secured backend, webhook signature verification, environment-based config, and Vercel SPA rewrites.
 
 ---
 
-## 💰 Integrated Payment Systems
+## 💰 Payment Integrations
 
-Pantane Hub features a robust, multi-tier payment integration designed to facilitate support from anywhere in the world, with specific optimizations for the Kenyan and African markets.
-
-### 1. Lipa na M-Pesa (Frictionless Local Support)
-*   **Integration:** Direct link via [lipana.dev](https://lipana.dev/pay/pantanehub).
-*   **UX:** One-click "Support Now" functionality that bypasses intermediate forms for the fastest possible mobile payment experience in Kenya.
-*   **Purpose:** Specifically designed for the 254 market to allow instant support via STK push or till number.
-
-### 2. PayPal (Global Transactions)
-*   **Integration:** Official PayPal JavaScript SDK.
-*   **UX:** Interactive "Smart Payment Buttons" for Credit/Debit cards.
-*   **Resilience:** Includes an automated **Direct Pay Fallback**. If the SDK is blocked or restricted, the system generates a secure legacy PayPal checkout link.
-
-### 3. Paystack (Regional Africa)
-*   **Integration:** Paystack Inline JS.
-*   **Market Focus:** Preferred for secure card and mobile money transactions across the African continent.
-
-### 4. Buy Me a Coffee (Social Support)
-*   **Integration:** Lightweight URI-based redirection.
-*   **Purpose:** Provides a non-formal, social way for supporters to contribute with minimal friction.
+| Method | Provider | Market |
+| :--- | :--- | :--- |
+| **Lipa na M-Pesa** | [Lipana](https://lipana.dev) — STK Push | Kenya 🇰🇪 |
+| **PayPal** | PayPal SDK | Global 🌍 |
+| **Paystack** | Paystack Inline | Africa 🌍 |
+| **Buy Me a Coffee** | URI redirect | Global 🌍 |
 
 ---
 
@@ -55,59 +43,61 @@ Pantane Hub features a robust, multi-tier payment integration designed to facili
 
 | Layer | Technology |
 | :--- | :--- |
-| **Frontend** | React 19 (Functional Components & Hooks) |
-| **Styling** | Tailwind CSS (Utility-first design) |
-| **Logic** | TypeScript (Type-safe systems) |
+| **Frontend** | React 19, TypeScript, Vite 6 |
+| **Styling** | Tailwind CSS 3 (PostCSS — no CDN) |
+| **Routing** | React Router v6 (BrowserRouter) |
+| **Backend** | Node.js, Express — deployed on Render |
+| **Payments** | M-Pesa via Lipana, PayPal, Paystack |
+| **Email** | EmailJS |
 | **Data** | GitHub REST API |
-| **Fintech** | M-Pesa (via lipana.dev), PayPal SDK, Paystack |
+| **Hiosted-On** | Vercel |
 
----
-
-## 🚀 Getting Started
-
-This project uses **ES Modules** and modern web standards. Because of browser security policies regarding modules, you cannot simply open the `index.html` file by double-clicking it.
-
-### Local Development
-1.  **Clone the repo:**
-    ```bash
-    git clone https://github.com/pantane1/pantane-hub.git
-    ```
-2.  **Run a local server:**
-    *   If using **VS Code**, install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension and click "Go Live".
-    *   Or use Python: `python -m http.server`
-    *   Or use Node: `npx serve .`
-
----
 
 ## 📂 Structure
 
 ```text
-├── components/       # Reusable UI (Header, Icons, SupportModal)
-├── pages/            # Page-level components (Home, Projects, Support)
-├── types.ts          # TypeScript interfaces & Enums
-├── App.tsx           # Main router & page controller
-├── index.html        # Main entry point & script map
-└── index.tsx         # React mounting logic
+pantane-hub/
+├── components/
+│   ├── Layout.tsx        # Header, Footer, TechMarquee
+│   ├── Icons.tsx         # Custom SVG icon components
+│   ├── MpesaModal.tsx    # STK Push modal
+│   ├── SupportModal.tsx  # PayPal / Paystack / Coffee modal
+│   └── MouseEffect.tsx   # Cursor effect
+├── pages/
+│   ├── Home.tsx          # Landing page
+│   ├── Projects.tsx      # GitHub repos grid
+│   ├── Socials.tsx       # Social links
+│   ├── Contact.tsx       # EmailJS contact form
+│   └── Support.tsx       # Payment methods
+├── server/
+│   ├── index.js          # Express server + CORS
+│   └── routes/
+│       ├── stk.js        # M-Pesa STK Push route
+│       └── webhook.js    # Lipana webhook handler
+├── types.ts              # TypeScript interfaces & enums
+├── App.tsx               # React Router routes
+├── index.tsx             # React entry point
+├── index.css             # Tailwind directives + global styles
+├── tailwind.config.js    # Tailwind content paths
+├── vite.config.ts        # Vite config
+└── vercel.json           # SPA rewrite rules
 ```
 
 ---
 
-## 🤝 Connect With Me
+## 🤝 Connect
 
-*   **[Pantane Hub](https://www.pantane.is-a.dev/#contact)**
-
+- 🌐 [pantane.is-a.dev](https://www.pantane.is-a.dev)
+- 💼 [LinkedIn](https://www.linkedin.com/in/pantane/)
+- 🐙 [GitHub](https://github.com/pantane1)
+- 🐦 [Twitter / X](https://twitter.com/pantane4)
 
 ---
 
 ## 📜 License
 
-© 2025 **Wamuhu Martin (Pantane)**. Built with passion and precision.
-All rights reserved.
+[© 2026 **Pantane**](https://github.com/Pantane1/pantane-hub/blob/main/LICENSE). All rights reserved. Built with precision in Kenya 🇰🇪
 
 <p align="center">
-  <a href="#"><img src="https://github.com/Pantane1/nf/blob/main/public/ph.png" alt="ph-logo">
-</p>
-
-<p align="center">
-  <a href="#"><img src="http://readme-typing-svg.herokuapp.com?color=ACAF50&center=true&vCenter=true&multiline=false&lines=Built+Different" alt="pantane">
+  <a href="https://www.pantane.is-a.dev"><img src="http://readme-typing-svg.herokuapp.com?color=ACAF50&center=true&vCenter=true&multiline=false&lines=Built+Different" alt="pantane"></a>
 </p>
