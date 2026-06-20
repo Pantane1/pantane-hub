@@ -5,7 +5,7 @@ import Home from './pages/Home';
 import Projects from './pages/Projects';
 import Socials from './pages/Socials';
 import Contact from './pages/Contact';
-import Support from './pages/Support';
+import Support from '/pages/Support';
 
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
