@@ -1,6 +1,6 @@
 <h1>
   <img src="https://raw.githubusercontent.com/Pantane1/wamuhu-martin/main/favcon.png" width="32" style="vertical-align: middle;" />
-  Pantane Hub
+  Pantane_Hub
 </h1>
 
 [![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://reactjs.org/)
