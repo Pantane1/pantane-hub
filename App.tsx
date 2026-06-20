@@ -21,7 +21,7 @@ const App: React.FC = () => (
       <Route path="/projects" element={<Projects />} />
       <Route path="/socials" element={<Socials />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/support" element={<Support />} />
+      <Route path="/-support" element={<Support />} />
       {/* Fallback — redirect unknown paths to home */}
       <Route path="*" element={<Home />} />
     </Routes>
