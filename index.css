@@ -5,6 +5,11 @@
 /* ─── Global resets & base ───────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
+html {
+  /* Scales every rem-based Tailwind text size down site-wide (default is 16px). */
+  font-size: 87.5%;
+}
+
 body {
   font-family: 'DM Sans', sans-serif;
   background-color: #f8fafc;
