@@ -3,6 +3,8 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
+import Journal from './pages/Journal';
+import JournalPost from './pages/JournalPost';
 import Socials from './pages/Socials';
 import Contact from './pages/Contact';
 import Support from '/pages/Support';
@@ -19,6 +21,8 @@ const App: React.FC = () => (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/projects" element={<Projects />} />
+      <Route path="/journal" element={<Journal />} />
+      <Route path="/journal/:slug" element={<JournalPost />} />
       <Route path="/socials" element={<Socials />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/support" element={<Support />} />

@@ -96,6 +96,7 @@ export const Header: React.FC = () => {
       <div className="hidden lg:flex items-center space-x-8">
         <nav className="flex items-center space-x-6 border-r border-slate-200 pr-8">
           <NavLink to="/projects" className={navLinkClass}>Projects</NavLink>
+          <NavLink to="/journal"  className={navLinkClass}>Journal</NavLink>
           <NavLink to="/socials"  className={navLinkClass}>Socials</NavLink>
           <NavLink to="/support"  className={navLinkClass}>Support</NavLink>
           <NavLink to="/contact"  className={navLinkClass}>Contact</NavLink>
@@ -126,7 +127,7 @@ export const Header: React.FC = () => {
       {mobileOpen && (
         <div className="absolute top-full left-0 right-0 bg-white border-b border-slate-100 shadow-lg lg:hidden z-50">
           <nav className="flex flex-col px-6 py-4 space-y-1">
-            {[['/', 'Home'], ['/projects', 'Projects'], ['/socials', 'Socials'], ['/support', 'Support'], ['/contact', 'Contact']].map(([to, label]) => (
+            {[['/', 'Home'], ['/projects', 'Projects'], ['/journal', 'Journal'], ['/socials', 'Socials'], ['/support', 'Support'], ['/contact', 'Contact']].map(([to, label]) => (
               <NavLink
                 key={to} to={to}
                 className={({ isActive }) => `px-4 py-3 rounded-xl font-bold text-sm transition-colors ${isActive ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-50'}`}

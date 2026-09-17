@@ -84,8 +84,9 @@ const Home: React.FC = () => (
     {/* Navigation cards */}
     <section>
       <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Explore</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-5">
         <NavCard title="Projects"  description="Full-stack systems, fintech integrations, and experiments."  icon="🚀" to="/projects" />
+        <NavCard title="Journal"   description="What I'm building, learning, and sharing — documented."      icon="📓" to="/journal" />
         <NavCard title="Socials"   description="Connect with me across platforms and follow the journey."   icon="🌐" to="/socials" />
         <NavCard title="Contact"   description="Have a project in mind? Always open to collaborate."         icon="✉️" to="/contact" />
         <NavCard title="Support"   description="If you like what I build, you can support the journey."      icon="☕" to="/support" />
