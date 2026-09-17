@@ -8,6 +8,7 @@ import JournalPost from './pages/JournalPost';
 import Socials from './pages/Socials';
 import Contact from './pages/Contact';
 import Support from '/pages/Support';
+import AdminJournal from './pages/AdminJournal';
 
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
@@ -26,6 +27,8 @@ const App: React.FC = () => (
       <Route path="/socials" element={<Socials />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/support" element={<Support />} />
+      {/* Not linked in nav — reachable only if you know the URL */}
+      <Route path="/admin/journal" element={<AdminJournal />} />
       {/* Fallback — redirect unknown paths to home */}
       <Route path="*" element={<Home />} />
     </Routes>
