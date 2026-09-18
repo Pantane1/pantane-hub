@@ -3,10 +3,10 @@
     "id": "10",
     "slug": "contactgate-automated-workflow",
     "title": "Building a new automated contact workflow",
-    "excerpt": "Today I'm working on improving ContactGate's automated communication flow — cutting down the manual steps between a contact unlock and the follow-up message.",
+    "excerpt": "Today I'm working on improving ContactGate's automated communication flow \u2014 cutting down the manual steps between a contact unlock and the follow-up message.",
     "content": [
-      "Today I'm working on improving ContactGate's automated communication flow — cutting down the manual steps between a contact unlock and the follow-up message.",
-      "The goal is simple: once a payment clears, the whole handoff — unlocking the contact, notifying both sides, and logging the transaction — should happen without anyone needing to check a dashboard.",
+      "Today I'm working on improving ContactGate's automated communication flow \u2014 cutting down the manual steps between a contact unlock and the follow-up message.",
+      "The goal is simple: once a payment clears, the whole handoff \u2014 unlocking the contact, notifying both sides, and logging the transaction \u2014 should happen without anyone needing to check a dashboard.",
       "Most of the day went into mapping the event flow and deciding where automation should live versus where a human check still makes sense. Small, unglamorous work, but it's the kind that makes a product feel reliable."
     ],
     "date": "2026-09-17",
@@ -35,7 +35,7 @@
     "excerpt": "Moving the PCEA Kandengwa church management system from a working prototype to a stable, production-ready full-stack build.",
     "content": [
       "Moving the PCEA Kandengwa church management system from a working prototype to a stable, production-ready full-stack build.",
-      "This stage of a project is less exciting than the first build but just as important — hardening the auth flow, tightening database constraints, and making sure the app behaves predictably when real people are using it daily rather than just during testing.",
+      "This stage of a project is less exciting than the first build but just as important \u2014 hardening the auth flow, tightening database constraints, and making sure the app behaves predictably when real people are using it daily rather than just during testing.",
       "It's a good reminder that 'done' and 'production-ready' are two different milestones."
     ],
     "date": "2026-09-15",
@@ -50,9 +50,9 @@
     "id": "8",
     "slug": "ble-peripheral-mode-attendbt",
     "title": "Digging into BLE peripheral mode for AttendBT",
-    "excerpt": "Spent the day deep in Bluetooth Low Energy peripheral mode behavior on mobile — the kind of platform-level detail that only shows up once you actually ship.",
+    "excerpt": "Spent the day deep in Bluetooth Low Energy peripheral mode behavior on mobile \u2014 the kind of platform-level detail that only shows up once you actually ship.",
     "content": [
-      "Spent the day deep in Bluetooth Low Energy peripheral mode behavior on mobile — the kind of platform-level detail that only shows up once you actually ship.",
+      "Spent the day deep in Bluetooth Low Energy peripheral mode behavior on mobile \u2014 the kind of platform-level detail that only shows up once you actually ship.",
       "AttendBT relies on nearby-device detection to mark attendance automatically, which sounds straightforward until you hit the real-world inconsistencies between how different devices advertise and scan for BLE signals.",
       "Today's win: a clearer mental model of how to keep detection reliable without draining battery life. Writing it down now so future-me doesn't have to relearn it."
     ],
@@ -74,9 +74,9 @@
     "id": "7",
     "slug": "why-postgres-by-default",
     "title": "Why I default to Postgres for every new SaaS build",
-    "excerpt": "A short breakdown of why Postgres has become my default choice for new projects — even the ones that start out simple.",
+    "excerpt": "A short breakdown of why Postgres has become my default choice for new projects \u2014 even the ones that start out simple.",
     "content": [
-      "A short breakdown of why Postgres has become my default choice for new projects — even the ones that start out simple.",
+      "A short breakdown of why Postgres has become my default choice for new projects \u2014 even the ones that start out simple.",
       "It's rarely about needing every advanced feature on day one. It's about not having to migrate later when a project that started as 'just an MVP' turns into something a client depends on.",
       "Relational integrity, solid JSON support when I need flexibility, and the ecosystem around tools like Supabase make it an easy default rather than a decision I have to keep re-making per project."
     ],
@@ -95,8 +95,8 @@
     "excerpt": "Formalizing something I already do a lot of: wiring M-Pesa and other payment flows directly into web and mobile apps.",
     "content": [
       "Formalizing something I already do a lot of: wiring M-Pesa and other payment flows directly into web and mobile apps.",
-      "If you're building for the Kenyan market and need STK push, payment confirmation handling, or a paywall-style unlock flow done properly — webhook verification, retries, and all — this is a service I offer directly.",
-      "No invented pricing here — every engagement starts with understanding what you're building and scoping it from there."
+      "If you're building for the Kenyan market and need STK push, payment confirmation handling, or a paywall-style unlock flow done properly \u2014 webhook verification, retries, and all \u2014 this is a service I offer directly.",
+      "No invented pricing here \u2014 every engagement starts with understanding what you're building and scoping it from there."
     ],
     "date": "2026-09-05",
     "category": "Services",
@@ -116,7 +116,7 @@
     "excerpt": "A small milestone worth noting: Pantane DevTools now has 26 live utilities, each one built to solve a problem I kept running into myself.",
     "content": [
       "A small milestone worth noting: Pantane DevTools now has 26 live utilities, each one built to solve a problem I kept running into myself.",
-      "The platform started as a handful of quick converters and has grown into something I reach for regularly in my own workflow — which is the best sign that it's worth continuing to build on."
+      "The platform started as a handful of quick converters and has grown into something I reach for regularly in my own workflow \u2014 which is the best sign that it's worth continuing to build on."
     ],
     "date": "2026-09-02",
     "category": "Achievements",
@@ -139,7 +139,7 @@
     "excerpt": "Social media is where I distribute what I'm building. This Journal is where I permanently document and archive it.",
     "content": [
       "Social media is where I distribute what I'm building. This Journal is where I permanently document and archive it.",
-      "Going forward, this is where you'll find real updates on projects I'm shipping, things I'm learning, services I offer, and the occasional longer write-up — without it disappearing into a feed after 24 hours.",
+      "Going forward, this is where you'll find real updates on projects I'm shipping, things I'm learning, services I offer, and the occasional longer write-up \u2014 without it disappearing into a feed after 24 hours.",
       "Thanks for following along."
     ],
     "date": "2026-08-28",
@@ -162,7 +162,7 @@
     "excerpt": "A behind-the-scenes walk-through of the first few steps I take on every new project, before a single line of feature code gets written.",
     "content": [
       "A behind-the-scenes walk-through of the first few steps I take on every new project, before a single line of feature code gets written.",
-      "It usually starts with mapping the data model, deciding on auth and access boundaries early, and setting up a deployment pipeline before the UI exists — it saves a lot of rework later.",
+      "It usually starts with mapping the data model, deciding on auth and access boundaries early, and setting up a deployment pipeline before the UI exists \u2014 it saves a lot of rework later.",
       "It's not the most visible part of the work, but it's the part that determines how smoothly everything after it goes."
     ],
     "date": "2026-08-24",
@@ -177,9 +177,9 @@
     "id": "2",
     "slug": "web-development-for-kenyan-businesses",
     "title": "Web development for Kenyan businesses",
-    "excerpt": "Modern, fast websites and web applications for businesses, organizations, and personal brands — built with the Kenyan market in mind.",
+    "excerpt": "Modern, fast websites and web applications for businesses, organizations, and personal brands \u2014 built with the Kenyan market in mind.",
     "content": [
-      "Modern, fast websites and web applications for businesses, organizations, and personal brands — built with the Kenyan market in mind.",
+      "Modern, fast websites and web applications for businesses, organizations, and personal brands \u2014 built with the Kenyan market in mind.",
       "That includes thinking about local payment methods, slower network conditions, and mobile-first usage from the start rather than as an afterthought.",
       "If you have an idea for a site or web app and want it built properly, this is one of the core services I offer."
     ],
@@ -198,10 +198,10 @@
     "id": "1",
     "slug": "kijani-ai-research-assistant",
     "title": "Kijani AI: a research assistant for forestry researchers",
-    "excerpt": "An early look at Kijani AI — a prototype built to help forestry researchers at KEFRI work through research material faster with an AI assistant.",
+    "excerpt": "An early look at Kijani AI \u2014 a prototype built to help forestry researchers at KEFRI work through research material faster with an AI assistant.",
     "content": [
-      "An early look at Kijani AI — a prototype built to help forestry researchers at KEFRI work through research material faster with an AI assistant.",
-      "The frontend is a React/Vite/TypeScript app talking to an Express backend — kept intentionally simple so the focus stays on getting the assistant experience right before adding more surface area.",
+      "An early look at Kijani AI \u2014 a prototype built to help forestry researchers at KEFRI work through research material faster with an AI assistant.",
+      "The frontend is a React/Vite/TypeScript app talking to an Express backend \u2014 kept intentionally simple so the focus stays on getting the assistant experience right before adding more surface area.",
       "Still early days, but it's a good example of the kind of AI-and-automation work I enjoy building."
     ],
     "date": "2026-08-15",
@@ -210,6 +210,27 @@
       "KijaniAI",
       "AI",
       "Automation"
+    ]
+  },
+  {
+    "id": "11",
+    "slug": "admin-panel-sponsors-and-a-rate-limit-fix",
+    "title": "Shipped a Git-backed admin panel, sponsor links, and a repo rate-limit fix",
+    "excerpt": "A lightweight admin form for journal posts, GitHub Sponsors support in the nav, and a fix for repos failing to load on the Projects page.",
+    "content": [
+      "Built a lightweight /admin/journal panel \u2014 a password-protected form that reads and writes journal posts straight to this repo via the GitHub API, so no more hand-editing TypeScript to publish a new post.",
+      "Moved journal posts out of journal.ts into a plain journal.json, keeping all the existing frontend logic untouched.",
+      "Reduced the site's font size site-wide for a tighter, more readable feel.",
+      "Added GitHub Sponsors support \u2014 a heart icon in the nav next to GitHub, LinkedIn, and Twitter, plus a native Sponsor button on the repo itself via .github/FUNDING.yml.",
+      "Fixed a bug on the Projects page where repos would intermittently fail to load. Moved the GitHub API call from the browser to the backend with a 10-minute cache, which avoids rate limits and stops a token from ever being exposed client-side."
+    ],
+    "date": "2026-09-18",
+    "category": "Behind the Scenes",
+    "tags": [
+      "PantaneHub",
+      "Journal",
+      "GitHubSponsors",
+      "WebDev"
     ]
   }
 ]
