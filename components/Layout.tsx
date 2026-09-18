@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { GithubIcon, LinkedInIcon, TwitterIcon } from './Icons';
 import MouseEffect from './MouseEffect';
 import PhBot from './PhBot';
+import OpeningAd from './OpeningAd';
 
 interface LayoutProps { children: React.ReactNode; }
 
@@ -192,6 +193,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => (
   <div className="min-h-screen flex flex-col selection:bg-amber-100 selection:text-amber-900 relative">
     <MouseEffect />
     <PhBot />
+    <OpeningAd />
     <Header />
     <main className="flex-grow max-w-7xl mx-auto w-full px-4 md:px-12 py-10 md:py-16 relative z-10">
       {children}
