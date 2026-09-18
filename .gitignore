@@ -26,3 +26,6 @@ package-lock.json
 
 # Generated at build time from data/journal.json — see scripts/generate-rss.js
 public/rss.xml
+
+# Generated at build time — see scripts/generate-sitemap.js
+public/sitemap.xml

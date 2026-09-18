@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node scripts/generate-rss.js && vite",
-    "build": "node scripts/generate-rss.js && vite build && node scripts/prerender-meta.js",
+    "dev": "node scripts/generate-rss.js && node scripts/generate-sitemap.js && vite",
+    "build": "node scripts/generate-rss.js && node scripts/generate-sitemap.js && vite build && node scripts/prerender-meta.js",
     "preview": "vite preview"
   },
   "dependencies": {
