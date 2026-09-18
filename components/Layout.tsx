@@ -4,6 +4,7 @@ import { GithubIcon, LinkedInIcon, TwitterIcon } from './Icons';
 import MouseEffect from './MouseEffect';
 import PhBot from './PhBot';
 import OpeningAd from './OpeningAd';
+import SnapchatAd from './SnapchatAd';
 
 interface LayoutProps { children: React.ReactNode; }
 
@@ -194,6 +195,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => (
     <MouseEffect />
     <PhBot />
     <OpeningAd />
+    <SnapchatAd />
     <Header />
     <main className="flex-grow max-w-7xl mx-auto w-full px-4 md:px-12 py-10 md:py-16 relative z-10">
       {children}

@@ -2,28 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GithubIcon } from './Icons';
 import {
-  OPENING_AD_COOLDOWN_DAYS,
-  OPENING_AD_STORAGE_KEY,
   openingAdContent as c,
   openingAdVideo,
 } from '../data/openingAd';
-
-const shouldShowAd = (): boolean => {
-  try {
-    const last = localStorage.getItem(OPENING_AD_STORAGE_KEY);
-    if (!last) return true;
-    const daysSince = (Date.now() - new Date(last).getTime()) / 86_400_000;
-    return daysSince >= OPENING_AD_COOLDOWN_DAYS;
-  } catch {
-    // localStorage unavailable (private mode etc.) — fail open so first-time
-    // visitors still see it; we just can't remember their choice.
-    return true;
-  }
-};
-
-const markSeen = () => {
-  try { localStorage.setItem(OPENING_AD_STORAGE_KEY, new Date().toISOString()); } catch { /* best effort */ }
-};
 
 /* ─── Fake code editor mock ──────────────────────────────────────────────── */
 const CODE_LINES: { indent?: number; parts: { text: string; c: string }[] }[] = [
@@ -134,11 +115,11 @@ const OpeningAd: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Decide once, on first mount of the app (Layout — and this component
-  // inside it — mounts once and persists across route changes).
+  // Shows on every fresh page load/refresh. Layout mounts once at the app
+  // root, so this doesn't re-fire on client-side route navigation — only
+  // on an actual reload, which is the intended behavior.
   useEffect(() => {
     if (location.pathname.startsWith('/admin')) return;
-    if (!shouldShowAd()) return;
     const t = setTimeout(() => setVisible(true), 350);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -146,7 +127,6 @@ const OpeningAd: React.FC = () => {
 
   const close = () => {
     setVisible(false);
-    markSeen();
   };
 
   useEffect(() => {

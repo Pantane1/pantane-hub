@@ -2,11 +2,9 @@
  * Configuration + content for the OpeningAd splash. Kept separate from the
  * component so copy, timing and (optional) video can be tuned without
  * touching any rendering logic.
+ *
+ * Shows on every page load/refresh by design (no dismissal persistence).
  */
-
-export const OPENING_AD_STORAGE_KEY = 'pantanehub_opening_ad_last_seen';
-/** How many days before the ad is eligible to show again after being closed. */
-export const OPENING_AD_COOLDOWN_DAYS = 14;
 
 export const openingAdContent = {
   brand: { first: 'PANTANE', second: 'HUB' },
