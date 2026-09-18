@@ -19,8 +19,7 @@ const emptyForm = () => ({
   tags: '',            // comma-separated
   image: '',
   featured: false,
-  linksLabel: '',
-  linksUrl: '',
+  links: [] as { label: string; url: string }[],
   sharedOn: [] as SocialPlatform[],
   serviceCta: '',
 });
@@ -112,8 +111,7 @@ const AdminJournal: React.FC = () => {
       tags: post.tags.join(', '),
       image: post.image || '',
       featured: !!post.featured,
-      linksLabel: post.links?.[0]?.label || '',
-      linksUrl: post.links?.[0]?.url || '',
+      links: post.links?.map(l => ({ label: l.label, url: l.url })) || [],
       sharedOn: post.sharedOn || [],
       serviceCta: post.service?.cta || '',
     });
@@ -130,6 +128,11 @@ const AdminJournal: React.FC = () => {
     }));
   };
 
+  const addLinkRow = () => setForm(f => ({ ...f, links: [...f.links, { label: '', url: '' }] }));
+  const removeLinkRow = (index: number) => setForm(f => ({ ...f, links: f.links.filter((_, i) => i !== index) }));
+  const updateLinkRow = (index: number, field: 'label' | 'url', value: string) =>
+    setForm(f => ({ ...f, links: f.links.map((l, i) => (i === index ? { ...l, [field]: value } : l)) }));
+
   const buildPostFromForm = (): JournalPost => {
     const post: JournalPost = {
       id: form.id || String(Date.now()),
@@ -143,9 +146,10 @@ const AdminJournal: React.FC = () => {
     };
     if (form.image.trim()) post.image = form.image.trim();
     if (form.featured) post.featured = true;
-    if (form.linksLabel.trim() && form.linksUrl.trim()) {
-      post.links = [{ label: form.linksLabel.trim(), url: form.linksUrl.trim() }];
-    }
+    const cleanLinks = form.links
+      .map(l => ({ label: l.label.trim(), url: l.url.trim() }))
+      .filter(l => l.label && l.url);
+    if (cleanLinks.length) post.links = cleanLinks;
     if (form.sharedOn.length) post.sharedOn = form.sharedOn;
     if (form.serviceCta.trim()) post.service = { cta: form.serviceCta.trim() };
     return post;
@@ -313,14 +317,42 @@ const AdminJournal: React.FC = () => {
           <input className={inputClass} value={form.image} onChange={e => setForm(f => ({ ...f, image: e.target.value }))} />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <label className={labelClass}>Link label (optional)</label>
-            <input className={inputClass} value={form.linksLabel} onChange={e => setForm(f => ({ ...f, linksLabel: e.target.value }))} placeholder="GitHub" />
-          </div>
-          <div>
-            <label className={labelClass}>Link URL (optional)</label>
-            <input className={inputClass} value={form.linksUrl} onChange={e => setForm(f => ({ ...f, linksUrl: e.target.value }))} placeholder="https://github.com/..." />
+        <div>
+          <label className={labelClass}>Links (optional — GitHub, live project, etc.)</label>
+          <div className="space-y-2">
+            {form.links.map((link, i) => (
+              <div key={i} className="grid grid-cols-[1fr_1.4fr_auto] gap-2">
+                <input
+                  className={inputClass}
+                  value={link.label}
+                  onChange={e => updateLinkRow(i, 'label', e.target.value)}
+                  placeholder="Label (e.g. GitHub)"
+                />
+                <input
+                  className={inputClass}
+                  value={link.url}
+                  onChange={e => updateLinkRow(i, 'url', e.target.value)}
+                  placeholder="https://..."
+                />
+                <button
+                  type="button"
+                  onClick={() => removeLinkRow(i)}
+                  aria-label="Remove link"
+                  className="w-10 h-10 rounded-xl border border-slate-200 text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-colors flex items-center justify-center shrink-0"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addLinkRow}
+              className="text-xs font-bold text-slate-500 hover:text-slate-900 uppercase tracking-wide px-1"
+            >
+              + Add link
+            </button>
           </div>
         </div>
 
