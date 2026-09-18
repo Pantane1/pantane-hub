@@ -55,6 +55,46 @@ const NotFound: React.FC = () => (
   </div>
 );
 
+const SITE_URL = 'https://pantane.is-a.dev';
+const DEFAULT_OG_IMAGE = 'https://raw.githubusercontent.com/Pantane1/wamuhu-martin/main/favcon.png';
+
+/** Get-or-create a <meta> tag by name/property, set its content, and return a
+ *  restore function that puts the previous value (or removes the tag) back. */
+const setMetaTag = (attr: 'name' | 'property', key: string, content: string) => {
+  const selector = `meta[${attr}="${key}"]`;
+  let el = document.querySelector(selector) as HTMLMetaElement | null;
+  const existed = !!el;
+  const prevContent = el?.getAttribute('content') ?? null;
+  if (!el) {
+    el = document.createElement('meta');
+    el.setAttribute(attr, key);
+    document.head.appendChild(el);
+  }
+  el.setAttribute('content', content);
+  return () => {
+    if (!el) return;
+    if (existed && prevContent !== null) el.setAttribute('content', prevContent);
+    else el.remove();
+  };
+};
+
+const setLinkTag = (rel: string, href: string) => {
+  let el = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement | null;
+  const existed = !!el;
+  const prevHref = el?.getAttribute('href') ?? null;
+  if (!el) {
+    el = document.createElement('link');
+    el.setAttribute('rel', rel);
+    document.head.appendChild(el);
+  }
+  el.setAttribute('href', href);
+  return () => {
+    if (!el) return;
+    if (existed && prevHref !== null) el.setAttribute('href', prevHref);
+    else el.remove();
+  };
+};
+
 const JournalPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = slug ? getPostBySlug(slug) : undefined;
@@ -62,20 +102,29 @@ const JournalPost: React.FC = () => {
   useEffect(() => {
     if (!post) return;
     const prevTitle = document.title;
-    document.title = `${post.title} — Pantane Journal`;
+    const fullTitle = `${post.title} — Pantane Journal`;
+    const url = `${SITE_URL}/journal/${post.slug}`;
+    const image = post.image || DEFAULT_OG_IMAGE;
 
-    let metaDesc = document.querySelector('meta[name="description"]');
-    const prevDesc = metaDesc?.getAttribute('content') ?? null;
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.setAttribute('name', 'description');
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.setAttribute('content', post.excerpt);
+    document.title = fullTitle;
+
+    const restoreFns = [
+      setMetaTag('name', 'description', post.excerpt),
+      setMetaTag('property', 'og:type', 'article'),
+      setMetaTag('property', 'og:url', url),
+      setMetaTag('property', 'og:title', fullTitle),
+      setMetaTag('property', 'og:description', post.excerpt),
+      setMetaTag('property', 'og:image', image),
+      setMetaTag('name', 'twitter:url', url),
+      setMetaTag('name', 'twitter:title', fullTitle),
+      setMetaTag('name', 'twitter:description', post.excerpt),
+      setMetaTag('name', 'twitter:image', image),
+      setLinkTag('canonical', url),
+    ];
 
     return () => {
       document.title = prevTitle;
-      if (metaDesc && prevDesc !== null) metaDesc.setAttribute('content', prevDesc);
+      restoreFns.forEach(fn => fn());
     };
   }, [post]);
 
