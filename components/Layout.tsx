@@ -113,6 +113,15 @@ export const Header: React.FC = () => {
           <a href="https://twitter.com/pantane4" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-900 transition-colors">
             <TwitterIcon className="w-5 h-5" />
           </a>
+          <a
+            href="https://github.com/sponsors/Pantane1"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Sponsor Pantane1 on GitHub"
+            className="text-base leading-none grayscale opacity-70 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all"
+          >
+            ❤️
+          </a>
         </div>
       </div>
 
@@ -162,27 +171,13 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="flex flex-col items-center md:items-end gap-2">
-          <div className="flex items-center gap-3">
-            <iframe
-              title="Subscribe on YouTube"
-              src="https://www.youtube.com/subscribe_embed?channelid=UCaS6ZQZtEBh5Mlm_7pTMwGA"
-              scrolling="no"
-              frameBorder="0"
-              style={{ width: '180px', height: '30px', border: 'none' }}
-            />
-            <a
-              href="https://github.com/sponsors/Pantane1"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity"
-            >
-              <img
-                src="https://img.shields.io/github/sponsors/Pantane1?style=for-the-badge&logo=githubsponsors&logoColor=white&label=Sponsor&color=EA4AAA"
-                alt="Sponsor Pantane1 on GitHub Sponsors"
-                className="h-6"
-              />
-            </a>
-          </div>
+          <iframe
+            title="Subscribe on YouTube"
+            src="https://www.youtube.com/subscribe_embed?channelid=UCaS6ZQZtEBh5Mlm_7pTMwGA"
+            scrolling="no"
+            frameBorder="0"
+            style={{ width: '180px', height: '30px', border: 'none' }}
+          />
           <div className="flex items-center space-x-3 text-sm">
             <Link to="/support" className="font-medium text-slate-500 hover:text-blue-600 transition-colors">Support</Link>
             <span className="text-slate-200">|</span>
