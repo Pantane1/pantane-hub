@@ -5,6 +5,7 @@ const cors = require('cors');
 const stkRoute = require('./routes/stk');
 const webhookRoute = require('./routes/webhook');
 const journalRoute = require('./routes/journal');
+const reposRoute = require('./routes/repos');
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use(express.json());
 // Routes
 app.use('/stk-push', stkRoute);
 app.use('/admin', journalRoute);
+app.use('/repos', reposRoute);
 
 // Health check
 app.get('/', (req, res) => {

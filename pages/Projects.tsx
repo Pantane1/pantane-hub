@@ -99,12 +99,9 @@ const Projects: React.FC = () => {
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        const headers: HeadersInit = {};
-        const token = import.meta.env.VITE_GITHUB_TOKEN;
-        if (token) headers['Authorization'] = `Bearer ${token}`;
-
-        const res  = await fetch('https://api.github.com/users/pantane1/repos?sort=updated&per_page=12', { headers });
-        if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const res  = await fetch(`${apiUrl}/repos`);
+        if (!res.ok) throw new Error(`Repos API ${res.status}`);
         const data = await res.json();
         setRepos(data);
       } catch (err) {
@@ -132,7 +129,7 @@ const Projects: React.FC = () => {
       {error ? (
         <div className="bg-red-50 border border-red-100 rounded-2xl p-8 text-center">
           <p className="text-red-500 font-semibold">Could not load repositories.</p>
-          <p className="text-red-400 text-sm mt-1">GitHub API may be rate-limited. Try again shortly.</p>
+          <p className="text-red-400 text-sm mt-1">The server may be waking up (free tier) — try refreshing in a few seconds.</p>
         </div>
       ) : loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
