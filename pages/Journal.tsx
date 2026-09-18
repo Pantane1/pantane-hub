@@ -76,7 +76,22 @@ const Journal: React.FC = () => {
     <div className="fade-in space-y-12">
       {/* Hero */}
       <div className="max-w-2xl">
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Journal</p>
+        <div className="flex items-center justify-between gap-4 mb-4">
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Journal</p>
+          <a
+            href="/rss.xml"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Subscribe via RSS"
+            title="RSS feed"
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-400 hover:text-amber-500 transition-colors"
+          >
+            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248S0 22.546 0 20.752s1.456-3.248 3.252-3.248 3.251 1.454 3.251 3.248zM1.677 6.462v4.052c8.744 0 15.809 7.065 15.809 15.809h4.052c0-10.978-8.882-19.861-19.861-19.861zM1.677.198v4.052c14.113 0 25.556 11.442 25.556 25.556h4.052C31.285 12.995 17.685.198 1.677.198z"/>
+            </svg>
+            RSS
+          </a>
+        </div>
         <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-5 leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
           Building. Learning. Creating. Sharing.
         </h1>

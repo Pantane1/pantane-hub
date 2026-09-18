@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 package-lock.json
+
+# Generated at build time from data/journal.json — see scripts/generate-rss.js
+public/rss.xml

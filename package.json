@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "node scripts/generate-rss.js && vite",
+    "build": "node scripts/generate-rss.js && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
