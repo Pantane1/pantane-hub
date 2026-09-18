@@ -170,14 +170,6 @@ export const Footer: React.FC = () => {
           <p className="text-slate-400 text-sm italic">Built different. Built in Kenya.</p>
         </div>
 
-        <iframe
-          title="Subscribe on YouTube"
-          src="https://www.youtube.com/subscribe_embed?channelid=UCaS6ZQZtEBh5Mlm_7pTMwGA"
-          scrolling="no"
-          frameBorder="0"
-          style={{ width: '180px', height: '30px', border: 'none' }}
-        />
-
         <div className="flex flex-col items-center md:items-end gap-2">
           <div className="flex items-center space-x-3 text-sm">
             <Link to="/support" className="font-medium text-slate-500 hover:text-blue-600 transition-colors">Support</Link>
