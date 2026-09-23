@@ -2,8 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GithubIcon } from './Icons';
 import {
-  openingAdContent as c,
+  openingAdBrand,
+  openingAdEyebrow,
+  openingAdTerminalLines,
+  openingAdTechSlugs,
+  openingAdVariants,
   openingAdVideo,
+  OpeningAdVariant,
 } from '../data/openingAd';
 
 /* ─── Fake code editor mock ──────────────────────────────────────────────── */
@@ -44,7 +49,7 @@ const TerminalMock: React.FC = () => (
       <span className="ml-3 text-[10px] text-slate-400 font-mono">terminal</span>
     </div>
     <div className="p-4 font-mono text-[11px] space-y-1.5">
-      {c.terminalLines.map((line, i) => (
+      {openingAdTerminalLines.map((line, i) => (
         <div key={i} className={line.type === 'command' ? 'text-cyan-300' : 'text-emerald-400'}>
           {line.type === 'command' ? '$ ' : '✓ '}{line.text}
         </div>
@@ -66,7 +71,7 @@ const FloatingCard: React.FC<{ label: string; sub: string; className?: string; d
 
 const TechRow: React.FC = () => (
   <div className="flex items-center gap-4 pt-1">
-    {c.techSlugs.map(slug => (
+    {openingAdTechSlugs.map(slug => (
       <img
         key={slug}
         src={`https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${slug}.svg`}
@@ -79,7 +84,7 @@ const TechRow: React.FC = () => (
 );
 
 /* ─── Main visual composition (desktop) ──────────────────────────────────── */
-const VisualComposition: React.FC = () => (
+const VisualComposition: React.FC<{ floatingCards: OpeningAdVariant['floatingCards'] }> = ({ floatingCards }) => (
   <div className="relative hidden lg:flex flex-col gap-4 items-center justify-center h-full min-h-[420px] px-6">
     <div className="absolute inset-0 flex items-center justify-center">
       <div className="ad-glow w-72 h-72 bg-blue-500/20 rounded-full blur-3xl" />
@@ -91,10 +96,10 @@ const VisualComposition: React.FC = () => (
       <TechRow />
     </div>
 
-    <FloatingCard label={c.floatingCards[0].label} sub={c.floatingCards[0].sub} className="top-2 -left-2" delay="0s" />
-    <FloatingCard label={c.floatingCards[1].label} sub={c.floatingCards[1].sub} className="top-10 -right-4" delay="0.6s" />
-    <FloatingCard label={c.floatingCards[2].label} sub={c.floatingCards[2].sub} className="bottom-24 -left-6" delay="1.2s" />
-    <FloatingCard label={c.floatingCards[3].label} sub={c.floatingCards[3].sub} className="bottom-6 -right-2" delay="1.8s" />
+    <FloatingCard label={floatingCards[0].label} sub={floatingCards[0].sub} className="top-2 -left-2" delay="0s" />
+    <FloatingCard label={floatingCards[1].label} sub={floatingCards[1].sub} className="top-10 -right-4" delay="0.6s" />
+    <FloatingCard label={floatingCards[2].label} sub={floatingCards[2].sub} className="bottom-24 -left-6" delay="1.2s" />
+    <FloatingCard label={floatingCards[3].label} sub={floatingCards[3].sub} className="bottom-6 -right-2" delay="1.8s" />
   </div>
 );
 
@@ -111,6 +116,11 @@ const VisualCompact: React.FC = () => (
 const OpeningAd: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
+  // Picked once per mount, i.e. once per fresh page load/refresh — this is
+  // what makes the ad "interchange" between visits.
+  const [variant] = useState<OpeningAdVariant>(
+    () => openingAdVariants[Math.floor(Math.random() * openingAdVariants.length)]
+  );
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -191,12 +201,12 @@ const OpeningAd: React.FC = () => {
             <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <div>
                 <h2 id="opening-ad-heading" className="text-2xl sm:text-3xl font-extrabold text-white leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
-                  {c.headline[0]}<br />{c.headline[1]}
+                  {variant.headline[0]}<br />{variant.headline[1]}
                 </h2>
               </div>
               <div className="flex gap-3">
-                <button onClick={() => goTo(c.primaryCta.to)} className="px-5 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-white text-sm font-bold transition-colors whitespace-nowrap">
-                  {c.primaryCta.label} →
+                <button onClick={() => goTo(variant.primaryCta.to)} className="px-5 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-white text-sm font-bold transition-colors whitespace-nowrap">
+                  {variant.primaryCta.label} →
                 </button>
               </div>
             </div>
@@ -207,37 +217,37 @@ const OpeningAd: React.FC = () => {
             <div className="flex flex-col justify-center space-y-6 min-w-0">
               <div className="flex items-center gap-3 flex-wrap">
                 <span className="text-sm font-black tracking-tighter" style={{ fontFamily: 'Syne, sans-serif' }}>
-                  <span className="text-white">{c.brand.first}</span>
-                  <span className="text-cyan-400 ml-0.5">{c.brand.second}</span>
+                  <span className="text-white">{openingAdBrand.first}</span>
+                  <span className="text-cyan-400 ml-0.5">{openingAdBrand.second}</span>
                 </span>
                 <span className="hidden sm:inline text-[10px] font-semibold text-slate-500 tracking-[0.2em] uppercase">
-                  {c.eyebrow.join(' / ')}
+                  {openingAdEyebrow.join(' / ')}
                 </span>
               </div>
 
               <h2 id="opening-ad-heading" className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-white leading-[1.08]" style={{ fontFamily: 'Syne, sans-serif' }}>
-                {c.headline[0]}<br />
-                <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">{c.headline[1]}</span>
+                {variant.headline[0]}<br />
+                <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">{variant.headline[1]}</span>
               </h2>
 
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-md">
-                {c.copy}
+                {variant.copy}
               </p>
 
               <VisualCompact />
 
               <div className="flex flex-col sm:flex-row gap-3 pt-1">
                 <button
-                  onClick={() => goTo(c.primaryCta.to)}
+                  onClick={() => goTo(variant.primaryCta.to)}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-white font-bold text-sm shadow-[0_0_30px_-5px_rgba(59,130,246,0.6)] hover:shadow-[0_0_40px_-5px_rgba(59,130,246,0.8)] transition-all"
                 >
-                  {c.primaryCta.label} <span aria-hidden="true">→</span>
+                  {variant.primaryCta.label} <span aria-hidden="true">→</span>
                 </button>
                 <button
-                  onClick={() => goTo(c.secondaryCta.to)}
+                  onClick={() => goTo(variant.secondaryCta.to)}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 text-white font-bold text-sm backdrop-blur-sm transition-colors"
                 >
-                  {c.secondaryCta.label}
+                  {variant.secondaryCta.label}
                 </button>
               </div>
 
@@ -252,7 +262,7 @@ const OpeningAd: React.FC = () => {
             </div>
 
             {/* Right: visual composition, desktop only */}
-            <VisualComposition />
+            <VisualComposition floatingCards={variant.floatingCards} />
           </div>
         )}
       </div>
