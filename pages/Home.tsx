@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import HeroCarousel from '../components/HeroCarousel';
 
 const NavCard = ({ title, description, icon, to }: { title: string; description: string; icon: string; to: string }) => (
   <Link
@@ -63,19 +64,12 @@ const Home: React.FC = () => (
         </div>
       </div>
 
-      {/* Profile image */}
+      {/* Profile image / hero carousel — same container, aspect ratio, and rounded styling as before */}
       <div className="flex-shrink-0 w-full max-w-xs lg:max-w-sm">
         <div className="relative group">
           <div className="absolute -inset-1.5 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-[2.5rem] blur opacity-20 group-hover:opacity-35 transition duration-700" />
           <div className="relative aspect-[3/4] overflow-hidden rounded-[2rem] border-8 border-white shadow-2xl bg-slate-100">
-            <img
-              src="https://github.com/pantane1.png"
-              alt="Pantane"
-              loading="lazy"
-              decoding="async"
-              className="w-full h-full object-cover grayscale-[15%] hover:grayscale-0 transition-all duration-700"
-              onError={(e) => { (e.target as HTMLImageElement).src = 'https://picsum.photos/600/800'; }}
-            />
+            <HeroCarousel />
           </div>
         </div>
       </div>
