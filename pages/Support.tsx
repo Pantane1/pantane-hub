@@ -3,8 +3,11 @@ import { CoffeeIcon, WalletIcon, MpesaIcon } from '../components/Icons';
 import SupportModal from '../components/SupportModal';
 import MpesaModal from '../components/MpesaModal';
 import { SupportProvider } from '../types';
+import { useSeo } from '../hooks/useSeo';
+import { pageSeo } from '../data/pageSeo';
 
 const Support: React.FC = () => {
+  useSeo(pageSeo.support);
   const [selectedProvider, setSelectedProvider] = useState<SupportProvider | null>(null);
   const [mpesaOpen, setMpesaOpen] = useState(false);
 

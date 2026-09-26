@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import emailjs from '@emailjs/browser';
+import { useSeo } from '../hooks/useSeo';
+import { pageSeo } from '../data/pageSeo';
 
 const Contact: React.FC = () => {
+  useSeo(pageSeo.contact);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading]     = useState(false);
   const [error, setError]         = useState<string | null>(null);

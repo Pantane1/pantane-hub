@@ -1,6 +1,6 @@
 // Prerenders <head> meta tags (title, description, OG, Twitter, canonical)
-// for the Journal feed and every individual post, as real static files in
-// dist/. The app shell (scripts/styles) is identical to the built
+// for every static top-level page and the full Journal (feed + every post),
+// as real static files in dist/. The app shell (scripts/styles) is identical to the built
 // dist/index.html — only the <head> tags differ — so real browsers still
 // boot the full SPA normally; only crawlers that read a page's raw HTML
 // (link-preview bots, most of which don't execute JS) now see correct,
@@ -15,11 +15,11 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { pageSeo, DEFAULT_OG_IMAGE } from '../data/pageSeo.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.join(__dirname, '..', 'dist');
 const SITE_URL = 'https://pantane.is-a.dev';
-const DEFAULT_OG_IMAGE = 'https://raw.githubusercontent.com/Pantane1/wamuhu-martin/main/favcon.png';
 
 const posts = JSON.parse(
   readFileSync(path.join(__dirname, '..', 'data', 'journal.json'), 'utf8')
@@ -79,11 +79,25 @@ const writePage = (routeDir, html) => {
   writeFileSync(path.join(outDir, 'index.html'), html, 'utf8');
 };
 
+// ── Static pages (home is dist/index.html itself, already correct via the
+//    base template — no separate folder needed for it) ───────────────────
+const staticRoutes = ['projects', 'socials', 'contact', 'support'];
+for (const route of staticRoutes) {
+  const seo = pageSeo[route];
+  writePage(route, renderPage({
+    title: seo.title,
+    description: seo.description,
+    url: `${SITE_URL}${seo.path}`,
+    image: DEFAULT_OG_IMAGE,
+    ogType: 'website',
+  }));
+}
+
 // ── Journal feed ────────────────────────────────────────────────────────
 writePage('journal', renderPage({
-  title: 'Pantane Journal | Building. Learning. Creating. Sharing.',
-  description: "Follow what I'm building, learning, and offering — projects, services, and updates from Pantane, permanently archived.",
-  url: `${SITE_URL}/journal`,
+  title: pageSeo.journal.title,
+  description: pageSeo.journal.description,
+  url: `${SITE_URL}${pageSeo.journal.path}`,
   image: DEFAULT_OG_IMAGE,
   ogType: 'website',
 }));
@@ -99,4 +113,4 @@ for (const post of posts) {
   }));
 }
 
-console.log(`Prerendered meta tags: journal feed + ${posts.length} post page(s)`);
+console.log(`Prerendered meta tags: ${staticRoutes.length} static page(s) + journal feed + ${posts.length} post page(s)`);

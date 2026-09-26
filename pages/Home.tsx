@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSeo } from '../hooks/useSeo';
+import { pageSeo } from '../data/pageSeo';
 import HeroCarousel from '../components/HeroCarousel';
 
 const NavCard = ({ title, description, icon, to }: { title: string; description: string; icon: string; to: string }) => (
@@ -20,7 +22,9 @@ const NavCard = ({ title, description, icon, to }: { title: string; description:
   </Link>
 );
 
-const Home: React.FC = () => (
+const Home: React.FC = () => {
+  useSeo(pageSeo.home);
+  return (
   <div className="fade-in space-y-20">
     {/* Hero */}
     <section className="flex flex-col lg:flex-row items-center gap-12 pt-6 pb-4">
@@ -87,6 +91,7 @@ const Home: React.FC = () => (
       </div>
     </section>
   </div>
-);
+  );
+};
 
 export default Home;

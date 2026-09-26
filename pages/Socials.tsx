@@ -1,5 +1,7 @@
 import React from 'react';
 import { GithubIcon, LinkedInIcon, TwitterIcon, InstagramIcon, FacebookIcon, WhatsAppIcon } from '../components/Icons';
+import { useSeo } from '../hooks/useSeo';
+import { pageSeo } from '../data/pageSeo';
 
 const SocialCard = ({ name, handle, icon, url, color, desc }: {
   name: string; handle: string; icon: React.ReactNode; url: string; color: string; desc: string;
@@ -26,6 +28,7 @@ const SocialCard = ({ name, handle, icon, url, color, desc }: {
 );
 
 const Socials: React.FC = () => {
+  useSeo(pageSeo.socials);
   const msg = encodeURIComponent('hi, got your number from your website.');
   return (
     <div className="fade-in max-w-3xl mx-auto space-y-12">

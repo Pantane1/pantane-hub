@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getPostBySlug, getRelatedPosts } from '../data/journal';
 import { CategoryBadge, formatJournalDate } from '../components/JournalCard';
 import JournalCard from '../components/JournalCard';
 import { SocialPlatform } from '../types';
 import { GithubIcon, LinkedInIcon, TwitterIcon, InstagramIcon, FacebookIcon, WhatsAppIcon } from '../components/Icons';
+import { useSeo } from '../hooks/useSeo';
+import { DEFAULT_OG_IMAGE } from '../data/pageSeo';
 
 /* Reuses the same accounts already listed on the Socials page — nothing new invented here. */
 const SOCIAL_META: Record<SocialPlatform, { name: string; url: string; icon: React.ReactNode; color: string }> = {
@@ -44,91 +46,41 @@ const ShareButton: React.FC<{ title: string }> = ({ title }) => {
   );
 };
 
-const NotFound: React.FC = () => (
-  <div className="fade-in max-w-lg mx-auto text-center py-20 space-y-5">
-    <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-2xl mx-auto">🔍</div>
-    <h1 className="text-2xl font-bold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>Entry not found</h1>
-    <p className="text-slate-500 text-sm">This Journal entry doesn't exist or may have been moved.</p>
-    <Link to="/journal" className="inline-flex items-center px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-slate-700 transition-colors">
-      ← Back to Journal
-    </Link>
-  </div>
-);
-
-const SITE_URL = 'https://pantane.is-a.dev';
-const DEFAULT_OG_IMAGE = 'https://raw.githubusercontent.com/Pantane1/wamuhu-martin/main/favcon.png';
-
-/** Get-or-create a <meta> tag by name/property, set its content, and return a
- *  restore function that puts the previous value (or removes the tag) back. */
-const setMetaTag = (attr: 'name' | 'property', key: string, content: string) => {
-  const selector = `meta[${attr}="${key}"]`;
-  let el = document.querySelector(selector) as HTMLMetaElement | null;
-  const existed = !!el;
-  const prevContent = el?.getAttribute('content') ?? null;
-  if (!el) {
-    el = document.createElement('meta');
-    el.setAttribute(attr, key);
-    document.head.appendChild(el);
-  }
-  el.setAttribute('content', content);
-  return () => {
-    if (!el) return;
-    if (existed && prevContent !== null) el.setAttribute('content', prevContent);
-    else el.remove();
-  };
-};
-
-const setLinkTag = (rel: string, href: string) => {
-  let el = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement | null;
-  const existed = !!el;
-  const prevHref = el?.getAttribute('href') ?? null;
-  if (!el) {
-    el = document.createElement('link');
-    el.setAttribute('rel', rel);
-    document.head.appendChild(el);
-  }
-  el.setAttribute('href', href);
-  return () => {
-    if (!el) return;
-    if (existed && prevHref !== null) el.setAttribute('href', prevHref);
-    else el.remove();
-  };
+/** Missing/unknown journal slug — distinct from the site-wide 404 (pages/NotFound.tsx),
+ *  since this one still lives inside the Journal section's own layout/context. */
+const PostNotFound: React.FC<{ slug?: string }> = ({ slug }) => {
+  useSeo({
+    title: 'Entry Not Found | Pantane Journal',
+    description: "This Journal entry doesn't exist or may have been moved.",
+    path: `/journal/${slug || ''}`,
+    noindex: true,
+  });
+  return (
+    <div className="fade-in max-w-lg mx-auto text-center py-20 space-y-5">
+      <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-2xl mx-auto">🔍</div>
+      <h1 className="text-2xl font-bold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>Entry not found</h1>
+      <p className="text-slate-500 text-sm">This Journal entry doesn't exist or may have been moved.</p>
+      <Link to="/journal" className="inline-flex items-center px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-slate-700 transition-colors">
+        ← Back to Journal
+      </Link>
+    </div>
+  );
 };
 
 const JournalPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = slug ? getPostBySlug(slug) : undefined;
 
-  useEffect(() => {
-    if (!post) return;
-    const prevTitle = document.title;
-    const fullTitle = `${post.title} — Pantane Journal`;
-    const url = `${SITE_URL}/journal/${post.slug}`;
-    const image = post.image || DEFAULT_OG_IMAGE;
+  useSeo({
+    title: post ? `${post.title} — Pantane Journal` : 'Entry Not Found | Pantane Journal',
+    description: post ? post.excerpt : "This Journal entry doesn't exist or may have been moved.",
+    path: `/journal/${slug || ''}`,
+    image: post?.image || DEFAULT_OG_IMAGE,
+    type: post ? 'article' : 'website',
+    noindex: !post,
+  });
 
-    document.title = fullTitle;
-
-    const restoreFns = [
-      setMetaTag('name', 'description', post.excerpt),
-      setMetaTag('property', 'og:type', 'article'),
-      setMetaTag('property', 'og:url', url),
-      setMetaTag('property', 'og:title', fullTitle),
-      setMetaTag('property', 'og:description', post.excerpt),
-      setMetaTag('property', 'og:image', image),
-      setMetaTag('name', 'twitter:url', url),
-      setMetaTag('name', 'twitter:title', fullTitle),
-      setMetaTag('name', 'twitter:description', post.excerpt),
-      setMetaTag('name', 'twitter:image', image),
-      setLinkTag('canonical', url),
-    ];
-
-    return () => {
-      document.title = prevTitle;
-      restoreFns.forEach(fn => fn());
-    };
-  }, [post]);
-
-  if (!post) return <NotFound />;
+  if (!post) return <PostNotFound slug={slug} />;
 
   const related = getRelatedPosts(post);
 

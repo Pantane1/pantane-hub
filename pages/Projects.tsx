@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { GithubRepo } from '../types';
 import { GithubIcon } from '../components/Icons';
+import { useSeo } from '../hooks/useSeo';
+import { pageSeo } from '../data/pageSeo';
 
 const ProjectCard: React.FC<{ repo: GithubRepo }> = ({ repo }) => (
   <div className="group bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col overflow-hidden">
@@ -92,6 +94,7 @@ const SkeletonCard = () => (
 );
 
 const Projects: React.FC = () => {
+  useSeo(pageSeo.projects);
   const [repos, setRepos]     = useState<GithubRepo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState(false);

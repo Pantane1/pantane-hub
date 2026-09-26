@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { JournalCategory } from '../types';
 import { getAllPosts, isToday, JOURNAL_CATEGORIES, searchPosts } from '../data/journal';
 import JournalCard, { CategoryBadge, formatJournalDate } from '../components/JournalCard';
+import { useSeo } from '../hooks/useSeo';
+import { pageSeo } from '../data/pageSeo';
 
 const TodayCard: React.FC<{ post: ReturnType<typeof getAllPosts>[number] }> = ({ post }) => (
   <Link
@@ -57,6 +59,7 @@ const EmptyState: React.FC<{ onReset: () => void }> = ({ onReset }) => (
 );
 
 const Journal: React.FC = () => {
+  useSeo(pageSeo.journal);
   const [activeCategory, setActiveCategory] = useState<JournalCategory | 'All'>('All');
   const [query, setQuery] = useState('');
 
