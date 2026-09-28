@@ -50,7 +50,9 @@ CONTACT:
 - Email: pantane254@gmail.com
 - WhatsApp: +254 740 312 402
 - GitHub: github.com/pantane1
-- LinkedIn: linkedin.com/in/pantane
+- LinkedIn: linkedin.com/in/wn-martin
+- Instagram: instagram.com/_pantane_
+- Telegram: t.me/pantane
 - Twitter: @pantane4
 - Live site: pantane.is-a.dev
 

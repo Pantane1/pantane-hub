@@ -1,5 +1,5 @@
 import React from 'react';
-import { GithubIcon, LinkedInIcon, TwitterIcon, InstagramIcon, FacebookIcon, WhatsAppIcon } from '../components/Icons';
+import { GithubIcon, LinkedInIcon, TwitterIcon, InstagramIcon, FacebookIcon, WhatsAppIcon, TelegramIcon } from '../components/Icons';
 import { useSeo } from '../hooks/useSeo';
 import { pageSeo } from '../data/pageSeo';
 
@@ -42,10 +42,11 @@ const Socials: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <SocialCard name="WhatsApp" handle="+254 740 312 402" desc="Quickest way to reach me" url={`https://wa.me/254740312402?text=${msg}`} icon={<WhatsAppIcon className="w-7 h-7"/>} color="#25D366"/>
+        <SocialCard name="Telegram" handle="@pantane"          desc="Chat and updates"               url="https://t.me/pantane" icon={<TelegramIcon className="w-7 h-7"/>} color="#26A5E4"/>
         <SocialCard name="GitHub"   handle="Pantane1"          desc="Code, projects & contributions" url="https://github.com/pantane1" icon={<GithubIcon className="w-7 h-7"/>} color="#181717"/>
-        <SocialCard name="LinkedIn" handle="Pantane_Hub"       desc="Professional network"           url="https://www.linkedin.com/in/pantane/" icon={<LinkedInIcon className="w-7 h-7"/>} color="#0A66C2"/>
+        <SocialCard name="LinkedIn" handle="wn-martin"         desc="Professional network"           url="https://linkedin.com/in/wn-martin" icon={<LinkedInIcon className="w-7 h-7"/>} color="#0A66C2"/>
         <SocialCard name="Twitter / X" handle="@Pantane4"      desc="Thoughts and updates"           url="https://twitter.com/pantane4" icon={<TwitterIcon className="w-7 h-7"/>} color="#000000"/>
-        <SocialCard name="Instagram" handle="@_pan.tane"       desc="Behind the scenes"              url="https://instagram.com/_pan.tane" icon={<InstagramIcon className="w-7 h-7"/>} color="#E4405F"/>
+        <SocialCard name="Instagram" handle="@_pantane_"       desc="Behind the scenes"              url="https://instagram.com/_pantane_" icon={<InstagramIcon className="w-7 h-7"/>} color="#E4405F"/>
         <SocialCard name="Facebook"  handle="Pantane"          desc="Community & updates"            url="https://web.facebook.com/profile.php?id=100095346974516" icon={<FacebookIcon className="w-7 h-7"/>} color="#1877F2"/>
       </div>
     </div>

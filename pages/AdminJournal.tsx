@@ -3,7 +3,7 @@ import axios from 'axios';
 import { JournalPost, JournalCategory, SocialPlatform } from '../types';
 import { JOURNAL_CATEGORIES } from '../data/journal';
 
-const SOCIAL_PLATFORMS: SocialPlatform[] = ['github', 'linkedin', 'twitter', 'instagram', 'facebook', 'whatsapp'];
+const SOCIAL_PLATFORMS: SocialPlatform[] = ['github', 'linkedin', 'twitter', 'instagram', 'facebook', 'whatsapp', 'telegram'];
 const CATEGORIES = JOURNAL_CATEGORIES.filter((c): c is JournalCategory => c !== 'All');
 
 const todayIso = () => new Date().toISOString().slice(0, 10);

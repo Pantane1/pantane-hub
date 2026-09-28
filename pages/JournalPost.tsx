@@ -4,18 +4,19 @@ import { getPostBySlug, getRelatedPosts } from '../data/journal';
 import { CategoryBadge, formatJournalDate } from '../components/JournalCard';
 import JournalCard from '../components/JournalCard';
 import { SocialPlatform } from '../types';
-import { GithubIcon, LinkedInIcon, TwitterIcon, InstagramIcon, FacebookIcon, WhatsAppIcon } from '../components/Icons';
+import { GithubIcon, LinkedInIcon, TwitterIcon, InstagramIcon, FacebookIcon, WhatsAppIcon, TelegramIcon } from '../components/Icons';
 import { useSeo } from '../hooks/useSeo';
 import { DEFAULT_OG_IMAGE } from '../data/pageSeo';
 
 /* Reuses the same accounts already listed on the Socials page — nothing new invented here. */
 const SOCIAL_META: Record<SocialPlatform, { name: string; url: string; icon: React.ReactNode; color: string }> = {
   github:    { name: 'GitHub',    url: 'https://github.com/pantane1',                                   icon: <GithubIcon className="w-4 h-4" />,    color: '#181717' },
-  linkedin:  { name: 'LinkedIn',  url: 'https://www.linkedin.com/in/pantane/',                           icon: <LinkedInIcon className="w-4 h-4" />,  color: '#0A66C2' },
+  linkedin:  { name: 'LinkedIn',  url: 'https://linkedin.com/in/wn-martin',                           icon: <LinkedInIcon className="w-4 h-4" />,  color: '#0A66C2' },
   twitter:   { name: 'Twitter / X', url: 'https://twitter.com/pantane4',                                 icon: <TwitterIcon className="w-4 h-4" />,   color: '#000000' },
-  instagram: { name: 'Instagram', url: 'https://instagram.com/_pan.tane',                                icon: <InstagramIcon className="w-4 h-4" />, color: '#E4405F' },
+  instagram: { name: 'Instagram', url: 'https://instagram.com/_pantane_',                                icon: <InstagramIcon className="w-4 h-4" />, color: '#E4405F' },
   facebook:  { name: 'Facebook',  url: 'https://web.facebook.com/profile.php?id=100095346974516',        icon: <FacebookIcon className="w-4 h-4" />,  color: '#1877F2' },
   whatsapp:  { name: 'WhatsApp',  url: 'https://wa.me/254740312402',                                      icon: <WhatsAppIcon className="w-4 h-4" />,  color: '#25D366' },
+  telegram:  { name: 'Telegram',  url: 'https://t.me/pantane',                                            icon: <TelegramIcon className="w-4 h-4" />,  color: '#26A5E4' },
 };
 
 const ShareButton: React.FC<{ title: string }> = ({ title }) => {

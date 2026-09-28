@@ -40,7 +40,7 @@ export interface JournalLink {
   url: string;
 }
 
-export type SocialPlatform = 'github' | 'linkedin' | 'twitter' | 'instagram' | 'facebook' | 'whatsapp';
+export type SocialPlatform = 'github' | 'linkedin' | 'twitter' | 'instagram' | 'facebook' | 'whatsapp' | 'telegram';
 
 export interface JournalPost {
   id: string;

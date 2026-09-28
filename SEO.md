@@ -114,31 +114,26 @@ No employer, no awards, no clients, no qualifications were invented —
 brief explicitly asked for that and I didn't add anything not verifiable
 from the site or the brief itself.
 
-### ⚠️ `sameAs` — please verify before relying on this
+### `sameAs` — verified and consistent
 
-The task brief gave these social URLs, which I used as-is in the schema:
+Confirmed by the site owner as the current, correct accounts:
 
+- GitHub: `https://github.com/Pantane1`
 - LinkedIn: `https://linkedin.com/in/wn-martin`
 - Instagram: `https://instagram.com/_pantane_`
 - Telegram: `https://t.me/pantane`
-- GitHub: `https://github.com/Pantane1`
 
-**These don't match what's actually live on the site right now.** The
-Socials page and the header currently link to:
+These now match everywhere they appear, so the structured data and the
+visible site agree: the JSON-LD in `index.html`, the Socials page, the
+header LinkedIn icon, the Journal post "Also posted on" icons, and PH-Bot's
+built-in knowledge (so the chatbot gives visitors the right links). Telegram
+was added as a new card on the Socials page and as a `telegram` option in
+the Journal admin form.
 
-- LinkedIn: `https://www.linkedin.com/in/pantane/`
-- Instagram: `https://instagram.com/_pan.tane`
-- No Telegram link anywhere on the site
-
-I didn't guess which set is current and didn't touch the live buttons on
-`pages/Socials.tsx` or `components/Layout.tsx` — I only used the brief's
-URLs in the new schema, since that's what was explicitly given as source
-of truth for this task. But right now your structured data and your
-visible page **disagree with each other**, which undercuts the exact
-"consistent signals" goal this whole task is for. You need to tell me
-which set is correct so I can make them match — either update the JSON-LD
-to the live URLs, or update the live Socials/header links to the ones in
-the brief.
+If any of these handles change in future, update all of those places
+together — a mismatch between schema and visible links weakens the
+"consistent identity" signal this whole setup exists to send. A quick
+repo-wide search for the old handle is the safest way to catch every spot.
 
 ## Image SEO
 

@@ -107,7 +107,7 @@ export const Header: React.FC = () => {
           <a href="https://github.com/pantane1" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-900 transition-colors">
             <GithubIcon className="w-5 h-5" />
           </a>
-          <a href="https://www.linkedin.com/in/pantane/" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-900 transition-colors">
+          <a href="https://linkedin.com/in/wn-martin" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-900 transition-colors">
             <LinkedInIcon className="w-5 h-5" />
           </a>
           <a href="https://twitter.com/pantane4" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-900 transition-colors">
