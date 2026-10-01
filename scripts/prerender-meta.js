@@ -24,6 +24,9 @@ const SITE_URL = 'https://pantane.is-a.dev';
 const posts = JSON.parse(
   readFileSync(path.join(__dirname, '..', 'data', 'journal.json'), 'utf8')
 );
+const deals = JSON.parse(
+  readFileSync(path.join(__dirname, '..', 'data', 'sharp.json'), 'utf8')
+);
 
 const escapeAttr = (str) =>
   String(str)
@@ -114,3 +117,25 @@ for (const post of posts) {
 }
 
 console.log(`Prerendered meta tags: ${staticRoutes.length} static page(s) + journal feed + ${posts.length} post page(s)`);
+
+// ── Sharp feed ──────────────────────────────────────────────────────────
+writePage('sharp', renderPage({
+  title: pageSeo.sharp.title,
+  description: pageSeo.sharp.description,
+  url: `${SITE_URL}${pageSeo.sharp.path}`,
+  image: DEFAULT_OG_IMAGE,
+  ogType: 'website',
+}));
+
+// ── Individual Sharp deals ─────────────────────────────────────────────
+for (const deal of deals) {
+  writePage(`sharp/${deal.slug}`, renderPage({
+    title: `${deal.title} — Get ${deal.reward} | Sharp`,
+    description: deal.description,
+    url: `${SITE_URL}/sharp/${deal.slug}`,
+    image: deal.thumbnail || DEFAULT_OG_IMAGE,
+    ogType: 'website',
+  }));
+}
+
+console.log(`Prerendered meta tags: Sharp feed + ${deals.length} deal page(s)`);

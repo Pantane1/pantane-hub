@@ -59,6 +59,8 @@ CONTACT:
 SITE PAGES:
 - / → Home
 - /projects → GitHub projects
+- /journal → Pantane Journal (updates on what I'm building/learning)
+- /sharp → Sharp: deals, rewards, referrals and opportunities, with step-by-step explanations of how each one works
 - /socials → Social links
 - /contact → Contact form
 - /support → Support / payments

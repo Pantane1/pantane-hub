@@ -1,0 +1,28 @@
+[
+  {
+    "id": "1",
+    "slug": "heist-attack",
+    "title": "HEIST ATTACK",
+    "category": "Rewards",
+    "description": "Get KSh 50 for signing up. Complete the steps and claim your reward.",
+    "whatYouGet": "Get KSh 50 after completing the required signup and verification steps, subject to the promotion's eligibility requirements.",
+    "reward": "KSh 50",
+    "referralReward": "KSh 100 per referral",
+    "status": "active",
+    "datePosted": "2026-09-29",
+    "thumbnail": "/assets/sharp-deals/heist-attack.jpg",
+    "steps": [
+      "Download the Absa app from Google Play.",
+      "Sign up.",
+      "Enter referral code: OFC0PEZBQF",
+      "Complete the required KYC verification.",
+      "Open Complete Profile and finish the required information.",
+      "Check the account for the applicable reward.",
+      "Referral participants can qualify for the stated referral reward according to the promotion terms."
+    ],
+    "referralCode": "OFC0PEZBQF",
+    "externalUrl": "https://play.google.com/store/apps/details?id=ke.co.absa.next",
+    "externalLabel": "Get Started",
+    "importantNotes": "Referral and reward eligibility may depend on the provider's current promotion terms and requirements. Complete all required steps and verify the current offer before participating."
+  }
+]

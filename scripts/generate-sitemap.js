@@ -1,9 +1,9 @@
 // Generates a sitemap.xml from the site's static routes + every post in
-// data/journal.json, written to public/sitemap.xml so Vite copies it into
-// the build output. Runs as a prebuild step (see package.json) so it stays
-// in sync with journal.json -- including posts added via the admin panel --
-// on every deploy. /admin/journal is intentionally excluded, matching
-// robots.txt.
+// data/journal.json + every deal in data/sharp.json, written to
+// public/sitemap.xml so Vite copies it into the build output. Runs as a
+// prebuild step (see package.json) so it stays in sync with those JSON
+// files -- including posts added via the admin panel -- on every deploy.
+// /admin/journal is intentionally excluded, matching robots.txt.
 
 import { readFileSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
@@ -15,6 +15,9 @@ const SITE_URL = 'https://pantane.is-a.dev';
 const posts = JSON.parse(
   readFileSync(path.join(__dirname, '..', 'data', 'journal.json'), 'utf8')
 );
+const deals = JSON.parse(
+  readFileSync(path.join(__dirname, '..', 'data', 'sharp.json'), 'utf8')
+);
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -23,6 +26,7 @@ const today = new Date().toISOString().slice(0, 10);
 const staticRoutes = [
   { loc: '/',         priority: '1.0' },
   { loc: '/journal',  priority: '0.9' },
+  { loc: '/sharp',    priority: '0.9' },
   { loc: '/projects', priority: '0.8' },
   { loc: '/contact',  priority: '0.6' },
   { loc: '/socials',  priority: '0.5' },
@@ -38,6 +42,11 @@ const urls = [
   ...posts.map((post) => ({
     loc: `${SITE_URL}/journal/${post.slug}`,
     lastmod: post.date,
+    priority: '0.7',
+  })),
+  ...deals.map((deal) => ({
+    loc: `${SITE_URL}/sharp/${deal.slug}`,
+    lastmod: deal.datePosted,
     priority: '0.7',
   })),
 ];
@@ -60,4 +69,4 @@ ${urlEntries}
 
 const outPath = path.join(__dirname, '..', 'public', 'sitemap.xml');
 writeFileSync(outPath, sitemap, 'utf8');
-console.log(`Sitemap generated: ${staticRoutes.length} static route(s) + ${posts.length} post(s) -> public/sitemap.xml`);
+console.log(`Sitemap generated: ${staticRoutes.length} static route(s) + ${posts.length} post(s) + ${deals.length} deal(s) -> public/sitemap.xml`);

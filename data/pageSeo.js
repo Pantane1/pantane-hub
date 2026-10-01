@@ -39,4 +39,9 @@ export const pageSeo = {
     title: 'Support Pantane | Back the Work',
     description: "Support Pantane's independent software projects and open-source work via M-Pesa, PayPal, or Paystack.",
   },
+  sharp: {
+    path: '/sharp',
+    title: 'Sharp — Deals, Rewards & Opportunities | PantaneHub',
+    description: 'Discover new deals, rewards, referrals and opportunities on PantaneHub, with simple step-by-step explanations of how they work.',
+  },
 };

@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import Projects from './pages/Projects';
 import Journal from './pages/Journal';
 import JournalPost from './pages/JournalPost';
+import Sharp from './pages/Sharp';
+import SharpDeal from './pages/SharpDeal';
 import Socials from './pages/Socials';
 import Contact from './pages/Contact';
 import Support from '/pages/Support';
@@ -25,6 +27,8 @@ const App: React.FC = () => (
       <Route path="/projects" element={<Projects />} />
       <Route path="/journal" element={<Journal />} />
       <Route path="/journal/:slug" element={<JournalPost />} />
+      <Route path="/sharp" element={<Sharp />} />
+      <Route path="/sharp/:slug" element={<SharpDeal />} />
       <Route path="/socials" element={<Socials />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/support" element={<Support />} />
