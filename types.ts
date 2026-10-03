@@ -89,4 +89,15 @@ export interface SharpDeal {
   externalUrl?: string;
   externalLabel?: string;
   importantNotes?: string;
+  /** Themed placeholder shown while `thumbnail` is unset or 404s — lets a
+   *  deal's provider "energy" come through (brand color, an icon, the
+   *  provider's name as plain text) without using any trademarked logo
+   *  artwork. `preset` keys into THUMBNAIL_PRESETS in SharpDealCard.tsx
+   *  (add new presets there, not raw Tailwind classes here — see that
+   *  file's comment for why). Falls back to a generic look if omitted. */
+  thumbnailTheme?: {
+    preset?: string;
+    icon: string;
+    wordmark?: string;
+  };
 }

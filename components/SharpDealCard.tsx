@@ -17,6 +17,17 @@ export const SHARP_CATEGORY_META: Record<SharpCategory, CategoryMeta> = {
   'Opportunities': { emoji: '🚀', badgeClass: 'text-emerald-600 bg-emerald-50' },
 };
 
+/** Gradient presets for the placeholder thumbnail, keyed by `thumbnailTheme.preset`
+ *  in data/sharp.json. Kept here (not in the JSON) as literal Tailwind class
+ *  strings so the content scanner — which only covers pages/**​/*.tsx and
+ *  components/**​/*.{ts,tsx}, not data/*.json — actually picks them up and
+ *  generates the CSS. Add a new preset here when a deal needs a color that
+ *  isn't covered yet; reference it from sharp.json by its key. */
+const THUMBNAIL_PRESETS: Record<string, string> = {
+  default: 'from-slate-900 via-blue-950 to-emerald-900',
+  absa: 'from-black via-red-950 to-red-700',
+};
+
 export const formatDealDate = (iso: string) =>
   new Date(iso).toLocaleDateString('en-KE', { year: 'numeric', month: 'short', day: 'numeric' });
 
@@ -42,9 +53,15 @@ export const SharpStatusBadge: React.FC<{ deal: SharpDeal; className?: string }>
 
 /** Thumbnail with a graceful themed placeholder if no image / the image
  *  404s — same pattern as HeroCarousel, so the grid looks complete before
- *  real thumbnails are dropped into public/assets/sharp-deals/. */
+ *  real thumbnails are dropped into public/assets/sharp-deals/. Uses the
+ *  deal's thumbnailTheme (brand color + icon + plain-text provider name)
+ *  when set, so a deal can carry its provider's "energy" without
+ *  reproducing any trademarked logo artwork. */
 export const DealThumbnail: React.FC<{ deal: SharpDeal; badge?: string; className?: string }> = ({ deal, badge, className = '' }) => {
   const [errored, setErrored] = useState(!deal.thumbnail);
+  const theme = deal.thumbnailTheme;
+  const gradient = THUMBNAIL_PRESETS[theme?.preset || 'default'] || THUMBNAIL_PRESETS.default;
+
   return (
     <div className={`relative aspect-video w-full overflow-hidden bg-slate-100 ${className}`}>
       {!errored && deal.thumbnail ? (
@@ -57,8 +74,17 @@ export const DealThumbnail: React.FC<{ deal: SharpDeal; badge?: string; classNam
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
       ) : (
-        <div className="w-full h-full bg-gradient-to-br from-slate-900 via-blue-950 to-emerald-900 flex items-center justify-center">
-          <span className="text-4xl opacity-90" aria-hidden="true">⚡</span>
+        <div className={`w-full h-full bg-gradient-to-br ${gradient} flex flex-col items-center justify-center gap-3 relative overflow-hidden`}>
+          <span className="absolute -right-6 -bottom-8 text-[9rem] opacity-[0.08] leading-none select-none" aria-hidden="true">
+            {theme?.icon || '⚡'}
+          </span>
+          <span className="relative text-4xl opacity-90" aria-hidden="true">{theme?.icon || '⚡'}</span>
+          <span className="relative text-white font-extrabold text-2xl tracking-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
+            Get {deal.reward}
+          </span>
+          {theme?.wordmark && (
+            <span className="relative text-[11px] font-bold tracking-[0.3em] text-white/70 uppercase">{theme.wordmark}</span>
+          )}
         </div>
       )}
       {badge && (

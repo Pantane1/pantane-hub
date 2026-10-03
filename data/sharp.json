@@ -11,6 +11,11 @@
     "status": "active",
     "datePosted": "2026-09-29",
     "thumbnail": "/assets/sharp-deals/heist-attack.jpg",
+    "thumbnailTheme": {
+      "preset": "absa",
+      "icon": "🏦",
+      "wordmark": "ABSA"
+    },
     "steps": [
       "Download the Absa app from Google Play.",
       "Sign up.",
