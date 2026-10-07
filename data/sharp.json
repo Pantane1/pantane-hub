@@ -29,5 +29,34 @@
     "externalUrl": "https://play.google.com/store/apps/details?id=ke.co.absa.next",
     "externalLabel": "Get Started",
     "importantNotes": "Referral and reward eligibility may depend on the provider's current promotion terms and requirements. Complete all required steps and verify the current offer before participating."
+  },
+  {
+    "id": "2",
+    "slug": "loop-kyc",
+    "title": "LOOP KYC",
+    "category": "Opportunities",
+    "description": "Register on Loop with my invite code and complete your profile to get KSh 150.",
+    "whatYouGet": "New users who successfully register through my invite code and complete their Loop profile receive KSh 150. Because I am the referrer, I receive KSh 200 for each successful referral. Downloading the app alone does not qualify — registration must be completed with a fully finished profile.",
+    "reward": "KSh 150",
+    "referralReward": "KSh 200 per referral",
+    "status": "active",
+    "datePosted": "2026-10-07",
+    "thumbnail": "/assets/sharp-deals/loop-kyc.jpg",
+    "thumbnailTheme": {
+      "preset": "loop",
+      "icon": "🔁",
+      "wordmark": "LOOP"
+    },
+    "steps": [
+      "Download the Loop app from the Google Play Store.",
+      "Create/register your Loop account.",
+      "Enter/use my invite code: MARTIN4774",
+      "Complete your profile/KYC requirements.",
+      "Only after your profile is fully completed is the registration considered successful and eligible for the KSh 150 reward."
+    ],
+    "referralCode": "MARTIN4774",
+    "externalUrl": "https://cbaloop.page.link/home",
+    "externalLabel": "Get Started with Loop",
+    "importantNotes": "⚠️ Downloading or creating an account is not enough. Your profile must be fully completed for the registration to qualify."
   }
 ]

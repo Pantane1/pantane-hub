@@ -26,6 +26,7 @@ export const SHARP_CATEGORY_META: Record<SharpCategory, CategoryMeta> = {
 const THUMBNAIL_PRESETS: Record<string, string> = {
   default: 'from-slate-900 via-blue-950 to-emerald-900',
   absa: 'from-black via-red-950 to-red-700',
+  loop: 'from-indigo-950 via-purple-900 to-fuchsia-800',
 };
 
 export const formatDealDate = (iso: string) =>

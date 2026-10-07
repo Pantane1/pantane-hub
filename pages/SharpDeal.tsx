@@ -67,12 +67,12 @@ const SharpDeal: React.FC = () => {
       {/* Reward info */}
       <div className="grid sm:grid-cols-3 gap-4">
         <div className="bg-slate-50 rounded-2xl p-5">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Signup Reward</p>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">New User</p>
           <p className="text-xl font-extrabold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>{deal.reward}</p>
         </div>
         {deal.referralReward && (
           <div className="bg-slate-50 rounded-2xl p-5">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Referral Reward</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Referrer</p>
             <p className="text-xl font-extrabold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>{deal.referralReward}</p>
           </div>
         )}

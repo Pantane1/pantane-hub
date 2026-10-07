@@ -4,11 +4,12 @@ Drop thumbnail images into `public/assets/sharp-deals/`, named to match each
 deal's `slug` (see `data/sharp.json`), then set that path as the deal's
 `thumbnail` field.
 
-Current deal:
+Current deals:
 
 | Deal slug | Expected file |
 |---|---|
 | `heist-attack` | `public/assets/sharp-deals/heist-attack.jpg` |
+| `loop-kyc` | `public/assets/sharp-deals/loop-kyc.jpg` |
 
 **Specs:**
 - Aspect ratio: 16:9 — matches the card/detail thumbnail container exactly
