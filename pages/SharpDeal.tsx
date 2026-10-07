@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getDealBySlug } from '../data/sharp';
 import { DealThumbnail, SharpCategoryBadge, SharpStatusBadge, formatDealDate, dealHeadline } from '../components/SharpDealCard';
 import CopyCode from '../components/CopyCode';
 import SharpRequestForm from '../components/SharpRequestForm';
 import SharpDisclaimer from '../components/SharpDisclaimer';
+import SharpFeedbackModal from '../components/SharpFeedbackModal';
 import { useSeo } from '../hooks/useSeo';
 import { DEFAULT_OG_IMAGE } from '../data/pageSeo';
 
@@ -31,6 +32,7 @@ const SharpDeal: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const deal = slug ? getDealBySlug(slug) : undefined;
   const isReward = !!deal && (!deal.dealType || deal.dealType === 'reward');
+  const [showFeedback, setShowFeedback] = useState(false);
 
   useSeo({
     title: deal ? `${deal.title} — ${dealHeadline(deal)} | Sharp` : 'Deal Not Found | Sharp — PantaneHub',
@@ -155,7 +157,8 @@ const SharpDeal: React.FC = () => {
         </div>
       )}
 
-      {/* CTA — request form for marketplace/service deals, external link for reward deals */}
+      {/* CTA — request form for marketplace/service deals; external link
+         (+ optional feedback-report button) for reward deals like Absa/Loop/Uber Eats */}
       {deal.requestFields && deal.requestFields.length > 0 ? (
         <section className="space-y-3">
           <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
@@ -168,15 +171,31 @@ const SharpDeal: React.FC = () => {
             ctaLabel={deal.externalLabel || 'Submit'}
           />
         </section>
-      ) : deal.externalUrl && (
-        <a
-          href={deal.externalUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-700 transition-colors w-full sm:w-auto"
-        >
-          {deal.externalLabel || 'Get Started'} <span aria-hidden="true">→</span>
-        </a>
+      ) : (
+        <div className="flex flex-col sm:flex-row gap-3">
+          {deal.externalUrl && (
+            <a
+              href={deal.externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-700 transition-colors w-full sm:w-auto"
+            >
+              {deal.externalLabel || 'Get Started'} <span aria-hidden="true">→</span>
+            </a>
+          )}
+          {deal.feedbackForm && (
+            <button
+              onClick={() => setShowFeedback(true)}
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-slate-900 text-slate-900 rounded-2xl font-bold hover:bg-slate-50 transition-colors w-full sm:w-auto"
+            >
+              {deal.feedbackForm.ctaLabel}
+            </button>
+          )}
+        </div>
+      )}
+
+      {showFeedback && deal.feedbackForm && (
+        <SharpFeedbackModal deal={deal} onClose={() => setShowFeedback(false)} />
       )}
 
       <SharpDisclaimer />

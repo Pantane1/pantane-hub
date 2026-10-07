@@ -130,4 +130,18 @@ export interface SharpDeal {
     icon: string;
     wordmark?: string;
   };
+  /** Optional secondary CTA for deals that need the user to report back
+   *  completion (e.g. "I've Done X") rather than just following an
+   *  external link. Opens a small modal that collects a name, WhatsApp
+   *  number, a completion confirmation, and sends it as a pre-filled
+   *  wa.me deep link — nothing is auto-sent or stored. */
+  feedbackForm?: {
+    ctaLabel: string;
+    /** Digits only (no +), matches wa.me's expected format. */
+    whatsappNumber: string;
+    /** Label for the status question, e.g. "Promotion status". Defaults to a generic prompt. */
+    statusLabel?: string;
+    /** The two radio options for the status question. */
+    statusOptions?: [string, string];
+  };
 }

@@ -12,6 +12,7 @@ Current deals:
 | `loop-kyc` | `public/assets/sharp-deals/loop-kyc.jpg` |
 | `buy-social-accounts` | `public/assets/sharp-deals/buy-social-accounts.jpg` |
 | `international-numbers` | `public/assets/sharp-deals/international-numbers.jpg` |
+| `uber-eats-promo` | `public/assets/sharp-deals/uber-eats-promo.jpg` |
 
 Note: the task brief for the account-buying and international-number deals
 suggested `/sharp/social-accounts.jpg` and `/sharp/international-numbers.jpg`

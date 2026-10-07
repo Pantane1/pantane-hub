@@ -72,7 +72,13 @@
     "dealType": "buying",
     "cardHeadline": "I Buy Accounts",
     "thumbnail": "/assets/sharp-deals/buy-social-accounts.jpg",
-    "platforms": ["X (Twitter)", "Instagram", "Facebook", "LinkedIn", "Locket"],
+    "platforms": [
+      "X (Twitter)",
+      "Instagram",
+      "Facebook",
+      "LinkedIn",
+      "Locket"
+    ],
     "pricingNote": "Price depends on the account's followers, age, engagement, platform and overall condition.",
     "safetyNote": "Only submit accounts you legitimately own or are authorized to transfer.",
     "thumbnailTheme": {
@@ -83,11 +89,47 @@
     "steps": [],
     "importantNotes": "Accounts are reviewed individually. Offers are based on account quality and current demand. An account is not automatically accepted simply because it meets a follower or age threshold.",
     "requestFields": [
-      { "name": "platform", "label": "Platform", "type": "select", "required": true, "options": ["X (Twitter)", "Instagram", "Facebook", "LinkedIn", "Locket"] },
-      { "name": "profile_link", "label": "Username / Profile Link", "type": "text", "required": true, "placeholder": "@username or profile URL" },
-      { "name": "followers", "label": "Approximate Follower Count", "type": "text", "required": true, "placeholder": "e.g. 2,500" },
-      { "name": "account_age", "label": "Approximate Account Age", "type": "text", "required": true, "placeholder": "e.g. 3 years" },
-      { "name": "notes", "label": "Other Relevant Information", "type": "textarea", "required": false, "placeholder": "Engagement, niche, past activity, etc." }
+      {
+        "name": "platform",
+        "label": "Platform",
+        "type": "select",
+        "required": true,
+        "options": [
+          "X (Twitter)",
+          "Instagram",
+          "Facebook",
+          "LinkedIn",
+          "Locket"
+        ]
+      },
+      {
+        "name": "profile_link",
+        "label": "Username / Profile Link",
+        "type": "text",
+        "required": true,
+        "placeholder": "@username or profile URL"
+      },
+      {
+        "name": "followers",
+        "label": "Approximate Follower Count",
+        "type": "text",
+        "required": true,
+        "placeholder": "e.g. 2,500"
+      },
+      {
+        "name": "account_age",
+        "label": "Approximate Account Age",
+        "type": "text",
+        "required": true,
+        "placeholder": "e.g. 3 years"
+      },
+      {
+        "name": "notes",
+        "label": "Other Relevant Information",
+        "type": "textarea",
+        "required": false,
+        "placeholder": "Engagement, niche, past activity, etc."
+      }
     ],
     "requestSubject": "Sharp: Social Media Account Submission",
     "externalLabel": "Submit Account"
@@ -118,11 +160,77 @@
       "You receive further instructions and details."
     ],
     "requestFields": [
-      { "name": "country", "label": "Country", "type": "select", "required": true, "options": ["United States", "United Kingdom", "Canada", "Australia", "Germany", "France", "Netherlands", "Sweden", "Norway", "South Africa", "Other country"] },
-      { "name": "other_country", "label": "If \"Other country\", please specify", "type": "text", "required": false, "placeholder": "Country name" },
-      { "name": "notes", "label": "Any Other Details", "type": "textarea", "required": false, "placeholder": "Anything else I should know" }
+      {
+        "name": "country",
+        "label": "Country",
+        "type": "select",
+        "required": true,
+        "options": [
+          "United States",
+          "United Kingdom",
+          "Canada",
+          "Australia",
+          "Germany",
+          "France",
+          "Netherlands",
+          "Sweden",
+          "Norway",
+          "South Africa",
+          "Other country"
+        ]
+      },
+      {
+        "name": "other_country",
+        "label": "If \"Other country\", please specify",
+        "type": "text",
+        "required": false,
+        "placeholder": "Country name"
+      },
+      {
+        "name": "notes",
+        "label": "Any Other Details",
+        "type": "textarea",
+        "required": false,
+        "placeholder": "Anything else I should know"
+      }
     ],
     "requestSubject": "Sharp: International Number Request",
     "externalLabel": "Request Number"
+  },
+  {
+    "id": "5",
+    "slug": "uber-eats-promo",
+    "title": "UBER EATS PROMO",
+    "category": "Opportunities",
+    "description": "Download Uber Eats, create a genuine account, and see what promotion Uber Eats offers you. Report back once it appears.",
+    "whatYouGet": "Download Uber Eats, create a genuine account, and complete any verification Uber Eats requests. Whether a promotion appears for you — and what it's worth — is entirely determined by Uber Eats and depends on your account, location, and the current promotion period. There's no guaranteed reward for completing this; it's about surfacing whichever promo Uber Eats currently offers new users like you, then letting Pantane know once it shows up.",
+    "reward": "access to the Uber Eats promo",
+    "status": "active",
+    "datePosted": "2026-10-07",
+    "thumbnail": "/assets/sharp-deals/uber-eats-promo.jpg",
+    "thumbnailTheme": {
+      "preset": "ubereats",
+      "icon": "🛵",
+      "wordmark": "UBER EATS"
+    },
+    "steps": [
+      "Download Uber Eats from the official app store.",
+      "Create your Uber Eats account using your genuine details.",
+      "Complete any verification Uber Eats requests.",
+      "Wait for the relevant promotion to appear in your notifications/promotions area.",
+      "Return to Sharp and tap \"I've Done Uber Eats\" to send your confirmation to Pantane."
+    ],
+    "externalUrl": "https://play.google.com/store/apps/details?id=com.ubercab.eats",
+    "externalLabel": "Get Uber Eats",
+    "importantNotes": "Promotion availability and eligibility are determined by Uber Eats and may vary by account, location, and promotion period. Use your genuine location and account information — never provide false details to Uber Eats.",
+    "feedbackForm": {
+      "ctaLabel": "I've Done Uber Eats",
+      "whatsappNumber": "254740312402",
+      "statusLabel": "Promotion status",
+      "statusOptions": [
+        "Promotion has appeared",
+        "Still waiting for promotion"
+      ]
+    }
   }
 ]

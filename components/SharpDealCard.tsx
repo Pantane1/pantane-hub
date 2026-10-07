@@ -30,6 +30,7 @@ const THUMBNAIL_PRESETS: Record<string, string> = {
   loop: 'from-indigo-950 via-purple-900 to-fuchsia-800',
   accounts: 'from-slate-900 via-slate-800 to-amber-900',
   numbers: 'from-slate-900 via-blue-900 to-cyan-800',
+  ubereats: 'from-black via-zinc-900 to-emerald-600',
 };
 
 export const formatDealDate = (iso: string) =>
