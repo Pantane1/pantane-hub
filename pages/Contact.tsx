@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import emailjs from '@emailjs/browser';
 import { useSeo } from '../hooks/useSeo';
 import { pageSeo } from '../data/pageSeo';
+import { EMAILJS_SERVICE_ID, EMAILJS_PUBLIC_KEY, EMAILJS_NOTIFY_TEMPLATE_ID, EMAILJS_AUTOREPLY_TEMPLATE_ID } from '../data/emailConfig';
 
 const Contact: React.FC = () => {
   useSeo(pageSeo.contact);
@@ -14,10 +15,10 @@ const Contact: React.FC = () => {
     setLoading(true);
     setError(null);
     const form = e.currentTarget;
-    const serviceId  = import.meta.env.VITE_EMAILJS_SERVICE_ID   || 'service_65nlo8m';
-    const publicKey  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY   || '6B39GrANe3KTTGYGH';
-    const notifyTemplateId    = import.meta.env.VITE_EMAILJS_TEMPLATE_ID          || 'template_b1391e3';
-    const autoreplyTemplateId = import.meta.env.VITE_EMAILJS_AUTOREPLY_TEMPLATE_ID || 'template_y88lggc';
+    const serviceId  = EMAILJS_SERVICE_ID;
+    const publicKey  = EMAILJS_PUBLIC_KEY;
+    const notifyTemplateId    = EMAILJS_NOTIFY_TEMPLATE_ID;
+    const autoreplyTemplateId = EMAILJS_AUTOREPLY_TEMPLATE_ID;
 
     const formData = new FormData(form);
     const senderName  = formData.get('from_name')  as string;

@@ -58,5 +58,71 @@
     "externalUrl": "https://cbaloop.page.link/home",
     "externalLabel": "Get Started with Loop",
     "importantNotes": "⚠️ Downloading or creating an account is not enough. Your profile must be fully completed for the registration to qualify."
+  },
+  {
+    "id": "3",
+    "slug": "buy-social-accounts",
+    "title": "I BUY SOCIAL MEDIA ACCOUNTS",
+    "category": "Opportunities",
+    "description": "Have an old social media account you're no longer using? I may buy it.",
+    "whatYouGet": "I'm buying existing social media accounts. The price isn't fixed — it depends mainly on followers, account age, engagement, condition and platform. Submit your account's details below and I'll review it individually.",
+    "status": "active",
+    "statusLabel": "Buying",
+    "datePosted": "2026-10-07",
+    "dealType": "buying",
+    "cardHeadline": "I Buy Accounts",
+    "thumbnail": "/assets/sharp-deals/buy-social-accounts.jpg",
+    "platforms": ["X (Twitter)", "Instagram", "Facebook", "LinkedIn", "Locket"],
+    "pricingNote": "Price depends on the account's followers, age, engagement, platform and overall condition.",
+    "safetyNote": "Only submit accounts you legitimately own or are authorized to transfer.",
+    "thumbnailTheme": {
+      "preset": "accounts",
+      "icon": "🔄",
+      "wordmark": "SHARP"
+    },
+    "steps": [],
+    "importantNotes": "Accounts are reviewed individually. Offers are based on account quality and current demand. An account is not automatically accepted simply because it meets a follower or age threshold.",
+    "requestFields": [
+      { "name": "platform", "label": "Platform", "type": "select", "required": true, "options": ["X (Twitter)", "Instagram", "Facebook", "LinkedIn", "Locket"] },
+      { "name": "profile_link", "label": "Username / Profile Link", "type": "text", "required": true, "placeholder": "@username or profile URL" },
+      { "name": "followers", "label": "Approximate Follower Count", "type": "text", "required": true, "placeholder": "e.g. 2,500" },
+      { "name": "account_age", "label": "Approximate Account Age", "type": "text", "required": true, "placeholder": "e.g. 3 years" },
+      { "name": "notes", "label": "Other Relevant Information", "type": "textarea", "required": false, "placeholder": "Engagement, niche, past activity, etc." }
+    ],
+    "requestSubject": "Sharp: Social Media Account Submission",
+    "externalLabel": "Submit Account"
+  },
+  {
+    "id": "4",
+    "slug": "international-numbers",
+    "title": "INTERNATIONAL NUMBERS",
+    "category": "Services",
+    "description": "Request an international phone number from a country of your choice.",
+    "whatYouGet": "Choose a country, submit your request, and I'll process it and get back to you with further instructions. Availability depends on the country and current supply.",
+    "status": "active",
+    "statusLabel": "Available on Request",
+    "datePosted": "2026-10-07",
+    "dealType": "service-request",
+    "cardHeadline": "Request a Number",
+    "thumbnail": "/assets/sharp-deals/international-numbers.jpg",
+    "pricingNote": "Availability depends on the country and current supply.",
+    "thumbnailTheme": {
+      "preset": "numbers",
+      "icon": "🌐",
+      "wordmark": "SHARP"
+    },
+    "steps": [
+      "Choose your country from the list.",
+      "Submit your request.",
+      "I process the request.",
+      "You receive further instructions and details."
+    ],
+    "requestFields": [
+      { "name": "country", "label": "Country", "type": "select", "required": true, "options": ["United States", "United Kingdom", "Canada", "Australia", "Germany", "France", "Netherlands", "Sweden", "Norway", "South Africa", "Other country"] },
+      { "name": "other_country", "label": "If \"Other country\", please specify", "type": "text", "required": false, "placeholder": "Country name" },
+      { "name": "notes", "label": "Any Other Details", "type": "textarea", "required": false, "placeholder": "Anything else I should know" }
+    ],
+    "requestSubject": "Sharp: International Number Request",
+    "externalLabel": "Request Number"
   }
 ]

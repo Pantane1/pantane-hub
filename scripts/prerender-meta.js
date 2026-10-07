@@ -128,9 +128,14 @@ writePage('sharp', renderPage({
 }));
 
 // ── Individual Sharp deals ─────────────────────────────────────────────
+// Mirrors the dealHeadline() fallback in components/SharpDealCard.tsx: reward
+// deals (Absa, Loop) get "Get {reward}"; buying/service-request deals use
+// their own cardHeadline instead, since they have no `reward` value.
+const dealHeadline = (deal) => deal.cardHeadline || (deal.reward ? `Get ${deal.reward}` : deal.title);
+
 for (const deal of deals) {
   writePage(`sharp/${deal.slug}`, renderPage({
-    title: `${deal.title} — Get ${deal.reward} | Sharp`,
+    title: `${deal.title} — ${dealHeadline(deal)} | Sharp`,
     description: deal.description,
     url: `${SITE_URL}/sharp/${deal.slug}`,
     image: deal.thumbnail || DEFAULT_OG_IMAGE,

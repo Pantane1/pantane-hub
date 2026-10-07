@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SharpCategory } from '../types';
 import { getAllDeals, getDealsByCategory, getFeaturedDeal, isDealExpired, SHARP_CATEGORIES } from '../data/sharp';
-import SharpDealCard, { DealThumbnail, SharpCategoryBadge, SharpStatusBadge } from '../components/SharpDealCard';
+import SharpDealCard, { DealThumbnail, SharpCategoryBadge, SharpStatusBadge, dealHeadline } from '../components/SharpDealCard';
 import SharpDisclaimer from '../components/SharpDisclaimer';
 import { useSeo } from '../hooks/useSeo';
 import { pageSeo } from '../data/pageSeo';
@@ -31,7 +31,7 @@ const FeaturedDealCard: React.FC<{ deal: ReturnType<typeof getAllDeals>[number] 
         <h2 className="text-2xl md:text-4xl font-extrabold text-white leading-tight mb-3" style={{ fontFamily: 'Syne, sans-serif' }}>
           {deal.title}
         </h2>
-        <p className="text-amber-300 font-bold text-lg mb-4">Get {deal.reward}</p>
+        <p className="text-amber-300 font-bold text-lg mb-4">{dealHeadline(deal)}</p>
         <p className="text-slate-300 leading-relaxed mb-7 max-w-md">{deal.description}</p>
 
         <span className={`inline-flex items-center px-6 py-3 rounded-2xl font-bold text-sm w-fit transition-colors ${expired ? 'bg-white/10 text-slate-400' : 'bg-white text-slate-900 group-hover:bg-amber-400'}`}>

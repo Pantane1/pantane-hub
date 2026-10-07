@@ -10,6 +10,15 @@ Current deals:
 |---|---|
 | `heist-attack` | `public/assets/sharp-deals/heist-attack.jpg` |
 | `loop-kyc` | `public/assets/sharp-deals/loop-kyc.jpg` |
+| `buy-social-accounts` | `public/assets/sharp-deals/buy-social-accounts.jpg` |
+| `international-numbers` | `public/assets/sharp-deals/international-numbers.jpg` |
+
+Note: the task brief for the account-buying and international-number deals
+suggested `/sharp/social-accounts.jpg` and `/sharp/international-numbers.jpg`
+as the asset paths. Used the existing `/assets/sharp-deals/<slug>.jpg`
+convention instead, to stay consistent with Absa/Loop and this doc rather
+than introduce a second, differently-located asset folder for the same kind
+of thing.
 
 **Specs:**
 - Aspect ratio: 16:9 — matches the card/detail thumbnail container exactly

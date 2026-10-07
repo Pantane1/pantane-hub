@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getDealBySlug } from '../data/sharp';
-import { DealThumbnail, SharpCategoryBadge, SharpStatusBadge, formatDealDate } from '../components/SharpDealCard';
+import { DealThumbnail, SharpCategoryBadge, SharpStatusBadge, formatDealDate, dealHeadline } from '../components/SharpDealCard';
 import CopyCode from '../components/CopyCode';
+import SharpRequestForm from '../components/SharpRequestForm';
 import SharpDisclaimer from '../components/SharpDisclaimer';
 import { useSeo } from '../hooks/useSeo';
 import { DEFAULT_OG_IMAGE } from '../data/pageSeo';
@@ -29,9 +30,10 @@ const DealNotFound: React.FC<{ slug?: string }> = ({ slug }) => {
 const SharpDeal: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const deal = slug ? getDealBySlug(slug) : undefined;
+  const isReward = !!deal && (!deal.dealType || deal.dealType === 'reward');
 
   useSeo({
-    title: deal ? `${deal.title} — Get ${deal.reward} | Sharp` : 'Deal Not Found | Sharp — PantaneHub',
+    title: deal ? `${deal.title} — ${dealHeadline(deal)} | Sharp` : 'Deal Not Found | Sharp — PantaneHub',
     description: deal ? deal.description : "This Sharp deal doesn't exist or may have been removed.",
     path: `/sharp/${slug || ''}`,
     image: deal?.thumbnail || DEFAULT_OG_IMAGE,
@@ -64,29 +66,61 @@ const SharpDeal: React.FC = () => {
         </h1>
       </header>
 
-      {/* Reward info */}
-      <div className="grid sm:grid-cols-3 gap-4">
-        <div className="bg-slate-50 rounded-2xl p-5">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">New User</p>
-          <p className="text-xl font-extrabold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>{deal.reward}</p>
-        </div>
-        {deal.referralReward && (
+      {/* Reward info — reward-type deals only (Absa, Loop) */}
+      {isReward && (
+        <div className="grid sm:grid-cols-3 gap-4">
           <div className="bg-slate-50 rounded-2xl p-5">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Referrer</p>
-            <p className="text-xl font-extrabold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>{deal.referralReward}</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">New User</p>
+            <p className="text-xl font-extrabold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>{deal.reward}</p>
           </div>
-        )}
-        <div className="bg-slate-50 rounded-2xl p-5">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Status</p>
-          <div className="mt-1"><SharpStatusBadge deal={deal} /></div>
+          {deal.referralReward && (
+            <div className="bg-slate-50 rounded-2xl p-5">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Referrer</p>
+              <p className="text-xl font-extrabold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>{deal.referralReward}</p>
+            </div>
+          )}
+          <div className="bg-slate-50 rounded-2xl p-5">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Status</p>
+            <div className="mt-1"><SharpStatusBadge deal={deal} /></div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* What you get */}
       <section className="space-y-3">
         <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">What you get</h2>
         <p className="text-slate-600 leading-relaxed text-lg">{deal.whatYouGet}</p>
       </section>
+
+      {/* Platforms — buying-type deals */}
+      {deal.platforms && deal.platforms.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Platforms I Buy</h2>
+          <div className="flex flex-wrap gap-2">
+            {deal.platforms.map(p => (
+              <span key={p} className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-700">
+                {p}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Pricing / availability note — buying + service-request deals */}
+      {deal.pricingNote && (
+        <div className="bg-slate-50 rounded-2xl p-5">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Pricing</p>
+          <p className="text-sm text-slate-600 leading-relaxed">{deal.pricingNote}</p>
+        </div>
+      )}
+
+      {/* Ownership / authorization requirement — buying-type deals */}
+      {deal.safetyNote && (
+        <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4">
+          <span className="text-base leading-none mt-0.5" aria-hidden="true">🔒</span>
+          <p className="text-sm text-blue-800 leading-relaxed">{deal.safetyNote}</p>
+        </div>
+      )}
 
       {/* How it works */}
       {deal.steps.length > 0 && (
@@ -105,7 +139,7 @@ const SharpDeal: React.FC = () => {
         </section>
       )}
 
-      {/* Referral code */}
+      {/* Referral code — reward-type deals with one (Absa, Loop) */}
       {deal.referralCode && (
         <section className="space-y-3">
           <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Referral Code</h2>
@@ -121,8 +155,20 @@ const SharpDeal: React.FC = () => {
         </div>
       )}
 
-      {/* CTA */}
-      {deal.externalUrl && (
+      {/* CTA — request form for marketplace/service deals, external link for reward deals */}
+      {deal.requestFields && deal.requestFields.length > 0 ? (
+        <section className="space-y-3">
+          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+            {deal.dealType === 'buying' ? 'Submit Your Account' : 'Submit Your Request'}
+          </h2>
+          <SharpRequestForm
+            dealTitle={deal.title}
+            requestSubject={deal.requestSubject || `Sharp: ${deal.title}`}
+            fields={deal.requestFields}
+            ctaLabel={deal.externalLabel || 'Submit'}
+          />
+        </section>
+      ) : deal.externalUrl && (
         <a
           href={deal.externalUrl}
           target="_blank"

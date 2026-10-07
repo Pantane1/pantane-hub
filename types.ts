@@ -63,8 +63,22 @@ export interface JournalPost {
 }
 
 /* ─── Sharp ─────────────────────────────────────────────────────────────────── */
-export type SharpCategory = 'Deals' | 'Rewards' | 'Referrals' | 'Opportunities';
+export type SharpCategory = 'Deals' | 'Rewards' | 'Referrals' | 'Opportunities' | 'Services';
 export type SharpStatus = 'active' | 'expired';
+/** 'reward' (default when omitted) is the Absa/Loop style: reward + referral +
+ *  external CTA. 'buying' and 'service-request' are marketplace/service
+ *  listings that collect a request via SharpRequestForm instead. */
+export type SharpDealType = 'reward' | 'buying' | 'service-request';
+
+export interface SharpRequestField {
+  name: string;
+  label: string;
+  type: 'text' | 'select' | 'textarea';
+  placeholder?: string;
+  required?: boolean;
+  /** For type: 'select'. */
+  options?: string[];
+}
 
 export interface SharpDeal {
   id: string;
@@ -76,10 +90,16 @@ export interface SharpDeal {
   /** Longer "what you get" copy for the deal detail page. */
   whatYouGet: string;
   thumbnail?: string;
-  /** Display value, e.g. "KSh 50". */
-  reward: string;
+  dealType?: SharpDealType;
+  /** Display value, e.g. "KSh 50". Only meaningful for dealType 'reward'. */
+  reward?: string;
   referralReward?: string;
   status: SharpStatus;
+  /** Overrides the status badge's displayed text (e.g. "Buying",
+   *  "Available on Request") while `status` still governs active/expired logic. */
+  statusLabel?: string;
+  /** Overrides the card/detail "Get {reward}" headline for non-reward deal types. */
+  cardHeadline?: string;
   /** ISO date string. */
   datePosted: string;
   /** ISO date string — past this, the deal is treated as expired even if status is still 'active'. */
@@ -89,6 +109,16 @@ export interface SharpDeal {
   externalUrl?: string;
   externalLabel?: string;
   importantNotes?: string;
+  /** dealType 'buying': platforms accepted, e.g. ["X (Twitter)", "Instagram"]. */
+  platforms?: string[];
+  /** dealType 'buying' | 'service-request': short informational note about pricing/availability. */
+  pricingNote?: string;
+  /** dealType 'buying': ownership/authorization requirement. */
+  safetyNote?: string;
+  /** dealType 'buying' | 'service-request': renders a SharpRequestForm with these fields. */
+  requestFields?: SharpRequestField[];
+  /** Subject line used in the email sent via SharpRequestForm. */
+  requestSubject?: string;
   /** Themed placeholder shown while `thumbnail` is unset or 404s — lets a
    *  deal's provider "energy" come through (brand color, an icon, the
    *  provider's name as plain text) without using any trademarked logo

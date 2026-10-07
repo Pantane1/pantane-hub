@@ -8,7 +8,7 @@ import sharpDealsData from './sharp.json';
  */
 export const sharpDeals: SharpDeal[] = sharpDealsData as SharpDeal[];
 
-export const SHARP_CATEGORIES: (SharpCategory | 'All')[] = ['All', 'Deals', 'Rewards', 'Referrals', 'Opportunities'];
+export const SHARP_CATEGORIES: (SharpCategory | 'All')[] = ['All', 'Deals', 'Rewards', 'Referrals', 'Opportunities', 'Services'];
 
 /** All deals, newest first. */
 export const getAllDeals = (): SharpDeal[] =>
@@ -21,10 +21,13 @@ export const isDealExpired = (deal: SharpDeal): boolean => {
   return false;
 };
 
-/** The featured deal shown at the top of the feed — newest active (non-expired) deal, if any. */
+/** The featured deal shown at the top of the feed — newest active (non-expired)
+ *  reward-type deal, if any. Marketplace/service listings (dealType 'buying'
+ *  or 'service-request') use their own card framing and aren't eligible for
+ *  the featured slot, which is built around the "Get {reward}" reward format. */
 export const getFeaturedDeal = (): SharpDeal | undefined => {
-  const all = getAllDeals();
-  return all.find(d => !isDealExpired(d)) || all[0];
+  const rewardDeals = getAllDeals().filter(d => !d.dealType || d.dealType === 'reward');
+  return rewardDeals.find(d => !isDealExpired(d)) || rewardDeals[0];
 };
 
 export const getDealsByCategory = (category: SharpCategory | 'All'): SharpDeal[] => {

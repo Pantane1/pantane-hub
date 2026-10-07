@@ -15,6 +15,7 @@ export const SHARP_CATEGORY_META: Record<SharpCategory, CategoryMeta> = {
   'Rewards':       { emoji: '⚡', badgeClass: 'text-amber-600 bg-amber-50' },
   'Referrals':     { emoji: '🔗', badgeClass: 'text-indigo-600 bg-indigo-50' },
   'Opportunities': { emoji: '🚀', badgeClass: 'text-emerald-600 bg-emerald-50' },
+  'Services':      { emoji: '🛠️', badgeClass: 'text-cyan-600 bg-cyan-50' },
 };
 
 /** Gradient presets for the placeholder thumbnail, keyed by `thumbnailTheme.preset`
@@ -27,6 +28,8 @@ const THUMBNAIL_PRESETS: Record<string, string> = {
   default: 'from-slate-900 via-blue-950 to-emerald-900',
   absa: 'from-black via-red-950 to-red-700',
   loop: 'from-indigo-950 via-purple-900 to-fuchsia-800',
+  accounts: 'from-slate-900 via-slate-800 to-amber-900',
+  numbers: 'from-slate-900 via-blue-900 to-cyan-800',
 };
 
 export const formatDealDate = (iso: string) =>
@@ -47,10 +50,16 @@ export const SharpStatusBadge: React.FC<{ deal: SharpDeal; className?: string }>
   return (
     <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider whitespace-nowrap ${expired ? 'bg-slate-100 text-slate-400' : 'bg-emerald-50 text-emerald-600'} ${className}`}>
       <span aria-hidden="true">{expired ? '⚪' : '🟢'}</span>
-      {expired ? 'Expired' : 'Active'}
+      {expired ? 'Expired' : (deal.statusLabel || 'Active')}
     </span>
   );
 };
+
+/** "Get KSh 50" for reward-type deals; a deal-supplied cardHeadline for
+ *  buying/service-request deals (e.g. "I Buy Accounts"); the title itself
+ *  as a last-resort fallback so nothing ever renders "Get undefined". */
+export const dealHeadline = (deal: SharpDeal): string =>
+  deal.cardHeadline || (deal.reward ? `Get ${deal.reward}` : deal.title);
 
 /** Thumbnail with a graceful themed placeholder if no image / the image
  *  404s — same pattern as HeroCarousel, so the grid looks complete before
@@ -80,8 +89,8 @@ export const DealThumbnail: React.FC<{ deal: SharpDeal; badge?: string; classNam
             {theme?.icon || '⚡'}
           </span>
           <span className="relative text-4xl opacity-90" aria-hidden="true">{theme?.icon || '⚡'}</span>
-          <span className="relative text-white font-extrabold text-2xl tracking-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
-            Get {deal.reward}
+          <span className="relative text-white font-extrabold text-2xl tracking-tight text-center px-6" style={{ fontFamily: 'Syne, sans-serif' }}>
+            {dealHeadline(deal)}
           </span>
           {theme?.wordmark && (
             <span className="relative text-[11px] font-bold tracking-[0.3em] text-white/70 uppercase">{theme.wordmark}</span>
@@ -125,7 +134,7 @@ const SharpDealCard: React.FC<SharpDealCardProps> = ({ deal }) => {
         </div>
 
         <h3 className="text-lg font-bold text-slate-900 leading-snug mb-2 group-hover:text-blue-600 transition-colors" style={{ fontFamily: 'Syne, sans-serif' }}>
-          Get {deal.reward}
+          {dealHeadline(deal)}
         </h3>
 
         <p className="text-slate-500 text-sm line-clamp-2 mb-5 flex-grow leading-relaxed">
