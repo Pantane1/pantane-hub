@@ -29,7 +29,7 @@ const SocialCard = ({ name, handle, icon, url, color, desc }: {
 
 const Socials: React.FC = () => {
   useSeo(pageSeo.socials);
-  const msg = encodeURIComponent('hi Pantane, got your number from your website.Am ');
+  const msg = encodeURIComponent('hi *Pantane*, got your number from your website.Am ');
   return (
     <div className="fade-in max-w-3xl mx-auto space-y-12">
       <div>
