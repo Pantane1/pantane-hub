@@ -107,7 +107,7 @@ const Contact: React.FC = () => {
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>Message Received!</h3>
-              <p className="text-slate-500 text-sm">Thanks for reaching out. I'll get back to you within 24 hours.</p>
+              <p className="text-slate-500 text-sm">Thanks for reaching out. Check your email inbox, Response within 24hrs.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
