@@ -9,7 +9,7 @@ import Sharp from './pages/Sharp';
 import SharpDeal from './pages/SharpDeal';
 import Socials from './pages/Socials';
 import Contact from './pages/Contact';
-import Support from '/pages/Support';
+import Support from './pages/Support';
 import AdminJournal from './pages/AdminJournal';
 import NotFound from './pages/NotFound';
 
