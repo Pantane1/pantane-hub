@@ -11,6 +11,7 @@ import Socials from './pages/Socials';
 import Contact from './pages/Contact';
 import Support from './pages/Support';
 import AdminJournal from './pages/AdminJournal';
+import AdminSharp from './pages/AdminSharp';
 import NotFound from './pages/NotFound';
 
 const ScrollToTop: React.FC = () => {
@@ -34,6 +35,7 @@ const App: React.FC = () => (
       <Route path="/support" element={<Support />} />
       {/* Not linked in nav — reachable only if you know the URL */}
       <Route path="/admin/journal" element={<AdminJournal />} />
+      <Route path="/admin/sharp" element={<AdminSharp />} />
       {/* Fallback — dedicated 404, noindex, distinct from silently duplicating Home content */}
       <Route path="*" element={<NotFound />} />
     </Routes>
