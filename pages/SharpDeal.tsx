@@ -7,7 +7,7 @@ import SharpRequestForm from '../components/SharpRequestForm';
 import SharpDisclaimer from '../components/SharpDisclaimer';
 import SharpFeedbackModal from '../components/SharpFeedbackModal';
 import { useSeo } from '../hooks/useSeo';
-import { DEFAULT_OG_IMAGE } from '../data/pageSeo';
+import { DEFAULT_OG_IMAGE, SITE_URL } from '../data/pageSeo';
 
 const DealNotFound: React.FC<{ slug?: string }> = ({ slug }) => {
   useSeo({
@@ -38,7 +38,10 @@ const SharpDeal: React.FC = () => {
     title: deal ? `${deal.title} — ${dealHeadline(deal)} | Sharp` : 'Deal Not Found | Sharp — PantaneHub',
     description: deal ? deal.description : "This Sharp deal doesn't exist or may have been removed.",
     path: `/sharp/${slug || ''}`,
-    image: deal?.thumbnail || DEFAULT_OG_IMAGE,
+    // Link previews need an absolute URL to a raster image (not SVG); otherwise use the site default.
+    image: deal?.thumbnail && /\.(jpe?g|png|webp)$/i.test(deal.thumbnail)
+      ? (deal.thumbnail.startsWith('http') ? deal.thumbnail : `${SITE_URL}${deal.thumbnail}`)
+      : DEFAULT_OG_IMAGE,
     noindex: !deal,
   });
 

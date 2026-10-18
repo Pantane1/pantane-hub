@@ -10,7 +10,7 @@
     "referralReward": "KSh 100 per referral",
     "status": "active",
     "datePosted": "2026-09-29",
-    "thumbnail": "/assets/sharp-deals/heist-attack.jpg",
+    "thumbnail": "/assets/sharp-deals/heist-attack.svg",
     "thumbnailTheme": {
       "preset": "absa",
       "icon": "🏦",
@@ -41,7 +41,7 @@
     "referralReward": "KSh 200 per referral",
     "status": "active",
     "datePosted": "2026-10-07",
-    "thumbnail": "/assets/sharp-deals/loop-kyc.jpg",
+    "thumbnail": "/assets/sharp-deals/loop-kyc.svg",
     "thumbnailTheme": {
       "preset": "loop",
       "icon": "🔁",
@@ -71,7 +71,7 @@
     "datePosted": "2026-10-07",
     "dealType": "buying",
     "cardHeadline": "I Buy Accounts",
-    "thumbnail": "/assets/sharp-deals/buy-social-accounts.jpg",
+    "thumbnail": "/assets/sharp-deals/buy-social-accounts.svg",
     "platforms": [
       "X (Twitter)",
       "Instagram",
@@ -146,7 +146,7 @@
     "datePosted": "2026-10-07",
     "dealType": "service-request",
     "cardHeadline": "Request a Number",
-    "thumbnail": "/assets/sharp-deals/international-numbers.jpg",
+    "thumbnail": "/assets/sharp-deals/international-numbers.svg",
     "pricingNote": "Availability depends on the country and current supply.",
     "thumbnailTheme": {
       "preset": "numbers",
@@ -207,7 +207,7 @@
     "reward": "access to the Uber Eats promo",
     "status": "active",
     "datePosted": "2026-10-07",
-    "thumbnail": "/assets/sharp-deals/uber-eats-promo.jpg",
+    "thumbnail": "/assets/sharp-deals/uber-eats-promo.svg",
     "thumbnailTheme": {
       "preset": "ubereats",
       "icon": "🛵",

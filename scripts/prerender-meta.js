@@ -131,6 +131,7 @@ writePage('sharp', renderPage({
 // Mirrors the dealHeadline() fallback in components/SharpDealCard.tsx: reward
 // deals (Absa, Loop) get "Get {reward}"; buying/service-request deals use
 // their own cardHeadline instead, since they have no `reward` value.
+const ogImageFor = (t) => (t && /\.(jpe?g|png|webp)$/i.test(t) ? (t.startsWith('http') ? t : `${SITE_URL}${t}`) : DEFAULT_OG_IMAGE);
 const dealHeadline = (deal) => deal.cardHeadline || (deal.reward ? `Get ${deal.reward}` : deal.title);
 
 for (const deal of deals) {
@@ -138,7 +139,7 @@ for (const deal of deals) {
     title: `${deal.title} — ${dealHeadline(deal)} | Sharp`,
     description: deal.description,
     url: `${SITE_URL}/sharp/${deal.slug}`,
-    image: deal.thumbnail || DEFAULT_OG_IMAGE,
+    image: ogImageFor(deal.thumbnail),
     ogType: 'website',
   }));
 }

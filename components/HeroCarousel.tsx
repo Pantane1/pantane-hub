@@ -14,7 +14,7 @@ interface CarouselSlide {
 const SLIDES: CarouselSlide[] = [
   {
     id: 'pantane',
-    src: '/assets/pantane-carousel/01-pantane.jpg',
+    src: '/assets/pantane-carousel/01-pantane.svg',
     alt: 'Pantane, software developer',
     label: 'PANTANE — SOFTWARE ENGINEER',
     index: '01 / 07',
@@ -23,7 +23,7 @@ const SLIDES: CarouselSlide[] = [
   },
   {
     id: 'building',
-    src: '/assets/pantane-carousel/02-building.jpg',
+    src: '/assets/pantane-carousel/02-building.svg',
     alt: 'Developer workspace with a laptop and code editor',
     label: 'BUILDING • SHIPPING • LEARNING',
     index: '02 / 07',
@@ -32,7 +32,7 @@ const SLIDES: CarouselSlide[] = [
   },
   {
     id: 'ai',
-    src: '/assets/pantane-carousel/03-ai.jpg',
+    src: '/assets/pantane-carousel/03-ai.svg',
     alt: 'AI and machine learning visualization',
     label: 'AI • AUTOMATION • ML',
     index: '03 / 07',
@@ -41,7 +41,7 @@ const SLIDES: CarouselSlide[] = [
   },
   {
     id: 'kenya',
-    src: '/assets/pantane-carousel/04-kenya-tech.jpg',
+    src: '/assets/pantane-carousel/04-kenya-tech.svg',
     alt: 'Kenyan skyline representing technology in Africa',
     label: 'KENYA • AFRICA • TECH',
     index: '04 / 07',
@@ -50,7 +50,7 @@ const SLIDES: CarouselSlide[] = [
   },
   {
     id: 'projects',
-    src: '/assets/pantane-carousel/05-projects.jpg',
+    src: '/assets/pantane-carousel/05-projects.svg',
     alt: "Showcase of Pantane's software projects",
     label: "PROJECTS I'VE BUILT",
     index: '05 / 07',
@@ -59,7 +59,7 @@ const SLIDES: CarouselSlide[] = [
   },
   {
     id: 'cloud',
-    src: '/assets/pantane-carousel/06-cloud.jpg',
+    src: '/assets/pantane-carousel/06-cloud.svg',
     alt: 'Cloud infrastructure and deployment pipeline',
     label: 'FULL-STACK • CLOUD',
     index: '06 / 07',
@@ -68,7 +68,7 @@ const SLIDES: CarouselSlide[] = [
   },
   {
     id: 'personal',
-    src: '/assets/pantane-carousel/07-personal.jpg',
+    src: '/assets/pantane-carousel/07-personal.svg',
     alt: 'Pantane outside of work — a personal moment',
     label: 'JUST A GUY',
     index: '07 / 07',
