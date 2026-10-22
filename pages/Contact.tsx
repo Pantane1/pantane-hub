@@ -59,9 +59,9 @@ const Contact: React.FC = () => {
         <div className="space-y-8 lg:sticky lg:top-28">
           <div>
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Get in touch</p>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
+            <h1 className="text-4xl md:text-5xl font-extrabold text-brand-navy leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
               Have a project in mind?{' '}
-              <span className="text-blue-600">Let's build it.</span>
+              <span className="text-brand-primary">Let's build it.</span>
             </h1>
           </div>
           <p className="text-slate-500 leading-relaxed">
@@ -71,7 +71,7 @@ const Contact: React.FC = () => {
           <div className="space-y-4">
             {/* Email */}
             <a href="mailto:pantane254@gmail.com" className="flex items-center gap-5 group">
-              <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center group-hover:bg-slate-900 transition-colors">
+              <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center group-hover:bg-brand-primary transition-colors">
                 <svg className="w-5 h-5 text-slate-500 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                 </svg>
@@ -106,7 +106,7 @@ const Contact: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"/>
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>Message Received!</h3>
+              <h3 className="text-xl font-bold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>Message Received!</h3>
               <p className="text-slate-500 text-sm">Thanks for reaching out. Check your email inbox, Response within 24hrs.</p>
             </div>
           ) : (
@@ -115,22 +115,22 @@ const Contact: React.FC = () => {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Your Name</label>
                   <input required type="text" name="from_name" placeholder="John Doe"
-                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" />
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Email Address</label>
                   <input required type="email" name="from_email" placeholder="john@example.com"
-                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" />
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all" />
                 </div>
               </div>
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Message</label>
                 <textarea required rows={5} name="message" placeholder="Tell me about your project..."
-                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none" />
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all resize-none" />
               </div>
               {error && <p className="text-red-500 text-xs bg-red-50 px-4 py-3 rounded-xl font-semibold">{error}</p>}
               <button type="submit" disabled={loading}
-                className="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-slate-700 transition-all active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed">
+                className="w-full py-4 bg-brand-primary text-white rounded-2xl font-bold text-sm hover:bg-brand-burgundy transition-all active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed">
                 {loading ? 'Sending…' : 'Send Message →'}
               </button>
             </form>

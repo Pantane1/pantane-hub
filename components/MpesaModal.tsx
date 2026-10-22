@@ -62,7 +62,7 @@ const MpesaModal: React.FC<MpesaModalProps> = ({ isOpen, onClose }) => {
                 Check your phone for the M-Pesa prompt and enter your PIN to complete the payment.
               </p>
             </div>
-            <button onClick={handleClose} className="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-slate-700 transition-all active:scale-[0.99]">
+            <button onClick={handleClose} className="w-full py-4 bg-brand-primary text-white rounded-2xl font-bold text-sm hover:bg-brand-burgundy transition-all active:scale-[0.99]">
               Done
             </button>
           </div>
@@ -97,7 +97,7 @@ const MpesaModal: React.FC<MpesaModalProps> = ({ isOpen, onClose }) => {
             <div className="flex gap-2">
               {['50','100','200','500'].map(v => (
                 <button key={v} onClick={() => setAmount(v)}
-                  className={`flex-1 py-2 rounded-xl text-xs font-bold transition-colors ${amount === v ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}>
+                  className={`flex-1 py-2 rounded-xl text-xs font-bold transition-colors ${amount === v ? 'bg-brand-primary text-white' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}>
                   {v}
                 </button>
               ))}

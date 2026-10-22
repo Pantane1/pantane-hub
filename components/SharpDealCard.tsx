@@ -11,11 +11,11 @@ interface CategoryMeta {
 /** Static Tailwind class strings per category — kept literal so Tailwind's
  *  content scanner picks them up, same convention as JournalCard's CATEGORY_META. */
 export const SHARP_CATEGORY_META: Record<SharpCategory, CategoryMeta> = {
-  'Deals':         { emoji: '🏷️', badgeClass: 'text-blue-600 bg-blue-50' },
-  'Rewards':       { emoji: '⚡', badgeClass: 'text-amber-600 bg-amber-50' },
-  'Referrals':     { emoji: '🔗', badgeClass: 'text-indigo-600 bg-indigo-50' },
-  'Opportunities': { emoji: '🚀', badgeClass: 'text-emerald-600 bg-emerald-50' },
-  'Services':      { emoji: '🛠️', badgeClass: 'text-cyan-600 bg-cyan-50' },
+  'Deals':         { emoji: '🏷️', badgeClass: 'text-brand-navy bg-slate-100' },
+  'Rewards':       { emoji: '⚡', badgeClass: 'text-brand-primary bg-brand-primary/10' },
+  'Referrals':     { emoji: '🔗', badgeClass: 'text-brand-burgundy bg-brand-rose/20' },
+  'Opportunities': { emoji: '🚀', badgeClass: 'text-brand-burgundy bg-brand-rose/10 ring-1 ring-brand-rose/40' },
+  'Services':      { emoji: '🛠️', badgeClass: 'text-white bg-brand-burgundy' },
 };
 
 /** Gradient presets for the placeholder thumbnail, keyed by `thumbnailTheme.preset`
@@ -25,11 +25,11 @@ export const SHARP_CATEGORY_META: Record<SharpCategory, CategoryMeta> = {
  *  generates the CSS. Add a new preset here when a deal needs a color that
  *  isn't covered yet; reference it from sharp.json by its key. */
 const THUMBNAIL_PRESETS: Record<string, string> = {
-  default: 'from-slate-900 via-blue-950 to-emerald-900',
+  default: 'from-brand-navy via-brand-burgundy to-brand-primary',
   absa: 'from-black via-red-950 to-red-700',
   loop: 'from-indigo-950 via-purple-900 to-fuchsia-800',
-  accounts: 'from-slate-900 via-slate-800 to-amber-900',
-  numbers: 'from-slate-900 via-blue-900 to-cyan-800',
+  accounts: 'from-brand-navy via-brand-primary to-brand-burgundy',
+  numbers: 'from-brand-burgundy via-brand-navy to-brand-primary',
   ubereats: 'from-black via-zinc-900 to-emerald-600',
 };
 
@@ -104,7 +104,7 @@ export const DealThumbnail: React.FC<{ deal: SharpDeal; badge?: string; classNam
         </span>
       )}
       {isDealExpired(deal) && (
-        <div className="absolute inset-0 bg-slate-900/50 flex items-center justify-center">
+        <div className="absolute inset-0 bg-brand-navy/50 flex items-center justify-center">
           <span className="px-3 py-1.5 bg-white/90 text-slate-700 text-[10px] font-bold uppercase tracking-widest rounded-lg">Expired</span>
         </div>
       )}
@@ -122,7 +122,7 @@ const SharpDealCard: React.FC<SharpDealCardProps> = ({ deal }) => {
     <Link
       to={`/sharp/${deal.slug}`}
       aria-label={`View deal: ${deal.title}`}
-      className="group bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+      className="group bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
     >
       <div className="rounded-t-3xl overflow-hidden">
         <DealThumbnail deal={deal} badge="⚡ SHARP" />
@@ -134,7 +134,7 @@ const SharpDealCard: React.FC<SharpDealCardProps> = ({ deal }) => {
           <span className="text-xs text-slate-400 font-medium whitespace-nowrap">{formatDealDate(deal.datePosted)}</span>
         </div>
 
-        <h3 className="text-lg font-bold text-slate-900 leading-snug mb-2 group-hover:text-blue-600 transition-colors" style={{ fontFamily: 'Syne, sans-serif' }}>
+        <h3 className="text-lg font-bold text-brand-navy leading-snug mb-2 group-hover:text-brand-primary transition-colors" style={{ fontFamily: 'Syne, sans-serif' }}>
           {dealHeadline(deal)}
         </h3>
 
@@ -144,7 +144,7 @@ const SharpDealCard: React.FC<SharpDealCardProps> = ({ deal }) => {
 
         <div className="pt-4 border-t border-slate-50 flex items-center justify-between">
           <SharpStatusBadge deal={deal} />
-          <span className={`inline-flex items-center text-sm font-bold transition-all duration-300 ${expired ? 'text-slate-300' : 'text-slate-900 group-hover:text-blue-600 group-hover:translate-x-1'}`}>
+          <span className={`inline-flex items-center text-sm font-bold transition-all duration-300 ${expired ? 'text-slate-300' : 'text-brand-navy group-hover:text-brand-primary group-hover:translate-x-1'}`}>
             View Deal <span className="ml-1.5">→</span>
           </span>
         </div>

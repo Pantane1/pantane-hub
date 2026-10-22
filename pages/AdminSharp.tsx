@@ -285,7 +285,7 @@ const AdminSharp: React.FC = () => {
     return (
       <div className="fade-in max-w-sm mx-auto mt-20">
         <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
-          <h1 className="text-2xl font-extrabold text-slate-900 mb-1" style={{ fontFamily: 'Syne, sans-serif' }}>Sharp Admin</h1>
+          <h1 className="text-2xl font-extrabold text-brand-navy mb-1" style={{ fontFamily: 'Syne, sans-serif' }}>Sharp Admin</h1>
           <p className="text-sm text-slate-500 mb-6">Enter the admin password to continue.</p>
           <form onSubmit={handleLogin} className="space-y-4">
             <input
@@ -300,7 +300,7 @@ const AdminSharp: React.FC = () => {
             <button
               type="submit"
               disabled={loginLoading || !passwordInput}
-              className="w-full bg-slate-900 text-white font-bold py-2.5 rounded-xl hover:bg-slate-800 transition-colors disabled:opacity-50"
+              className="w-full bg-brand-primary text-white font-bold py-2.5 rounded-xl hover:bg-brand-burgundy transition-colors disabled:opacity-50"
             >
               {loginLoading ? 'Checking…' : 'Log in'}
             </button>
@@ -313,7 +313,7 @@ const AdminSharp: React.FC = () => {
   return (
     <div className="fade-in max-w-3xl mx-auto space-y-8 pb-24">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-extrabold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>⚡ Sharp Admin</h1>
+        <h1 className="text-3xl font-extrabold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>⚡ Sharp Admin</h1>
         <button onClick={handleLogout} className="text-xs font-bold text-slate-400 hover:text-slate-700 uppercase tracking-wide">
           Log out
         </button>
@@ -514,7 +514,7 @@ const AdminSharp: React.FC = () => {
         <button
           type="submit"
           disabled={saving}
-          className="w-full bg-amber-400 text-slate-900 font-bold py-3 rounded-xl hover:bg-amber-300 transition-colors disabled:opacity-50"
+          className="w-full bg-brand-rose text-brand-navy font-bold py-3 rounded-xl hover:bg-brand-rose transition-colors disabled:opacity-50"
         >
           {saving ? 'Pushing to GitHub…' : editingSlug ? 'Save changes' : 'Publish deal'}
         </button>
@@ -533,7 +533,7 @@ const AdminSharp: React.FC = () => {
                 <p className="text-xs text-slate-400">{deal.datePosted} · {deal.category} · {deal.dealType || 'reward'} · /{deal.slug}</p>
               </div>
               <div className="flex gap-2 shrink-0">
-                <button onClick={() => startEdit(deal)} className="text-xs font-bold text-slate-500 hover:text-slate-900 uppercase tracking-wide px-2">
+                <button onClick={() => startEdit(deal)} className="text-xs font-bold text-slate-500 hover:text-brand-primary uppercase tracking-wide px-2">
                   Edit
                 </button>
                 <button onClick={() => handleDelete(deal)} className="text-xs font-bold text-rose-400 hover:text-rose-600 uppercase tracking-wide px-2">

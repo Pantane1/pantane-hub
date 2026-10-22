@@ -13,11 +13,11 @@ import {
 
 /* ─── Fake code editor mock ──────────────────────────────────────────────── */
 const CODE_LINES: { indent?: number; parts: { text: string; c: string }[] }[] = [
-  { parts: [{ text: 'export', c: 'text-blue-400' }, { text: ' const ', c: 'text-slate-300' }, { text: 'Pantane', c: 'text-cyan-300' }, { text: ' = () => {', c: 'text-slate-400' }] },
-  { indent: 1, parts: [{ text: 'return', c: 'text-blue-400' }, { text: ' {', c: 'text-slate-400' }] },
-  { indent: 2, parts: [{ text: 'builds:', c: 'text-cyan-300' }, { text: " 'projects, apis, ai',", c: 'text-emerald-300' }] },
-  { indent: 2, parts: [{ text: 'ships:', c: 'text-cyan-300' }, { text: ' true,', c: 'text-amber-300' }] },
-  { indent: 2, parts: [{ text: 'journal:', c: 'text-cyan-300' }, { text: " '/journal',", c: 'text-emerald-300' }] },
+  { parts: [{ text: 'export', c: 'text-brand-rose' }, { text: ' const ', c: 'text-slate-300' }, { text: 'Pantane', c: 'text-slate-200' }, { text: ' = () => {', c: 'text-slate-400' }] },
+  { indent: 1, parts: [{ text: 'return', c: 'text-brand-rose' }, { text: ' {', c: 'text-slate-400' }] },
+  { indent: 2, parts: [{ text: 'builds:', c: 'text-slate-200' }, { text: " 'projects, apis, ai',", c: 'text-brand-rose/80' }] },
+  { indent: 2, parts: [{ text: 'ships:', c: 'text-slate-200' }, { text: ' true,', c: 'text-brand-rose' }] },
+  { indent: 2, parts: [{ text: 'journal:', c: 'text-slate-200' }, { text: " '/journal',", c: 'text-brand-rose/80' }] },
   { indent: 1, parts: [{ text: '};', c: 'text-slate-400' }] },
   { parts: [{ text: '};', c: 'text-slate-400' }] },
 ];
@@ -50,7 +50,7 @@ const TerminalMock: React.FC = () => (
     </div>
     <div className="p-4 font-mono text-[11px] space-y-1.5">
       {openingAdTerminalLines.map((line, i) => (
-        <div key={i} className={line.type === 'command' ? 'text-cyan-300' : 'text-emerald-400'}>
+        <div key={i} className={line.type === 'command' ? 'text-slate-200' : 'text-emerald-400'}>
           {line.type === 'command' ? '$ ' : '✓ '}{line.text}
         </div>
       ))}
@@ -65,7 +65,7 @@ const FloatingCard: React.FC<{ label: string; sub: string; className?: string; d
     style={{ animationDelay: delay }}
   >
     <p className="text-white text-[11px] font-bold whitespace-nowrap">{label}</p>
-    <p className="text-cyan-300/80 text-[9px] font-medium whitespace-nowrap">{sub}</p>
+    <p className="text-brand-rose/80 text-[9px] font-medium whitespace-nowrap">{sub}</p>
   </div>
 );
 
@@ -87,7 +87,7 @@ const TechRow: React.FC = () => (
 const VisualComposition: React.FC<{ floatingCards: OpeningAdVariant['floatingCards'] }> = ({ floatingCards }) => (
   <div className="relative hidden lg:flex flex-col gap-4 items-center justify-center h-full min-h-[420px] px-6">
     <div className="absolute inset-0 flex items-center justify-center">
-      <div className="ad-glow w-72 h-72 bg-blue-500/20 rounded-full blur-3xl" />
+      <div className="ad-glow w-72 h-72 bg-brand-primary/40 rounded-full blur-3xl" />
     </div>
 
     <div className="relative z-10 w-full max-w-sm space-y-4">
@@ -106,7 +106,7 @@ const VisualComposition: React.FC<{ floatingCards: OpeningAdVariant['floatingCar
 /* ─── Compact visual (mobile) ────────────────────────────────────────────── */
 const VisualCompact: React.FC = () => (
   <div className="lg:hidden space-y-3 relative">
-    <div className="ad-glow absolute -top-6 left-1/2 -translate-x-1/2 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl -z-10" />
+    <div className="ad-glow absolute -top-6 left-1/2 -translate-x-1/2 w-48 h-48 bg-brand-primary/40 rounded-full blur-3xl -z-10" />
     <TerminalMock />
     <TechRow />
   </div>
@@ -168,18 +168,18 @@ const OpeningAd: React.FC = () => {
       onClick={close}
     >
       <div
-        role="dialog"
+        role="dialog" data-surface="dark"
         aria-modal="true"
         aria-labelledby="opening-ad-heading"
         onClick={e => e.stopPropagation()}
         className="ad-scale-in relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-[1.75rem] sm:rounded-[2rem] border border-white/10 shadow-2xl"
-        style={{ background: 'radial-gradient(circle at 20% 0%, #0f1c3d 0%, #05070f 55%, #020308 100%)' }}
+        style={{ background: 'radial-gradient(circle at 20% 0%, #420001 0%, #040B15 55%, #020509 100%)' }}
       >
         <button
           ref={closeBtnRef}
           onClick={close}
           aria-label="Close"
-          className="absolute top-4 right-4 sm:top-5 sm:right-5 z-20 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 z-20 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-rose"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -205,7 +205,7 @@ const OpeningAd: React.FC = () => {
                 </h2>
               </div>
               <div className="flex gap-3">
-                <button onClick={() => goTo(variant.primaryCta.to)} className="px-5 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-white text-sm font-bold transition-colors whitespace-nowrap">
+                <button onClick={() => goTo(variant.primaryCta.to)} className="px-5 py-2.5 rounded-xl bg-brand-primary hover:bg-brand-burgundy ring-1 ring-brand-rose/50 text-white text-sm font-bold transition-colors whitespace-nowrap">
                   {variant.primaryCta.label} →
                 </button>
               </div>
@@ -218,7 +218,7 @@ const OpeningAd: React.FC = () => {
               <div className="flex items-center gap-3 flex-wrap">
                 <span className="text-sm font-black tracking-tighter" style={{ fontFamily: 'Syne, sans-serif' }}>
                   <span className="text-white">{openingAdBrand.first}</span>
-                  <span className="text-cyan-400 ml-0.5">{openingAdBrand.second}</span>
+                  <span className="text-brand-rose ml-0.5">{openingAdBrand.second}</span>
                 </span>
                 <span className="hidden sm:inline text-[10px] font-semibold text-slate-500 tracking-[0.2em] uppercase">
                   {openingAdEyebrow.join(' / ')}
@@ -227,7 +227,7 @@ const OpeningAd: React.FC = () => {
 
               <h2 id="opening-ad-heading" className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-white leading-[1.08]" style={{ fontFamily: 'Syne, sans-serif' }}>
                 {variant.headline[0]}<br />
-                <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">{variant.headline[1]}</span>
+                <span className="bg-gradient-to-r from-brand-rose to-white bg-clip-text text-transparent">{variant.headline[1]}</span>
               </h2>
 
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-md">
@@ -239,7 +239,7 @@ const OpeningAd: React.FC = () => {
               <div className="flex flex-col sm:flex-row gap-3 pt-1">
                 <button
                   onClick={() => goTo(variant.primaryCta.to)}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-white font-bold text-sm shadow-[0_0_30px_-5px_rgba(59,130,246,0.6)] hover:shadow-[0_0_40px_-5px_rgba(59,130,246,0.8)] transition-all"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-primary hover:bg-brand-burgundy ring-1 ring-brand-rose/50 text-white font-bold text-sm shadow-[0_0_30px_-5px_rgba(182,126,125,0.6)] hover:shadow-[0_0_40px_-5px_rgba(182,126,125,0.8)] transition-all"
                 >
                   {variant.primaryCta.label} <span aria-hidden="true">→</span>
                 </button>

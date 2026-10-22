@@ -59,9 +59,9 @@ const PostNotFound: React.FC<{ slug?: string }> = ({ slug }) => {
   return (
     <div className="fade-in max-w-lg mx-auto text-center py-20 space-y-5">
       <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-2xl mx-auto">🔍</div>
-      <h1 className="text-2xl font-bold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>Entry not found</h1>
+      <h1 className="text-2xl font-bold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>Entry not found</h1>
       <p className="text-slate-500 text-sm">This Journal entry doesn't exist or may have been moved.</p>
-      <Link to="/journal" className="inline-flex items-center px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-slate-700 transition-colors">
+      <Link to="/journal" className="inline-flex items-center px-6 py-3 bg-brand-primary text-white rounded-2xl font-bold text-sm hover:bg-brand-burgundy transition-colors">
         ← Back to Journal
       </Link>
     </div>
@@ -87,7 +87,7 @@ const JournalPost: React.FC = () => {
 
   return (
     <div className="fade-in max-w-3xl mx-auto space-y-12">
-      <Link to="/journal" className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-slate-900 transition-colors">
+      <Link to="/journal" className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-brand-primary transition-colors">
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
@@ -100,7 +100,7 @@ const JournalPost: React.FC = () => {
             <CategoryBadge category={post.category} />
             <span className="text-sm text-slate-400 font-medium">{formatJournalDate(post.date)}</span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
+          <h1 className="text-3xl md:text-5xl font-extrabold text-brand-navy leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
             {post.title}
           </h1>
         </header>
@@ -137,7 +137,7 @@ const JournalPost: React.FC = () => {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-slate-700 transition-colors"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-primary text-white rounded-xl font-bold text-sm hover:bg-brand-burgundy transition-colors"
                   >
                     {link.label} <span aria-hidden="true">↗</span>
                   </a>
@@ -175,7 +175,7 @@ const JournalPost: React.FC = () => {
           {post.service && (
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-amber-400 text-slate-900 rounded-2xl font-bold text-sm hover:bg-amber-300 hover:shadow-lg transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-brand-rose text-brand-navy rounded-2xl font-bold text-sm hover:bg-brand-rose hover:shadow-lg transition-all"
             >
               {post.service.cta} <span aria-hidden="true">→</span>
             </Link>

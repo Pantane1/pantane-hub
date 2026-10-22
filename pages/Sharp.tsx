@@ -12,16 +12,16 @@ const FeaturedDealCard: React.FC<{ deal: ReturnType<typeof getAllDeals>[number] 
   return (
     <Link
       to={`/sharp/${deal.slug}`}
-      className="group grid md:grid-cols-2 bg-slate-900 rounded-[2rem] overflow-hidden relative focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+      className="group grid md:grid-cols-2 bg-brand-navy rounded-[2rem] overflow-hidden relative focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-rose"
     >
       <div className="relative">
         <DealThumbnail deal={deal} badge="⚡ SHARP" />
       </div>
 
       <div className="p-8 md:p-10 flex flex-col justify-center relative">
-        <div className="absolute -top-10 -right-10 w-56 h-56 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-10 -right-10 w-56 h-56 bg-brand-rose/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 flex items-center gap-3 mb-5 flex-wrap">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-400 text-slate-900 rounded-full text-[10px] font-black uppercase tracking-widest">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-rose text-brand-navy rounded-full text-[10px] font-black uppercase tracking-widest">
             Featured Deal
           </span>
           <SharpCategoryBadge category={deal.category} className="!bg-white/10 !text-white" />
@@ -31,10 +31,10 @@ const FeaturedDealCard: React.FC<{ deal: ReturnType<typeof getAllDeals>[number] 
         <h2 className="text-2xl md:text-4xl font-extrabold text-white leading-tight mb-3" style={{ fontFamily: 'Syne, sans-serif' }}>
           {deal.title}
         </h2>
-        <p className="text-amber-300 font-bold text-lg mb-4">{dealHeadline(deal)}</p>
+        <p className="text-brand-rose font-bold text-lg mb-4">{dealHeadline(deal)}</p>
         <p className="text-slate-300 leading-relaxed mb-7 max-w-md">{deal.description}</p>
 
-        <span className={`inline-flex items-center px-6 py-3 rounded-2xl font-bold text-sm w-fit transition-colors ${expired ? 'bg-white/10 text-slate-400' : 'bg-white text-slate-900 group-hover:bg-amber-400'}`}>
+        <span className={`inline-flex items-center px-6 py-3 rounded-2xl font-bold text-sm w-fit transition-colors ${expired ? 'bg-white/10 text-slate-400' : 'bg-white text-brand-navy group-hover:bg-brand-rose'}`}>
           {expired ? 'View Details' : 'See How It Works →'}
         </span>
       </div>
@@ -75,8 +75,8 @@ const Sharp: React.FC = () => {
     <div className="fade-in space-y-12">
       {/* Hero */}
       <div className="max-w-2xl">
-        <p className="text-xs font-bold text-amber-500 uppercase tracking-widest mb-4">⚡ Sharp</p>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-5 leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
+        <p className="text-xs font-bold text-brand-primary uppercase tracking-widest mb-4">⚡ Sharp</p>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-brand-navy mb-5 leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
           New deals. Smart opportunities. No confusion.
         </h1>
         <p className="text-lg text-slate-500 leading-relaxed">
@@ -94,8 +94,8 @@ const Sharp: React.FC = () => {
             onClick={() => setActiveCategory(cat)}
             className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wide transition-colors ${
               activeCategory === cat
-                ? 'bg-slate-900 text-white'
-                : 'bg-white text-slate-500 border border-slate-100 hover:border-slate-300 hover:text-slate-900'
+                ? 'bg-brand-primary text-white'
+                : 'bg-white text-slate-500 border border-slate-100 hover:border-slate-300 hover:text-brand-primary'
             }`}
           >
             {cat}

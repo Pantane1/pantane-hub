@@ -16,16 +16,16 @@ const DEVTOOLS_TOOL_COUNT = 26;
 const NavCard = ({ title, description, icon, to }: { title: string; description: string; icon: string; to: string }) => (
   <Link
     to={to}
-    className="group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-blue-50/60 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between min-h-[210px]"
+    className="group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-brand-primary/60 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between min-h-[210px]"
   >
     <div>
-      <div className="w-13 h-13 w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-xl mb-5 group-hover:bg-slate-900 group-hover:scale-110 transition-all duration-300">
+      <div className="w-13 h-13 w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-xl mb-5 group-hover:bg-brand-primary group-hover:scale-110 transition-all duration-300">
         {icon}
       </div>
-      <h3 className="text-xl font-bold text-slate-900 mb-2" style={{ fontFamily: 'Syne, sans-serif' }}>{title}</h3>
+      <h3 className="text-xl font-bold text-brand-navy mb-2" style={{ fontFamily: 'Syne, sans-serif' }}>{title}</h3>
       <p className="text-slate-500 text-sm leading-relaxed">{description}</p>
     </div>
-    <div className="mt-5 flex items-center text-slate-400 text-sm font-bold group-hover:text-blue-600 group-hover:translate-x-1.5 transition-all duration-300">
+    <div className="mt-5 flex items-center text-slate-400 text-sm font-bold group-hover:text-brand-primary group-hover:translate-x-1.5 transition-all duration-300">
       Explore <span className="ml-1.5">→</span>
     </div>
   </Link>
@@ -35,10 +35,10 @@ const SectionHeading: React.FC<{ eyebrow: string; title: string; linkTo?: string
   <div className="flex items-end justify-between gap-4 mb-6 flex-wrap">
     <div>
       <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">{eyebrow}</p>
-      <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>{title}</h2>
+      <h2 className="text-2xl md:text-3xl font-extrabold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>{title}</h2>
     </div>
     {linkTo && (
-      <Link to={linkTo} className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors whitespace-nowrap flex items-center gap-1">
+      <Link to={linkTo} className="text-sm font-bold text-slate-500 hover:text-brand-primary transition-colors whitespace-nowrap flex items-center gap-1">
         {linkLabel || 'See all'} <span>→</span>
       </Link>
     )}
@@ -63,11 +63,11 @@ const Home: React.FC = () => {
           Available for new opportunities
         </div>
 
-        <h1 className="slide-up stagger-2 text-5xl md:text-6xl xl:text-7xl font-extrabold text-slate-900 leading-[1.08]" style={{ fontFamily: 'Syne, sans-serif' }}>
+        <h1 className="slide-up stagger-2 text-5xl md:text-6xl xl:text-7xl font-extrabold text-brand-navy leading-[1.08]" style={{ fontFamily: 'Syne, sans-serif' }}>
           Welcome to{' '}
           <span className="relative inline-block">
-            <span className="relative z-10 text-blue-600">Pantane Hub.</span>
-            <span className="absolute -bottom-1 left-0 right-0 h-3 bg-amber-100 -z-0 skew-x-1" />
+            <span className="relative z-10 text-brand-primary">Pantane Hub.</span>
+            <span className="absolute -bottom-1 left-0 right-0 h-3 bg-brand-rose/20 -z-0 skew-x-1" />
           </span>
         </h1>
 
@@ -93,7 +93,7 @@ const Home: React.FC = () => {
             href="https://m1wamuhu.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto px-7 py-3.5 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-700 hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm"
+            className="w-full sm:w-auto px-7 py-3.5 bg-brand-primary text-white rounded-2xl font-bold hover:bg-brand-burgundy hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -102,7 +102,7 @@ const Home: React.FC = () => {
           </a>
           <Link
             to="/contact"
-            className="w-full sm:w-auto px-7 py-3.5 bg-white text-slate-900 border border-slate-200 rounded-2xl font-bold hover:border-slate-400 hover:shadow-md transition-all text-sm text-center"
+            className="w-full sm:w-auto px-7 py-3.5 bg-white text-brand-navy border border-slate-200 rounded-2xl font-bold hover:border-slate-400 hover:shadow-md transition-all text-sm text-center"
           >
             Get in Touch
           </Link>
@@ -112,7 +112,7 @@ const Home: React.FC = () => {
       {/* Profile image / hero carousel — same container, aspect ratio, and rounded styling as before */}
       <div className="flex-shrink-0 w-full max-w-xs lg:max-w-sm">
         <div className="relative group">
-          <div className="absolute -inset-1.5 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-[2.5rem] blur opacity-20 group-hover:opacity-35 transition duration-700" />
+          <div className="absolute -inset-1.5 bg-gradient-to-br from-brand-primary to-brand-burgundy rounded-[2.5rem] blur opacity-20 group-hover:opacity-35 transition duration-700" />
           <div className="relative aspect-[3/4] overflow-hidden rounded-[2rem] border-8 border-white shadow-2xl bg-slate-100">
             <HeroCarousel />
           </div>
@@ -129,7 +129,7 @@ const Home: React.FC = () => {
         { label: 'DevTools Shipped', value: `${DEVTOOLS_TOOL_COUNT}` },
       ].map(stat => (
         <div key={stat.label} className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 text-center">
-          <p className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-1" style={{ fontFamily: 'Syne, sans-serif' }}>{stat.value}</p>
+          <p className="text-3xl md:text-4xl font-extrabold text-brand-navy mb-1" style={{ fontFamily: 'Syne, sans-serif' }}>{stat.value}</p>
           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{stat.label}</p>
         </div>
       ))}
@@ -159,11 +159,11 @@ const Home: React.FC = () => {
             <CategoryBadge category={latestPost.category} />
             <span className="text-xs text-slate-400 font-medium">{formatJournalDate(latestPost.date)}</span>
           </div>
-          <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors" style={{ fontFamily: 'Syne, sans-serif' }}>
+          <h3 className="text-xl md:text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-primary transition-colors" style={{ fontFamily: 'Syne, sans-serif' }}>
             {latestPost.title}
           </h3>
           <p className="text-slate-500 leading-relaxed mb-5 max-w-2xl">{latestPost.excerpt}</p>
-          <span className="inline-flex items-center text-sm font-bold text-slate-900 group-hover:translate-x-1 transition-transform">
+          <span className="inline-flex items-center text-sm font-bold text-brand-navy group-hover:translate-x-1 transition-transform">
             Read more <span className="ml-1.5">→</span>
           </span>
         </Link>
@@ -176,7 +176,7 @@ const Home: React.FC = () => {
         <SectionHeading eyebrow="Sharp" title="Featured Deal" linkTo="/sharp" linkLabel="See All Deals" />
         <Link
           to={`/sharp/${featuredDeal.slug}`}
-          className="group grid md:grid-cols-[1fr_1.4fr] bg-slate-900 rounded-[2rem] overflow-hidden"
+          className="group grid md:grid-cols-[1fr_1.4fr] bg-brand-navy rounded-[2rem] overflow-hidden"
         >
           <DealThumbnail deal={featuredDeal} badge="⚡ SHARP" />
           <div className="p-8 flex flex-col justify-center">
@@ -186,9 +186,9 @@ const Home: React.FC = () => {
             <h3 className="text-xl md:text-2xl font-extrabold text-white mb-2" style={{ fontFamily: 'Syne, sans-serif' }}>
               {featuredDeal.title}
             </h3>
-            <p className="text-amber-300 font-bold mb-3">{dealHeadline(featuredDeal)}</p>
+            <p className="text-brand-rose font-bold mb-3">{dealHeadline(featuredDeal)}</p>
             <p className="text-slate-300 text-sm leading-relaxed mb-5">{featuredDeal.description}</p>
-            <span className="inline-flex items-center text-sm font-bold text-white group-hover:text-amber-400 transition-colors w-fit">
+            <span className="inline-flex items-center text-sm font-bold text-white group-hover:text-brand-rose transition-colors w-fit">
               View Deal <span className="ml-1.5">→</span>
             </span>
           </div>
@@ -197,8 +197,8 @@ const Home: React.FC = () => {
     )}
 
     {/* DevTools callout */}
-    <section className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[2rem] p-10 md:p-14 text-center text-white relative overflow-hidden">
-      <div className="absolute -top-16 -right-16 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+    <section className="bg-gradient-to-br from-brand-navy to-brand-burgundy rounded-[2rem] p-10 md:p-14 text-center text-white relative overflow-hidden">
+      <div className="absolute -top-16 -right-16 w-72 h-72 bg-brand-primary/10 rounded-full blur-3xl pointer-events-none" />
       <div className="relative z-10 max-w-xl mx-auto space-y-5">
         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest">
           🛠️ Pantane DevTools
@@ -213,7 +213,7 @@ const Home: React.FC = () => {
           href={DEVTOOLS_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center px-7 py-3.5 bg-white text-slate-900 rounded-2xl font-bold text-sm hover:shadow-2xl hover:-translate-y-0.5 transition-all gap-2"
+          className="inline-flex items-center px-7 py-3.5 bg-white text-brand-navy rounded-2xl font-bold text-sm hover:shadow-2xl hover:-translate-y-0.5 transition-all gap-2"
         >
           Open Pantane DevTools <span>→</span>
         </a>

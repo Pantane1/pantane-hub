@@ -68,7 +68,7 @@ const SharpFeedbackModal: React.FC<SharpFeedbackModalProps> = ({ deal, onClose }
       >
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-lg font-extrabold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>
+            <h2 className="text-lg font-extrabold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>
               {form.ctaLabel}
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">Sends a pre-filled message to Pantane on WhatsApp — you'll review it before it sends.</p>
@@ -76,7 +76,7 @@ const SharpFeedbackModal: React.FC<SharpFeedbackModalProps> = ({ deal, onClose }
           <button
             onClick={onClose}
             aria-label="Close"
-            className="text-slate-400 hover:text-slate-900 transition-colors text-xl leading-none shrink-0 ml-3"
+            className="text-slate-400 hover:text-brand-primary transition-colors text-xl leading-none shrink-0 ml-3"
           >
             ✕
           </button>

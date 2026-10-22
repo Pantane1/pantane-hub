@@ -17,7 +17,7 @@ const SocialCard = ({ name, handle, icon, url, color, desc }: {
       {icon}
     </div>
     <div className="flex-1 min-w-0">
-      <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors" style={{ fontFamily: 'Syne, sans-serif' }}>{name}</h3>
+      <h3 className="text-base font-bold text-brand-navy group-hover:text-brand-primary transition-colors" style={{ fontFamily: 'Syne, sans-serif' }}>{name}</h3>
       <p className="text-slate-400 text-sm font-medium truncate">{handle}</p>
       <p className="text-slate-500 text-xs mt-0.5 leading-relaxed">{desc}</p>
     </div>
@@ -34,7 +34,7 @@ const Socials: React.FC = () => {
     <div className="fade-in max-w-3xl mx-auto space-y-12">
       <div>
         <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Connect</p>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4" style={{ fontFamily: 'Syne, sans-serif' }}>Let's Connect.</h1>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-brand-navy mb-4" style={{ fontFamily: 'Syne, sans-serif' }}>Let's Connect.</h1>
         <p className="text-slate-500 leading-relaxed">
           Platforms where I share ideas, projects, and updates. Reach out or follow the journey.
         </p>

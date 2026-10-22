@@ -11,7 +11,7 @@ interface SharpRequestFormProps {
   successMessage?: string;
 }
 
-const fieldInputClass = 'w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all';
+const fieldInputClass = 'w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all';
 const fieldLabelClass = 'text-xs font-bold text-slate-500 uppercase tracking-widest';
 
 /**
@@ -110,7 +110,7 @@ const SharpRequestForm: React.FC<SharpRequestFormProps> = ({ dealTitle, requestS
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-3.5 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-slate-700 transition-all active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full py-3.5 bg-brand-primary text-white rounded-xl font-bold text-sm hover:bg-brand-burgundy transition-all active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {loading ? 'Sending…' : `${ctaLabel} →`}
       </button>

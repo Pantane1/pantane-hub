@@ -15,8 +15,8 @@ const Support: React.FC = () => {
     {
       id: SupportProvider.BUymeACoffee,
       icon: <CoffeeIcon className="w-9 h-9" />,
-      bg: 'bg-amber-400',
-      badge: 'bg-amber-50 text-amber-700',
+      bg: 'bg-brand-rose',
+      badge: 'bg-brand-rose/10 text-brand-burgundy',
       title: 'Buy Me a Coffee',
       desc: 'Fuel the late-night coding sessions.',
       onClick: () => setSelectedProvider(SupportProvider.BUymeACoffee),
@@ -38,8 +38,8 @@ const Support: React.FC = () => {
           <path d="M19.498 7.89c-.7 3.37-2.99 5.5-6.525 5.5H11l-1.528 6.4h2.15a.641.641 0 00.626-.535l1.34-5.61h2.996c2.66 0 5.095-1.587 5.744-4.71.38-1.83.07-3.26-.83-4.045z" opacity=".6"/>
         </svg>
       ),
-      bg: 'bg-blue-600',
-      badge: 'bg-blue-50 text-blue-700',
+      bg: 'bg-brand-primary',
+      badge: 'bg-brand-rose/10 text-brand-burgundy',
       title: 'PayPal',
       desc: 'Fast and secure for international supporters.',
       onClick: () => setSelectedProvider(SupportProvider.PayPal),
@@ -47,8 +47,8 @@ const Support: React.FC = () => {
     {
       id: SupportProvider.Paystack,
       icon: <WalletIcon className="w-9 h-9" />,
-      bg: 'bg-cyan-500',
-      badge: 'bg-cyan-50 text-cyan-700',
+      bg: 'bg-brand-navy',
+      badge: 'bg-brand-navy/5 text-brand-navy',
       title: 'Paystack',
       desc: 'Preferred payment option for Africa.',
       onClick: () => setSelectedProvider(SupportProvider.Paystack),
@@ -59,7 +59,7 @@ const Support: React.FC = () => {
     <div className="fade-in max-w-5xl mx-auto space-y-12">
       <div className="text-center space-y-4">
         <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Support the work</p>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>
           Support the Journey.
         </h1>
         <p className="text-slate-500 max-w-xl mx-auto leading-relaxed">
@@ -78,7 +78,7 @@ const Support: React.FC = () => {
               {c.icon}
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 mb-1" style={{ fontFamily: 'Syne, sans-serif' }}>{c.title}</h3>
+              <h3 className="text-lg font-bold text-brand-navy mb-1" style={{ fontFamily: 'Syne, sans-serif' }}>{c.title}</h3>
               <p className="text-slate-500 text-sm leading-relaxed">{c.desc}</p>
             </div>
             <span className={`px-4 py-1.5 ${c.badge} rounded-full text-xs font-bold`}>Support Now</span>

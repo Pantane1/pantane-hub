@@ -19,9 +19,9 @@ const DealNotFound: React.FC<{ slug?: string }> = ({ slug }) => {
   return (
     <div className="fade-in max-w-lg mx-auto text-center py-20 space-y-5">
       <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-2xl mx-auto">⚡</div>
-      <h1 className="text-2xl font-bold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>Deal not found</h1>
+      <h1 className="text-2xl font-bold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>Deal not found</h1>
       <p className="text-slate-500 text-sm">This Sharp deal doesn't exist or may have been removed.</p>
-      <Link to="/sharp" className="inline-flex items-center px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-slate-700 transition-colors">
+      <Link to="/sharp" className="inline-flex items-center px-6 py-3 bg-brand-primary text-white rounded-2xl font-bold text-sm hover:bg-brand-burgundy transition-colors">
         ← Back to Sharp
       </Link>
     </div>
@@ -49,7 +49,7 @@ const SharpDeal: React.FC = () => {
 
   return (
     <div className="fade-in max-w-3xl mx-auto space-y-10">
-      <Link to="/sharp" className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-slate-900 transition-colors">
+      <Link to="/sharp" className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-brand-primary transition-colors">
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
@@ -66,7 +66,7 @@ const SharpDeal: React.FC = () => {
           <SharpStatusBadge deal={deal} />
           <span className="text-sm text-slate-400 font-medium">Posted {formatDealDate(deal.datePosted)}</span>
         </div>
-        <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
+        <h1 className="text-3xl md:text-4xl font-extrabold text-brand-navy leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
           {deal.title}
         </h1>
       </header>
@@ -76,12 +76,12 @@ const SharpDeal: React.FC = () => {
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="bg-slate-50 rounded-2xl p-5">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">New User</p>
-            <p className="text-xl font-extrabold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>{deal.reward}</p>
+            <p className="text-xl font-extrabold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>{deal.reward}</p>
           </div>
           {deal.referralReward && (
             <div className="bg-slate-50 rounded-2xl p-5">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Referrer</p>
-              <p className="text-xl font-extrabold text-slate-900" style={{ fontFamily: 'Syne, sans-serif' }}>{deal.referralReward}</p>
+              <p className="text-xl font-extrabold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>{deal.referralReward}</p>
             </div>
           )}
           <div className="bg-slate-50 rounded-2xl p-5">
@@ -121,9 +121,9 @@ const SharpDeal: React.FC = () => {
 
       {/* Ownership / authorization requirement — buying-type deals */}
       {deal.safetyNote && (
-        <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4">
+        <div className="flex items-start gap-3 bg-brand-navy/5 border border-brand-navy/15 rounded-2xl px-5 py-4">
           <span className="text-base leading-none mt-0.5" aria-hidden="true">🔒</span>
-          <p className="text-sm text-blue-800 leading-relaxed">{deal.safetyNote}</p>
+          <p className="text-sm text-brand-navy leading-relaxed">{deal.safetyNote}</p>
         </div>
       )}
 
@@ -134,7 +134,7 @@ const SharpDeal: React.FC = () => {
           <ol className="space-y-3">
             {deal.steps.map((step, i) => (
               <li key={i} className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center mt-0.5">
+                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center mt-0.5">
                   {i + 1}
                 </span>
                 <span className="text-slate-600 leading-relaxed pt-0.5">{step}</span>
@@ -154,9 +154,9 @@ const SharpDeal: React.FC = () => {
 
       {/* Important notice */}
       {deal.importantNotes && (
-        <div className="flex items-start gap-3 bg-amber-50 border border-amber-100 rounded-2xl px-5 py-4">
+        <div className="flex items-start gap-3 bg-brand-rose/10 border border-brand-rose/20 rounded-2xl px-5 py-4">
           <span className="text-base leading-none mt-0.5" aria-hidden="true">⚠️</span>
-          <p className="text-sm text-amber-800 leading-relaxed">{deal.importantNotes}</p>
+          <p className="text-sm text-brand-burgundy leading-relaxed">{deal.importantNotes}</p>
         </div>
       )}
 
@@ -181,7 +181,7 @@ const SharpDeal: React.FC = () => {
               href={deal.externalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-700 transition-colors w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-brand-primary text-white rounded-2xl font-bold hover:bg-brand-burgundy transition-colors w-full sm:w-auto"
             >
               {deal.externalLabel || 'Get Started'} <span aria-hidden="true">→</span>
             </a>
@@ -189,7 +189,7 @@ const SharpDeal: React.FC = () => {
           {deal.feedbackForm && (
             <button
               onClick={() => setShowFeedback(true)}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-slate-900 text-slate-900 rounded-2xl font-bold hover:bg-slate-50 transition-colors w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-brand-navy text-brand-navy rounded-2xl font-bold hover:bg-slate-50 transition-colors w-full sm:w-auto"
             >
               {deal.feedbackForm.ctaLabel}
             </button>

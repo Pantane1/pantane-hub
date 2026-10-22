@@ -204,14 +204,14 @@ const PhBot: React.FC = () => {
       <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
         {/* Tooltip — show before first open */}
         {!hasOpened && !open && (
-          <div className="bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-2xl shadow-lg animate-bounce">
+          <div className="bg-brand-primary text-white text-xs font-semibold px-4 py-2 rounded-2xl shadow-lg animate-bounce">
             Ask me anything 👋
           </div>
         )}
 
         <button
           onClick={() => open ? setOpen(false) : handleOpen()}
-          className="w-14 h-14 bg-slate-900 hover:bg-slate-700 text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 relative"
+          className="w-14 h-14 bg-brand-primary hover:bg-brand-burgundy text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 relative"
           aria-label="Open PH-Bot"
         >
           {open ? (
@@ -234,8 +234,8 @@ const PhBot: React.FC = () => {
           style={{ maxHeight: '520px', animation: 'slideUp 0.3s cubic-bezier(0.22,1,0.36,1) forwards' }}>
 
           {/* Header */}
-          <div className="bg-slate-900 px-5 py-4 flex items-center gap-3">
-            <div className="w-9 h-9 bg-amber-400 rounded-full flex items-center justify-center text-slate-900 font-black text-sm flex-shrink-0">
+          <div className="bg-brand-primary px-5 py-4 flex items-center gap-3">
+            <div className="w-9 h-9 bg-brand-rose rounded-full flex items-center justify-center text-brand-navy font-black text-sm flex-shrink-0">
               PH
             </div>
             <div className="flex-1">
@@ -256,7 +256,7 @@ const PhBot: React.FC = () => {
                 <div className={`max-w-[82%] ${msg.role === 'user' ? 'order-2' : 'order-1'}`}>
                   <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                     msg.role === 'user'
-                      ? 'bg-slate-900 text-white rounded-br-md'
+                      ? 'bg-brand-primary text-white rounded-br-md'
                       : 'bg-white text-slate-800 border border-slate-100 shadow-sm rounded-bl-md'
                   }`}>
                     {renderText(msg.text)}
@@ -287,7 +287,7 @@ const PhBot: React.FC = () => {
             <div className="px-4 py-2 bg-slate-50 border-t border-slate-100 flex gap-1.5 overflow-x-auto pb-2 scrollbar-hide">
               {QUICK_REPLIES.map(qr => (
                 <button key={qr.label} onClick={() => handleQuickReply(qr)}
-                  className="flex-shrink-0 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-full text-[11px] font-semibold hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all whitespace-nowrap">
+                  className="flex-shrink-0 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-full text-[11px] font-semibold hover:bg-brand-primary hover:text-white hover:border-brand-navy transition-all whitespace-nowrap">
                   {qr.label}
                 </button>
               ))}
@@ -304,12 +304,12 @@ const PhBot: React.FC = () => {
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
               placeholder="Ask me anything..."
               disabled={loading}
-              className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-all disabled:opacity-50"
+              className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-brand-navy focus:border-transparent outline-none transition-all disabled:opacity-50"
             />
             <button
               onClick={() => handleSend()}
               disabled={!input.trim() || loading}
-              className="w-10 h-10 bg-slate-900 text-white rounded-2xl flex items-center justify-center hover:bg-slate-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
+              className="w-10 h-10 bg-brand-primary text-white rounded-2xl flex items-center justify-center hover:bg-brand-burgundy transition-all disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>

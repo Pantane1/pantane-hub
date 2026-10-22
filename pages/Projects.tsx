@@ -13,7 +13,7 @@ const Projects: React.FC = () => {
     <div className="fade-in space-y-12">
       <div className="max-w-2xl">
         <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Portfolio</p>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-5 leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-brand-navy mb-5 leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
           Built to Solve Problems.
         </h1>
         <p className="text-lg text-slate-500 leading-relaxed">
@@ -36,7 +36,7 @@ const Projects: React.FC = () => {
         </div>
       )}
 
-      <div className="bg-slate-900 rounded-3xl p-12 text-center text-white">
+      <div className="bg-brand-navy rounded-3xl p-12 text-center text-white">
         <h2 className="text-2xl font-bold mb-3" style={{ fontFamily: 'Syne, sans-serif' }}>Want to see more?</h2>
         <p className="text-slate-400 mb-7 max-w-md mx-auto text-sm leading-relaxed">
           Browse all my repositories and active contributions directly on GitHub.
@@ -45,7 +45,7 @@ const Projects: React.FC = () => {
           href="https://github.com/pantane1"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center px-7 py-3.5 bg-white text-slate-900 rounded-2xl font-bold text-sm hover:shadow-2xl hover:-translate-y-0.5 transition-all gap-2"
+          className="inline-flex items-center px-7 py-3.5 bg-white text-brand-navy rounded-2xl font-bold text-sm hover:shadow-2xl hover:-translate-y-0.5 transition-all gap-2"
         >
           <GithubIcon className="w-4 h-4" />
           Browse Full Profile

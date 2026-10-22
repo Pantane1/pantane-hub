@@ -18,7 +18,7 @@ const SLIDES: CarouselSlide[] = [
     alt: 'Pantane, software developer',
     label: 'PANTANE — SOFTWARE ENGINEER',
     index: '01 / 07',
-    gradient: 'from-slate-900 to-slate-700',
+    gradient: 'from-brand-navy to-brand-burgundy',
     icon: '👨\u200d💻',
   },
   {
@@ -27,7 +27,7 @@ const SLIDES: CarouselSlide[] = [
     alt: 'Developer workspace with a laptop and code editor',
     label: 'BUILDING • SHIPPING • LEARNING',
     index: '02 / 07',
-    gradient: 'from-slate-900 to-blue-900',
+    gradient: 'from-brand-navy to-brand-primary',
     icon: '💻',
   },
   {
@@ -36,7 +36,7 @@ const SLIDES: CarouselSlide[] = [
     alt: 'AI and machine learning visualization',
     label: 'AI • AUTOMATION • ML',
     index: '03 / 07',
-    gradient: 'from-blue-950 to-indigo-800',
+    gradient: 'from-brand-burgundy to-brand-navy',
     icon: '🧠',
   },
   {
@@ -45,7 +45,7 @@ const SLIDES: CarouselSlide[] = [
     alt: 'Kenyan skyline representing technology in Africa',
     label: 'KENYA • AFRICA • TECH',
     index: '04 / 07',
-    gradient: 'from-emerald-900 to-slate-900',
+    gradient: 'from-emerald-900 to-brand-navy',
     icon: '🌍',
   },
   {
@@ -54,7 +54,7 @@ const SLIDES: CarouselSlide[] = [
     alt: "Showcase of Pantane's software projects",
     label: "PROJECTS I'VE BUILT",
     index: '05 / 07',
-    gradient: 'from-zinc-900 to-amber-900',
+    gradient: 'from-brand-burgundy to-brand-primary',
     icon: '🚀',
   },
   {
@@ -63,7 +63,7 @@ const SLIDES: CarouselSlide[] = [
     alt: 'Cloud infrastructure and deployment pipeline',
     label: 'FULL-STACK • CLOUD',
     index: '06 / 07',
-    gradient: 'from-slate-900 to-cyan-900',
+    gradient: 'from-brand-navy to-slate-700',
     icon: '☁️',
   },
   {
@@ -72,7 +72,7 @@ const SLIDES: CarouselSlide[] = [
     alt: 'Pantane outside of work — a personal moment',
     label: 'JUST A GUY',
     index: '07 / 07',
-    gradient: 'from-indigo-950 to-slate-900',
+    gradient: 'from-brand-primary to-brand-navy',
     icon: '✨',
   },
 ];
@@ -171,7 +171,7 @@ const HeroCarousel: React.FC = () => {
 
       {/* Slide label overlay — subtle, bottom-left, contained to this image only */}
       <div className="absolute bottom-9 left-4 right-4 text-white pointer-events-none">
-        <p className="text-[10px] font-bold tracking-widest text-amber-300/90">{SLIDES[activeIndex].index}</p>
+        <p className="text-[10px] font-bold tracking-widest text-brand-rose/90">{SLIDES[activeIndex].index}</p>
         <p className="text-xs font-bold tracking-wide mt-0.5 truncate">{SLIDES[activeIndex].label}</p>
       </div>
 
@@ -186,7 +186,7 @@ const HeroCarousel: React.FC = () => {
             aria-label={`Slide ${i + 1} of ${SLIDES.length}: ${slide.label}`}
             onClick={() => goTo(i)}
             className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-              i === activeIndex ? 'bg-amber-400 scale-125' : 'bg-white/40 hover:bg-white/70'
+              i === activeIndex ? 'bg-brand-rose scale-125' : 'bg-white/40 hover:bg-white/70'
             }`}
           />
         ))}

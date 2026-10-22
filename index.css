@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Brand design tokens (Deep Rouge palette) ────────────────────
+   Single source of truth. Tailwind reads the *-rgb triplets via
+   tailwind.config.js (so opacity modifiers like bg-brand-rose/20 work);
+   plain CSS can use the hex vars. Change a color HERE and it updates
+   everywhere. */
+:root {
+  /* Official palette */
+  --brand-rose: #B67E7D;      /* Muted Rose      – soft accents, secondary highlights */
+  --brand-primary: #640000;   /* Deep Rouge      – primary brand, buttons, links, active nav */
+  --brand-burgundy: #420001;  /* Dark Burgundy   – hover states, depth, gradients */
+  --brand-navy: #040B15;      /* Midnight Navy   – dark surfaces, header, footer */
+
+  --brand-rose-rgb: 182 126 125;
+  --brand-primary-rgb: 100 0 0;
+  --brand-burgundy-rgb: 66 0 1;
+  --brand-navy-rgb: 4 11 21;
+
+  /* Complementary tokens */
+  --surface-page: #fcfafa;                 /* page background – warm off-white */
+  --surface-card: #ffffff;
+  --border-subtle: #ece4e4;
+  --text-body: #1e293b;
+  --text-muted: #64748b;                   /* 4.8:1 on --surface-page */
+  --focus-ring: var(--brand-primary);      /* on light surfaces */
+  --focus-ring-on-dark: var(--brand-rose); /* on navy surfaces  */
+  --shadow-brand: 0 10px 30px -12px rgb(var(--brand-primary-rgb) / 0.35);
+}
+
 /* ─── Global resets & base ───────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -12,7 +40,7 @@ html {
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background-color: #f8fafc;
+  background-color: var(--surface-page);
   margin: 0;
   padding: 0;
 }
@@ -43,3 +71,16 @@ h1, h2, h3, h4, .font-display {
   animation: marquee 50s linear infinite;
 }
 .marquee-track:hover { animation-play-state: paused; }
+/* ─── Keyboard focus (visible on every surface) ──────────────── */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+/* Deep Rouge is too dark to see on navy, so dark surfaces use Muted Rose */
+header :focus-visible,
+footer :focus-visible,
+[data-surface="dark"] :focus-visible {
+  outline-color: var(--focus-ring-on-dark);
+}
+
+::selection { background: rgb(var(--brand-rose-rgb) / 0.35); color: var(--brand-burgundy); }

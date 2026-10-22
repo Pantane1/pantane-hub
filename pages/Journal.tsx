@@ -9,20 +9,20 @@ import { pageSeo } from '../data/pageSeo';
 const TodayCard: React.FC<{ post: ReturnType<typeof getAllPosts>[number] }> = ({ post }) => (
   <Link
     to={`/journal/${post.slug}`}
-    className="group block bg-slate-900 rounded-[2rem] p-8 md:p-12 relative overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+    className="group block bg-brand-navy rounded-[2rem] p-8 md:p-12 relative overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-rose"
   >
-    <div className="absolute -top-16 -right-16 w-64 h-64 bg-amber-400/10 rounded-full blur-3xl" />
+    <div className="absolute -top-16 -right-16 w-64 h-64 bg-brand-rose/10 rounded-full blur-3xl" />
     <div className="relative z-10">
       <div className="flex items-center gap-3 mb-6 flex-wrap">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-400 text-slate-900 rounded-full text-[10px] font-black uppercase tracking-widest">
-          <span className="w-1.5 h-1.5 rounded-full bg-slate-900 animate-pulse inline-block" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-rose text-brand-navy rounded-full text-[10px] font-black uppercase tracking-widest">
+          <span className="w-1.5 h-1.5 rounded-full bg-brand-navy animate-pulse inline-block" />
           Today
         </span>
         <span className="text-slate-400 text-xs font-semibold">{formatJournalDate(post.date)}</span>
         <CategoryBadge category={post.category} className="!bg-white/10 !text-white" />
       </div>
 
-      <h2 className="text-2xl md:text-4xl font-extrabold text-white leading-tight mb-4 group-hover:text-amber-400 transition-colors" style={{ fontFamily: 'Syne, sans-serif' }}>
+      <h2 className="text-2xl md:text-4xl font-extrabold text-white leading-tight mb-4 group-hover:text-brand-rose transition-colors" style={{ fontFamily: 'Syne, sans-serif' }}>
         {post.title}
       </h2>
 
@@ -31,7 +31,7 @@ const TodayCard: React.FC<{ post: ReturnType<typeof getAllPosts>[number] }> = ({
       </p>
 
       <div className="flex flex-wrap items-center gap-4">
-        <span className="inline-flex items-center px-6 py-3 bg-white text-slate-900 rounded-2xl font-bold text-sm group-hover:bg-amber-400 transition-colors">
+        <span className="inline-flex items-center px-6 py-3 bg-white text-brand-navy rounded-2xl font-bold text-sm group-hover:bg-brand-rose transition-colors">
           Read the full entry →
         </span>
         {post.tags.slice(0, 3).map(t => (
@@ -87,7 +87,7 @@ const Journal: React.FC = () => {
             rel="noopener noreferrer"
             aria-label="Subscribe via RSS"
             title="RSS feed"
-            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-400 hover:text-amber-500 transition-colors"
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-400 hover:text-brand-primary transition-colors"
           >
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248S0 22.546 0 20.752s1.456-3.248 3.252-3.248 3.251 1.454 3.251 3.248zM1.677 6.462v4.052c8.744 0 15.809 7.065 15.809 15.809h4.052c0-10.978-8.882-19.861-19.861-19.861zM1.677.198v4.052c14.113 0 25.556 11.442 25.556 25.556h4.052C31.285 12.995 17.685.198 1.677.198z"/>
@@ -95,7 +95,7 @@ const Journal: React.FC = () => {
             RSS
           </a>
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-5 leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-brand-navy mb-5 leading-tight" style={{ fontFamily: 'Syne, sans-serif' }}>
           Building. Learning. Creating. Sharing.
         </h1>
         <p className="text-lg text-slate-500 leading-relaxed">
@@ -119,7 +119,7 @@ const Journal: React.FC = () => {
             onChange={e => setQuery(e.target.value)}
             placeholder="Search entries, tags, categories…"
             aria-label="Search Journal entries"
-            className="w-full pl-11 pr-4 py-3.5 bg-white border border-slate-100 rounded-2xl text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+            className="w-full pl-11 pr-4 py-3.5 bg-white border border-slate-100 rounded-2xl text-sm shadow-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
           />
         </div>
 
@@ -132,8 +132,8 @@ const Journal: React.FC = () => {
               onClick={() => setActiveCategory(cat)}
               className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wide transition-colors ${
                 activeCategory === cat
-                  ? 'bg-slate-900 text-white'
-                  : 'bg-white text-slate-500 border border-slate-100 hover:border-slate-300 hover:text-slate-900'
+                  ? 'bg-brand-primary text-white'
+                  : 'bg-white text-slate-500 border border-slate-100 hover:border-slate-300 hover:text-brand-primary'
               }`}
             >
               {cat}
