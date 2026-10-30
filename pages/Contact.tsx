@@ -3,6 +3,7 @@ import emailjs from '@emailjs/browser';
 import { useSeo } from '../hooks/useSeo';
 import { pageSeo } from '../data/pageSeo';
 import { EMAILJS_SERVICE_ID, EMAILJS_PUBLIC_KEY, EMAILJS_NOTIFY_TEMPLATE_ID, EMAILJS_AUTOREPLY_TEMPLATE_ID } from '../data/emailConfig';
+import ServiceAreaSection from '../components/ServiceAreaSection';
 
 const Contact: React.FC = () => {
   useSeo(pageSeo.contact);
@@ -98,7 +99,7 @@ const Contact: React.FC = () => {
         </div>
 
         {/* Right — form */}
-        <div className="bg-white p-9 rounded-[2rem] border border-slate-100 shadow-xl">
+        <div id="contact-form" className="bg-white p-9 rounded-[2rem] border border-slate-100 shadow-xl scroll-mt-28">
           {submitted ? (
             <div className="flex flex-col items-center justify-center text-center space-y-5 py-8">
               <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center">
@@ -137,6 +138,9 @@ const Contact: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Kenya service area */}
+      <ServiceAreaSection />
     </div>
   );
 };

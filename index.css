@@ -84,3 +84,15 @@ footer :focus-visible,
 }
 
 ::selection { background: rgb(var(--brand-rose-rgb) / 0.35); color: var(--brand-burgundy); }
+
+/* ─── Leaflet (Contact map) – brand touches only; tiles are never tinted ─── */
+.leaflet-container { font-family: 'DM Sans', sans-serif; background: #e8e4e4; }
+.leaflet-bar a, .leaflet-bar a:hover { color: var(--brand-navy); }
+.leaflet-bar a:hover { background: rgb(var(--brand-rose-rgb) / 0.2); }
+.leaflet-bar a:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; }
+.leaflet-control-attribution a { color: var(--brand-primary); }
+@media (prefers-reduced-motion: reduce) {
+  .leaflet-zoom-anim .leaflet-zoom-animated,
+  .leaflet-fade-anim .leaflet-tile,
+  .leaflet-fade-anim .leaflet-popup { transition: none !important; }
+}
