@@ -26,6 +26,8 @@ const today = new Date().toISOString().slice(0, 10);
 const staticRoutes = [
   { loc: '/',         priority: '1.0' },
   { loc: '/journal',  priority: '0.9' },
+  { loc: '/services', priority: '0.9' },
+  { loc: '/start-project', priority: '0.8' },
   { loc: '/sharp',    priority: '0.9' },
   { loc: '/projects', priority: '0.8' },
   { loc: '/contact',  priority: '0.6' },

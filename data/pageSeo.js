@@ -39,6 +39,16 @@ export const pageSeo = {
     title: 'Support Pantane | Back the Work',
     description: "Support Pantane's independent software projects and open-source work via M-Pesa, PayPal, or Paystack.",
   },
+  services: {
+    path: '/services',
+    title: 'Services — Websites, Web Apps, Payments & AI | Pantane',
+    description: 'Web development, full-stack applications, M-Pesa and payment integrations, AI chatbots and automation, and technical support for businesses across Kenya. Request a quote.',
+  },
+  startProject: {
+    path: '/start-project',
+    title: 'Start a Project — Request a Quote | Pantane',
+    description: 'Tell Pantane about your project — the service you need, your budget range and timeline — and get a quote based on the scope of your website, app, payment integration or AI automation.',
+  },
   sharp: {
     path: '/sharp',
     title: 'Sharp — Deals, Rewards & Opportunities | PantaneHub',

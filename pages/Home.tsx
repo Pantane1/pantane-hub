@@ -9,6 +9,8 @@ import { CategoryBadge, formatJournalDate } from '../components/JournalCard';
 import { getAllPosts } from '../data/journal';
 import { DealThumbnail, SharpCategoryBadge, dealHeadline } from '../components/SharpDealCard';
 import { getAllDeals, getFeaturedDeal } from '../data/sharp';
+import { serviceCategories } from '../data/services';
+import { QuoteButton } from '../components/CtaButtons';
 
 const DEVTOOLS_URL = 'https://pantane-devtools-web.onrender.com/tools';
 const DEVTOOLS_TOOL_COUNT = 26;
@@ -89,11 +91,12 @@ const Home: React.FC = () => {
         </div>
 
         <div className="slide-up stagger-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2 flex-wrap">
+          <QuoteButton label="Start a Project" className="w-full sm:w-auto px-7 py-3.5" />
           <a
             href="https://m1wamuhu.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto px-7 py-3.5 bg-brand-primary text-white rounded-2xl font-bold hover:bg-brand-burgundy hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm"
+            className="w-full sm:w-auto px-7 py-3.5 bg-brand-navy text-white rounded-2xl font-bold hover:bg-brand-burgundy hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -133,6 +136,30 @@ const Home: React.FC = () => {
           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{stat.label}</p>
         </div>
       ))}
+    </section>
+
+    {/* What I build — the commercial offer, one click from the homepage */}
+    <section aria-labelledby="home-services-title">
+      <SectionHeading eyebrow="Services" title="What I Can Build For You" linkTo="/services" linkLabel="All Services" />
+      <h2 id="home-services-title" className="sr-only">Services</h2>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+        {serviceCategories.map(c => (
+          <li key={c.id}>
+            <Link
+              to={`/services#${c.id}`}
+              className="group flex h-full flex-col rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-rose/50 hover:shadow-xl"
+            >
+              <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-rose/20 text-xl" aria-hidden="true">{c.icon}</span>
+              <h3 className="mb-2 text-base font-bold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>{c.name}</h3>
+              <p className="flex-grow text-sm leading-relaxed text-slate-500">{c.problem}</p>
+              <span className="mt-4 text-sm font-bold text-slate-500 transition-colors group-hover:text-brand-primary">Learn more →</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-8 flex justify-center">
+        <QuoteButton label="Request a Quote" />
+      </div>
     </section>
 
     {/* Pinned projects */}

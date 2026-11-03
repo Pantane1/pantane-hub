@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import { Link } from 'react-router-dom';
 import { serviceArea } from '../data/serviceArea';
 
 // Leaflet is ~40 KB gzipped; load it only when the Contact page is visited.
@@ -41,6 +42,12 @@ const ServiceAreaSection: React.FC = () => (
         >
           Get in Touch
         </a>
+        <Link
+          to="/start-project"
+          className="inline-flex items-center rounded-2xl border border-brand-primary/40 px-6 py-3 text-sm font-bold text-brand-primary transition-colors hover:bg-brand-primary hover:text-white"
+        >
+          Start a Project
+        </Link>
         <a
           href={serviceArea.googleMapsUrl}
           target="_blank"

@@ -97,6 +97,7 @@ export const Header: React.FC = () => {
       {/* Desktop nav */}
       <div className="hidden lg:flex items-center space-x-8">
         <nav className="flex items-center space-x-6 border-r border-white/15 pr-8">
+          <NavLink to="/services" className={navLinkClass}>Services</NavLink>
           <NavLink to="/projects" className={navLinkClass}>Projects</NavLink>
           <NavLink to="/journal"  className={navLinkClass}>Journal</NavLink>
           <NavLink to="/sharp"    className={navLinkClass}>⚡ Sharp</NavLink>
@@ -139,7 +140,7 @@ export const Header: React.FC = () => {
       {mobileOpen && (
         <div className="absolute top-full left-0 right-0 bg-brand-navy border-b-2 border-brand-primary shadow-xl lg:hidden z-50">
           <nav className="flex flex-col px-6 py-4 space-y-1">
-            {[['/', 'Home'], ['/projects', 'Projects'], ['/journal', 'Journal'], ['/sharp', '⚡ Sharp'], ['/socials', 'Socials'], ['/support', 'Support'], ['/contact', 'Contact']].map(([to, label]) => (
+            {[['/', 'Home'], ['/services', 'Services'], ['/projects', 'Projects'], ['/journal', 'Journal'], ['/sharp', '⚡ Sharp'], ['/socials', 'Socials'], ['/support', 'Support'], ['/contact', 'Contact']].map(([to, label]) => (
               <NavLink
                 key={to} to={to}
                 className={({ isActive }) => `px-4 py-3 rounded-xl font-bold text-sm transition-colors ${isActive ? 'bg-brand-primary text-white' : 'text-slate-300 hover:bg-white/10 hover:text-white'}`}
@@ -173,7 +174,11 @@ export const Footer: React.FC = () => {
 
         <div className="flex flex-col items-center md:items-end gap-2">
           <div className="flex items-center space-x-3 text-sm">
-            <Link to="/support" className="font-medium text-slate-300 hover:text-brand-rose transition-colors">Support</Link>
+            <Link to="/services" className="font-medium text-slate-300 hover:text-brand-rose transition-colors">Services</Link>
+          <span className="text-slate-600">|</span>
+          <Link to="/start-project" className="font-medium text-slate-300 hover:text-brand-rose transition-colors">Start a Project</Link>
+          <span className="text-slate-600">|</span>
+          <Link to="/support" className="font-medium text-slate-300 hover:text-brand-rose transition-colors">Support</Link>
             <span className="text-slate-600">|</span>
             <button onClick={() => setShowPrivacy(true)} className="font-medium text-slate-300 hover:text-brand-rose transition-colors">Privacy</button>
             <span className="text-slate-600">|</span>

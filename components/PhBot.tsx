@@ -60,6 +60,8 @@ SITE PAGES:
 - / → Home
 - /projects → GitHub projects
 - /journal → Pantane Journal (updates on what I'm building/learning)
+- /services → What I offer (websites, web apps, payments, AI & automation, support)
+- /start-project → Project inquiry / request a quote form
 - /sharp → Sharp: deals, rewards, referrals and opportunities, with step-by-step explanations of how each one works
 - /socials → Social links
 - /contact → Contact form

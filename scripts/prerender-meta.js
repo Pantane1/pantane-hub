@@ -84,10 +84,10 @@ const writePage = (routeDir, html) => {
 
 // ── Static pages (home is dist/index.html itself, already correct via the
 //    base template — no separate folder needed for it) ───────────────────
-const staticRoutes = ['projects', 'socials', 'contact', 'support'];
+const staticRoutes = ['projects', 'socials', 'contact', 'support', 'services', 'startProject'];
 for (const route of staticRoutes) {
   const seo = pageSeo[route];
-  writePage(route, renderPage({
+  writePage(seo.path.slice(1), renderPage({
     title: seo.title,
     description: seo.description,
     url: `${SITE_URL}${seo.path}`,

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { GithubRepo } from '../types';
 import { GithubIcon } from './Icons';
 
@@ -66,6 +67,10 @@ export const ProjectCard: React.FC<{ repo: GithubRepo }> = ({ repo }) => (
           ))}
         </div>
       )}
+
+      <Link to="/start-project" className="mb-4 inline-flex w-fit text-xs font-bold text-brand-primary transition-colors hover:text-brand-burgundy">
+        Need something like this? Request a quote →
+      </Link>
 
       <div className="pt-4 border-t border-slate-50 flex items-center justify-between text-xs text-slate-400">
         <span>Updated {new Date(repo.updated_at).toLocaleDateString('en-KE', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
