@@ -164,7 +164,7 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, provider }
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full pl-16 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-xl font-bold text-slate-800"
+                className="w-full pl-16 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-brand-primary outline-none transition-all text-xl font-bold text-slate-800"
               />
             </div>
           </div>
@@ -175,7 +175,7 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, provider }
               rows={2}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none text-slate-600 font-medium"
+              className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-brand-primary outline-none transition-all resize-none text-slate-600 font-medium"
               placeholder="Cheers!"
             />
           </div>
@@ -194,14 +194,14 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, provider }
 
             <button
               onClick={handleDirectPay}
-              className="w-full py-5 bg-[#1e293b] text-white rounded-2xl font-bold text-lg hover:bg-slate-800 shadow-xl shadow-slate-200 transition-all active:scale-95 flex items-center justify-center space-x-3"
+              className="w-full py-5 bg-brand-primary text-white rounded-2xl font-bold text-lg hover:bg-brand-burgundy shadow-xl shadow-brand-primary/20 transition-all active:scale-95 flex items-center justify-center space-x-3"
             >
               <span>Proceed to {provider}</span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
             </button>
 
             {error && (
-              <p className="mt-4 text-[11px] text-amber-600 bg-amber-50 p-3 rounded-xl text-center font-bold">
+              <p className="mt-4 text-[11px] text-brand-primary bg-brand-rose/10 p-3 rounded-xl text-center font-bold">
                 NOTE: Interactive buttons are disabled due to environment restrictions. Direct checkout is available above.
               </p>
             )}

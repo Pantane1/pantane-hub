@@ -17,10 +17,10 @@ const MouseEffect: React.FC = () => {
   const mouse = useRef({ x: 0, y: 0, isActive: false });
 
   const colors = [
-    'rgba(59, 130, 246, ', // Blue-500
-    'rgba(245, 158, 11, ', // Amber-500
-    'rgba(99, 102, 241, ', // Indigo-500
-    'rgba(14, 165, 233, ', // Sky-500
+    'rgba(182, 126, 125, ', // Muted Rose
+    'rgba(100, 0, 0, ',     // Deep Rouge
+    'rgba(182, 126, 125, ', // Muted Rose
+    'rgba(66, 0, 1, ',      // Dark Burgundy
   ];
 
   const createParticle = (x: number, y: number, isBurst = false) => {

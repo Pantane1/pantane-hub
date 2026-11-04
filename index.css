@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Brand design tokens (Deep Rouge palette) ────────────────────
+   Single source of truth. Tailwind reads the *-rgb triplets via
+   tailwind.config.js (so opacity modifiers like bg-brand-rose/20 work);
+   plain CSS can use the hex vars. Change a color HERE and it updates
+   everywhere. */
+:root {
+  /* Official palette */
+  --brand-rose: #B67E7D;      /* Muted Rose      – soft accents, secondary highlights */
+  --brand-primary: #640000;   /* Deep Rouge      – primary brand, buttons, links, active nav */
+  --brand-burgundy: #420001;  /* Dark Burgundy   – hover states, depth, gradients */
+  --brand-navy: #040B15;      /* Midnight Navy   – dark surfaces, header, footer */
+
+  --brand-rose-rgb: 182 126 125;
+  --brand-primary-rgb: 100 0 0;
+  --brand-burgundy-rgb: 66 0 1;
+  --brand-navy-rgb: 4 11 21;
+
+  /* Complementary tokens */
+  --surface-page: #fcfafa;                 /* page background – warm off-white */
+  --surface-card: #ffffff;
+  --border-subtle: #ece4e4;
+  --text-body: #1e293b;
+  --text-muted: #64748b;                   /* 4.8:1 on --surface-page */
+  --focus-ring: var(--brand-primary);      /* on light surfaces */
+  --focus-ring-on-dark: var(--brand-rose); /* on navy surfaces  */
+  --shadow-brand: 0 10px 30px -12px rgb(var(--brand-primary-rgb) / 0.35);
+}
+
+/* ─── Global resets & base ───────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  /* Scales every rem-based Tailwind text size down site-wide (default is 16px). */
+  font-size: 87.5%;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--surface-page);
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: 'Syne', sans-serif;
+}
+
+#root { min-height: 100vh; }
+
+/* ─── Page transition animations ────────────────────────────── */
+.fade-in  { animation: fadeIn 0.45s ease-out forwards; }
+.slide-up { animation: slideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+@keyframes fadeIn  { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+.stagger-1 { animation-delay: 0.05s; opacity: 0; }
+.stagger-2 { animation-delay: 0.12s; opacity: 0; }
+.stagger-3 { animation-delay: 0.19s; opacity: 0; }
+.stagger-4 { animation-delay: 0.26s; opacity: 0; }
+
+/* ─── Marquee ────────────────────────────────────────────────── */
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 50s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+/* ─── Keyboard focus (visible on every surface) ──────────────── */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+/* Deep Rouge is too dark to see on navy, so dark surfaces use Muted Rose */
+header :focus-visible,
+footer :focus-visible,
+[data-surface="dark"] :focus-visible {
+  outline-color: var(--focus-ring-on-dark);
+}
+
+::selection { background: rgb(var(--brand-rose-rgb) / 0.35); color: var(--brand-burgundy); }
+
+/* ─── Leaflet (Contact map) – brand touches only; tiles are never tinted ─── */
+.leaflet-container { font-family: 'DM Sans', sans-serif; background: #e8e4e4; }
+.leaflet-bar a, .leaflet-bar a:hover { color: var(--brand-navy); }
+.leaflet-bar a:hover { background: rgb(var(--brand-rose-rgb) / 0.2); }
+.leaflet-bar a:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; }
+.leaflet-control-attribution a { color: var(--brand-primary); }
+@media (prefers-reduced-motion: reduce) {
+  .leaflet-zoom-anim .leaflet-zoom-animated,
+  .leaflet-fade-anim .leaflet-tile,
+  .leaflet-fade-anim .leaflet-popup { transition: none !important; }
+}

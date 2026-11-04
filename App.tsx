@@ -4,9 +4,16 @@ import { Analytics } from '@vercel/analytics/react';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
+import Journal from './pages/Journal';
+import JournalPost from './pages/JournalPost';
+import Sharp from './pages/Sharp';
+import SharpDeal from './pages/SharpDeal';
 import Socials from './pages/Socials';
 import Contact from './pages/Contact';
 import Support from './pages/Support';
+import AdminJournal from './pages/AdminJournal';
+import AdminSharp from './pages/AdminSharp';
+import NotFound from './pages/NotFound';
 
 const App: React.FC = () => {
   const [hash, setHash] = useState(window.location.hash || '#');
@@ -42,5 +49,27 @@ const App: React.FC = () => {
     </Layout>
   );
 };
+
+const App: React.FC = () => (
+  <Layout>
+    <ScrollToTop />
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/projects" element={<Projects />} />
+      <Route path="/journal" element={<Journal />} />
+      <Route path="/journal/:slug" element={<JournalPost />} />
+      <Route path="/sharp" element={<Sharp />} />
+      <Route path="/sharp/:slug" element={<SharpDeal />} />
+      <Route path="/socials" element={<Socials />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/support" element={<Support />} />
+      {/* Not linked in nav — reachable only if you know the URL */}
+      <Route path="/admin/journal" element={<AdminJournal />} />
+      <Route path="/admin/sharp" element={<AdminSharp />} />
+      {/* Fallback — dedicated 404, noindex, distinct from silently duplicating Home content */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </Layout>
+);
 
 export default App;

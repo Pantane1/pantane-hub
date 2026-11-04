@@ -1,0 +1,236 @@
+[
+  {
+    "id": "1",
+    "slug": "heist-attack",
+    "title": "HEIST ATTACK",
+    "category": "Rewards",
+    "description": "Get KSh 50 for signing up. Complete the steps and claim your reward.",
+    "whatYouGet": "Get KSh 50 after completing the required signup and verification steps, subject to the promotion's eligibility requirements.",
+    "reward": "KSh 50",
+    "referralReward": "KSh 100 per referral",
+    "status": "active",
+    "datePosted": "2026-09-29",
+    "thumbnail": "/assets/sharp-deals/heist-attack.svg",
+    "thumbnailTheme": {
+      "preset": "absa",
+      "icon": "🏦",
+      "wordmark": "ABSA"
+    },
+    "steps": [
+      "Download the Absa app from Google Play.",
+      "Sign up.",
+      "Enter referral code: OFC0PEZBQF",
+      "Complete the required KYC verification.",
+      "Open Complete Profile and finish the required information.",
+      "Check the account for the applicable reward.",
+      "Referral participants can qualify for the stated referral reward according to the promotion terms."
+    ],
+    "referralCode": "OFC0PEZBQF",
+    "externalUrl": "https://play.google.com/store/apps/details?id=ke.co.absa.next",
+    "externalLabel": "Get Started",
+    "importantNotes": "Referral and reward eligibility may depend on the provider's current promotion terms and requirements. Complete all required steps and verify the current offer before participating."
+  },
+  {
+    "id": "2",
+    "slug": "loop-kyc",
+    "title": "LOOP KYC",
+    "category": "Opportunities",
+    "description": "Register on Loop with my invite code and complete your profile to get KSh 150.",
+    "whatYouGet": "New users who successfully register through my invite code and complete their Loop profile receive KSh 150. Because I am the referrer, I receive KSh 200 for each successful referral. Downloading the app alone does not qualify — registration must be completed with a fully finished profile.",
+    "reward": "KSh 150",
+    "referralReward": "KSh 200 per referral",
+    "status": "active",
+    "datePosted": "2026-10-07",
+    "thumbnail": "/assets/sharp-deals/loop-kyc.svg",
+    "thumbnailTheme": {
+      "preset": "loop",
+      "icon": "🔁",
+      "wordmark": "LOOP"
+    },
+    "steps": [
+      "Download the Loop app from the Google Play Store.",
+      "Create/register your Loop account.",
+      "Enter/use my invite code: MARTIN4774",
+      "Complete your profile/KYC requirements.",
+      "Only after your profile is fully completed is the registration considered successful and eligible for the KSh 150 reward."
+    ],
+    "referralCode": "MARTIN4774",
+    "externalUrl": "https://cbaloop.page.link/home",
+    "externalLabel": "Get Started with Loop",
+    "importantNotes": "⚠️ Downloading or creating an account is not enough. Your profile must be fully completed for the registration to qualify."
+  },
+  {
+    "id": "3",
+    "slug": "buy-social-accounts",
+    "title": "I BUY SOCIAL MEDIA ACCOUNTS",
+    "category": "Opportunities",
+    "description": "Have an old social media account you're no longer using? I may buy it.",
+    "whatYouGet": "I'm buying existing social media accounts. The price isn't fixed — it depends mainly on followers, account age, engagement, condition and platform. Submit your account's details below and I'll review it individually.",
+    "status": "active",
+    "statusLabel": "Buying",
+    "datePosted": "2026-10-07",
+    "dealType": "buying",
+    "cardHeadline": "I Buy Accounts",
+    "thumbnail": "/assets/sharp-deals/buy-social-accounts.svg",
+    "platforms": [
+      "X (Twitter)",
+      "Instagram",
+      "Facebook",
+      "LinkedIn",
+      "Locket"
+    ],
+    "pricingNote": "Price depends on the account's followers, age, engagement, platform and overall condition.",
+    "safetyNote": "Only submit accounts you legitimately own or are authorized to transfer.",
+    "thumbnailTheme": {
+      "preset": "accounts",
+      "icon": "🔄",
+      "wordmark": "SHARP"
+    },
+    "steps": [],
+    "importantNotes": "Accounts are reviewed individually. Offers are based on account quality and current demand. An account is not automatically accepted simply because it meets a follower or age threshold.",
+    "requestFields": [
+      {
+        "name": "platform",
+        "label": "Platform",
+        "type": "select",
+        "required": true,
+        "options": [
+          "X (Twitter)",
+          "Instagram",
+          "Facebook",
+          "LinkedIn",
+          "Locket"
+        ]
+      },
+      {
+        "name": "profile_link",
+        "label": "Username / Profile Link",
+        "type": "text",
+        "required": true,
+        "placeholder": "@username or profile URL"
+      },
+      {
+        "name": "followers",
+        "label": "Approximate Follower Count",
+        "type": "text",
+        "required": true,
+        "placeholder": "e.g. 2,500"
+      },
+      {
+        "name": "account_age",
+        "label": "Approximate Account Age",
+        "type": "text",
+        "required": true,
+        "placeholder": "e.g. 3 years"
+      },
+      {
+        "name": "notes",
+        "label": "Other Relevant Information",
+        "type": "textarea",
+        "required": false,
+        "placeholder": "Engagement, niche, past activity, etc."
+      }
+    ],
+    "requestSubject": "Sharp: Social Media Account Submission",
+    "externalLabel": "Submit Account"
+  },
+  {
+    "id": "4",
+    "slug": "international-numbers",
+    "title": "INTERNATIONAL NUMBERS",
+    "category": "Services",
+    "description": "Request an international phone number from a country of your choice.",
+    "whatYouGet": "Choose a country, submit your request, and I'll process it and get back to you with further instructions. Availability depends on the country and current supply.",
+    "status": "active",
+    "statusLabel": "Available on Request",
+    "datePosted": "2026-10-07",
+    "dealType": "service-request",
+    "cardHeadline": "Request a Number",
+    "thumbnail": "/assets/sharp-deals/international-numbers.svg",
+    "pricingNote": "Availability depends on the country and current supply.",
+    "thumbnailTheme": {
+      "preset": "numbers",
+      "icon": "🌐",
+      "wordmark": "SHARP"
+    },
+    "steps": [
+      "Choose your country from the list.",
+      "Submit your request.",
+      "I process the request.",
+      "You receive further instructions and details."
+    ],
+    "requestFields": [
+      {
+        "name": "country",
+        "label": "Country",
+        "type": "select",
+        "required": true,
+        "options": [
+          "United States",
+          "United Kingdom",
+          "Canada",
+          "Australia",
+          "Germany",
+          "France",
+          "Netherlands",
+          "Sweden",
+          "Norway",
+          "South Africa",
+          "Other country"
+        ]
+      },
+      {
+        "name": "other_country",
+        "label": "If \"Other country\", please specify",
+        "type": "text",
+        "required": false,
+        "placeholder": "Country name"
+      },
+      {
+        "name": "notes",
+        "label": "Any Other Details",
+        "type": "textarea",
+        "required": false,
+        "placeholder": "Anything else I should know"
+      }
+    ],
+    "requestSubject": "Sharp: International Number Request",
+    "externalLabel": "Request Number"
+  },
+  {
+    "id": "5",
+    "slug": "uber-eats-promo",
+    "title": "UBER EATS PROMO",
+    "category": "Opportunities",
+    "description": "Download Uber Eats, create a genuine account, and see what promotion Uber Eats offers you. Report back once it appears.",
+    "whatYouGet": "Download Uber Eats, create a genuine account, and complete any verification Uber Eats requests. Whether a promotion appears for you — and what it's worth — is entirely determined by Uber Eats and depends on your account, location, and the current promotion period. There's no guaranteed reward for completing this; it's about surfacing whichever promo Uber Eats currently offers new users like you, then letting Pantane know once it shows up.",
+    "reward": "access to the Uber Eats promo",
+    "status": "active",
+    "datePosted": "2026-10-07",
+    "thumbnail": "/assets/sharp-deals/uber-eats-promo.svg",
+    "thumbnailTheme": {
+      "preset": "ubereats",
+      "icon": "🛵",
+      "wordmark": "UBER EATS"
+    },
+    "steps": [
+      "Download Uber Eats from the official app store.",
+      "Create your Uber Eats account using your genuine details.",
+      "Complete any verification Uber Eats requests.",
+      "Wait for the relevant promotion to appear in your notifications/promotions area.",
+      "Return to Sharp and tap \"I've Done Uber Eats\" to send your confirmation to Pantane."
+    ],
+    "externalUrl": "https://play.google.com/store/apps/details?id=com.ubercab.eats",
+    "externalLabel": "Get Uber Eats",
+    "importantNotes": "Promotion availability and eligibility are determined by Uber Eats and may vary by account, location, and promotion period. Use your genuine location and account information — never provide false details to Uber Eats.",
+    "feedbackForm": {
+      "ctaLabel": "I've Done Uber Eats",
+      "whatsappNumber": "254740312402",
+      "statusLabel": "Promotion status",
+      "statusOptions": [
+        "Promotion has appeared",
+        "Still waiting for promotion"
+      ]
+    }
+  }
+]
