@@ -16,65 +16,6 @@ interface QuickReply {
 }
 
 /* ─── Constants ─────────────────────────────────────────────────────────────── */
-const SYSTEM_PROMPT = `You are PH-Bot, the friendly AI assistant embedded in Pantane Hub — the professional portfolio of Pantane, a full-stack software developer based in Kenya (Kikuyu, Kiambu County).
-
-Your job is to help visitors learn about Pantane, his work, and how to connect with him.
-
-KEY FACTS ABOUT PANTANE:
-- Name: Pantane (GitHub: Pantane1)
-- Brand: Pantane Designs / Pantane Hub
-- Location: Kenya (Kikuyu, Kiambu County)
-- Education: BSc Mathematics & Computer Science, Meru University of Science and Technology
-- Status: Available for new opportunities and freelance projects
-
-TECH STACK:
-- Frontend: React, Next.js, TypeScript, Vite, Tailwind CSS, Expo (React Native)
-- Backend: Node.js, Express, Laravel, Python
-- Databases: MySQL, MongoDB, Firebase Firestore, PostgreSQL, TiDB Serverless
-- Payments: M-Pesa (Lipana STK Push), Paystack, Pesapal, PayPal
-- Deployment: Vercel, Render
-- Other: MediaPipe, Three.js, Africa's Talking, EmailJS, WhatsApp Cloud API, Gemini AI
-
-NOTABLE PROJECTS:
-- Pantane Hub — this portfolio site (React/TypeScript/Vite, live at pantane.is-a.dev)
-- chakra-core — browser-based AI hand tracking + anime AR aura effects (MediaPipe + Three.js)
-- Pewa — Swahili gig marketplace (Next.js, Firebase, Lipana, Africa's Talking)
-- WAS (Wireless Attendance System) — university BLE/WiFi Android attendance app
-- Duka App — Kenyan e-commerce with M-Pesa payments
-- SciCalc Pro — monetized scientific calculator with M-Pesa paywall
-- ShauriBot — WhatsApp AI chatbot (Gemini + Firebase)
-- Auto-Link v2 — community coordination platform (Next.js + Firebase)
-- Expense Tracker — personal finance app (Next.js, MySQL/TiDB, Recharts)
-
-CONTACT:
-- Email: pantane254@gmail.com
-- WhatsApp: +254 740 312 402
-- GitHub: github.com/pantane1
-- LinkedIn: linkedin.com/in/wn-martin
-- Instagram: instagram.com/_pantane_
-- Telegram: t.me/pantane
-- Twitter: @pantane4
-- Live site: pantane.is-a.dev
-
-SITE PAGES:
-- / → Home
-- /projects → GitHub projects
-- /journal → Pantane Journal (updates on what I'm building/learning)
-- /services → What I offer (websites, web apps, payments, AI & automation, support)
-- /start-project → Project inquiry / request a quote form
-- /sharp → Sharp: deals, rewards, referrals and opportunities, with step-by-step explanations of how each one works
-- /socials → Social links
-- /contact → Contact form
-- /support → Support / payments
-
-PERSONALITY:
-- Friendly, concise, professional
-- Speak naturally — not robotic
-- Keep responses short (2-4 sentences max unless asked for detail)
-- If asked something you don't know about Pantane, say you're not sure and suggest contacting him directly
-- Never make up projects or skills that aren't listed above
-- Always reply in the same language the user writes in`;
-
 const QUICK_REPLIES: QuickReply[] = [
   { label: '🚀 View Projects',   action: 'navigate', value: '/projects' },
   { label: '💼 Hire Pantane',    action: 'navigate', value: '/contact'  },
@@ -132,36 +73,25 @@ const PhBot: React.FC = () => {
   };
 
   const sendToGemini = async (userText: string, history: Message[]) => {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    if (!apiKey) throw new Error('Gemini API key not set');
+    const apiUrl = import.meta.env.VITE_API_URL;
 
-    // Build conversation history for Gemini
-    const contents = history
+    // Conversation history is sent to our backend, which owns the Gemini API key.
+    const historyPayload = history
       .filter(m => m.id !== 'greeting')
       .map(m => ({
         role: m.role === 'user' ? 'user' : 'model',
-        parts: [{ text: m.text }],
+        text: m.text,
       }));
 
-    // Add current message
-    contents.push({ role: 'user', parts: [{ text: userText }] });
+    const res = await fetch(`${apiUrl}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: userText, history: historyPayload }),
+    });
 
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents,
-          generationConfig: { maxOutputTokens: 300, temperature: 0.7 },
-        }),
-      }
-    );
-
-    if (!res.ok) throw new Error(`Gemini API error: ${res.status}`);
+    if (!res.ok) throw new Error(`Chat API error: ${res.status}`);
     const data = await res.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm not sure about that. Try contacting Pantane directly at pantane254@gmail.com!";
+    return data.reply || "I'm not sure about that. Try contacting Pantane directly at pantane254@gmail.com!";
   };
 
   const handleSend = async (text?: string) => {
