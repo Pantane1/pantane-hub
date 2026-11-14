@@ -11,6 +11,10 @@ const chatRoute = require('./routes/chat');
 function createApp() {
   const app = express();
 
+  // Render terminates TLS and forwards requests; trust the first proxy hop so
+  // req.ip reflects the visitor rather than the proxy.
+  app.set('trust proxy', 1);
+
   app.use(cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
@@ -21,6 +25,8 @@ function createApp() {
         process.env.FRONTEND_URL?.replace('https://', 'https://www.'),
         'http://localhost:3000',
         'http://localhost:5173',
+        'https://pantane.is-a.dev',
+        'https://www.pantane.is-a.dev',
       ].filter(Boolean);
 
       if (allowed.includes(origin)) {
