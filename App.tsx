@@ -2,6 +2,8 @@ import { Analytics } from '@vercel/analytics/react';
 import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
+import AdminLayout from './components/AdminLayout';
+import { AdminAuthProvider } from './contexts/AdminAuthContext';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import Journal from './pages/Journal';
@@ -13,8 +15,10 @@ import SharpDeal from './pages/SharpDeal';
 import Socials from './pages/Socials';
 import Contact from './pages/Contact';
 import Support from './pages/Support';
+import AdminOverview from './pages/AdminOverview';
 import AdminJournal from './pages/AdminJournal';
 import AdminSharp from './pages/AdminSharp';
+import AdminPlaceholder from './components/AdminPlaceholder';
 import NotFound from './pages/NotFound';
 
 const ScrollToTop: React.FC = () => {
@@ -39,9 +43,18 @@ const App: React.FC = () => (
       <Route path="/socials" element={<Socials />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/support" element={<Support />} />
-      {/* Not linked in nav — reachable only if you know the URL */}
-      <Route path="/admin/journal" element={<AdminJournal />} />
-      <Route path="/admin/sharp" element={<AdminSharp />} />
+      {/* Central admin dashboard */}
+      <Route path="/admin" element={<AdminAuthProvider><AdminLayout /></AdminAuthProvider>}>
+        <Route index element={<AdminOverview />} />
+        <Route path="journal" element={<AdminJournal />} />
+        <Route path="sharp" element={<AdminSharp />} />
+        <Route path="inquiries" element={<AdminPlaceholder title="Project Inquiries" description="Inquiry management will be connected to the operational database in the next mission stage." />} />
+        <Route path="payments" element={<AdminPlaceholder title="Payments" description="Payment transaction history will be connected to verified provider events in a later stage." />} />
+        <Route path="communications" element={<AdminPlaceholder title="Communications" description="Contact message history and notification delivery status will be added in a later stage." />} />
+        <Route path="access" element={<AdminPlaceholder title="Access" description="Administrator and session management will be expanded in a later security mission." />} />
+        <Route path="activity" element={<AdminPlaceholder title="Activity" description="Administrative audit logging will be connected in a later stage." />} />
+        <Route path="settings" element={<AdminPlaceholder title="Settings" description="Platform configuration and integration health will be added in a later stage." />} />
+      </Route>
       {/* Fallback — dedicated 404, noindex, distinct from silently duplicating Home content */}
       <Route path="*" element={<NotFound />} />
     </Routes>
