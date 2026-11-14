@@ -267,6 +267,37 @@ test('login is rate limited after repeated failures', async () => {
   assert.equal(limited.status, 429);
 });
 
+test('auth diagnostics report valid configured hash metadata without secrets', async () => {
+  const res = await request('/admin/auth-diagnostics');
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  assert.equal(body.configured, true);
+  assert.equal(body.hashLength, 60);
+  assert.equal(body.hashPrefix, '$2b$10$'.slice(0, 7));
+  assert.equal(body.formatValid, true);
+  assert.ok(!JSON.stringify(body).includes('test-password'));
+});
+
+test('malformed password hash returns 401 instead of 500', async () => {
+  process.env.ADMIN_PASSWORD_HASH = 'not-a-valid-bcrypt-hash';
+  const res = await request('/admin/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: 'test-password' }),
+  });
+  assert.equal(res.status, 401);
+});
+
+test('surrounding whitespace in ADMIN_PASSWORD_HASH is tolerated', async () => {
+  process.env.ADMIN_PASSWORD_HASH = `  ${bcrypt.hashSync('test-password', 10)}  `;
+  const res = await request('/admin/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: 'test-password' }),
+  });
+  assert.equal(res.status, 200);
+});
+
 test('public health endpoint remains accessible', async () => {
   const res = await request('/');
   assert.equal(res.status, 200);
