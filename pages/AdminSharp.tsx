@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useAdminAuth } from '../contexts/AdminAuthContext';
 import { SharpDeal, SharpCategory, SharpDealType, SharpStatus, SharpRequestField } from '../types';
 import { SHARP_CATEGORIES } from '../data/sharp';
 
@@ -58,8 +59,7 @@ const inputClass = "w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:
 const labelClass = "block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5";
 
 const AdminSharp: React.FC = () => {
-  const [authenticated, setAuthenticated] = useState<boolean | null>(null);
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+  const { csrfToken, logout, refresh } = useAdminAuth();
   const [passwordInput, setPasswordInput] = useState('');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [loginLoading, setLoginLoading] = useState(false);
@@ -87,8 +87,7 @@ const AdminSharp: React.FC = () => {
       setSha(res.data.sha);
     } catch (err: any) {
       if (err?.response?.status === 401) {
-        setAuthenticated(false);
-        setCsrfToken(null);
+        refresh();
       }
       setError(err?.response?.data?.error || 'Failed to load deals.');
     } finally {
@@ -97,54 +96,12 @@ const AdminSharp: React.FC = () => {
   };
 
   useEffect(() => {
-    let active = true;
-    const verifySession = async () => {
-      try {
-        const res = await axios.get(`${apiUrl}/admin/session`, { withCredentials: true });
-        if (!active) return;
-        setCsrfToken(res.data?.csrfToken ?? null);
-        setAuthenticated(true);
-      } catch {
-        if (!active) return;
-        setAuthenticated(false);
-      }
-    };
-    verifySession();
-    return () => {
-      active = false;
-    };
+    loadDeals();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (authenticated) loadDeals();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authenticated]);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoginLoading(true);
-    setLoginError(null);
-    try {
-      const res = await axios.post(`${apiUrl}/admin/login`, { password: passwordInput }, { withCredentials: true });
-      setCsrfToken(res.data?.csrfToken ?? null);
-      setAuthenticated(true);
-      setPasswordInput('');
-    } catch (err: any) {
-      setLoginError(err?.response?.data?.error || 'Login failed.');
-    } finally {
-      setLoginLoading(false);
-    }
-  };
-
   const handleLogout = async () => {
-    try {
-      await axios.post(`${apiUrl}/admin/logout`, {}, { withCredentials: true, headers: authHeaders() });
-    } catch {
-      // Ignore logout transport errors and clear local state anyway.
-    }
-    setAuthenticated(false);
-    setCsrfToken(null);
+    await logout();
     setDeals([]);
     setSha(null);
   };
@@ -221,7 +178,7 @@ const AdminSharp: React.FC = () => {
     if (form.thumbnailPreset.trim() || form.thumbnailIcon.trim() || form.thumbnailWordmark.trim()) {
       deal.thumbnailTheme = {
         preset: form.thumbnailPreset.trim() || undefined,
-        icon: form.thumbnailIcon.trim() || '⚡',
+        icon: form.thumbnailIcon.trim() || 'âš¡',
         wordmark: form.thumbnailWordmark.trim() || undefined,
       };
     }
@@ -308,39 +265,11 @@ const AdminSharp: React.FC = () => {
     }
   };
 
-  if (!authenticated) {
-    return (
-      <div className="fade-in max-w-sm mx-auto mt-20">
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
-          <h1 className="text-2xl font-extrabold text-brand-navy mb-1" style={{ fontFamily: 'Syne, sans-serif' }}>Sharp Admin</h1>
-          <p className="text-sm text-slate-500 mb-6">Enter the admin password to continue.</p>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <input
-              type="password"
-              autoFocus
-              className={inputClass}
-              placeholder="Password"
-              value={passwordInput}
-              onChange={e => setPasswordInput(e.target.value)}
-            />
-            {loginError && <p className="text-sm text-rose-600">{loginError}</p>}
-            <button
-              type="submit"
-              disabled={loginLoading || !passwordInput}
-              className="w-full bg-brand-primary text-white font-bold py-2.5 rounded-xl hover:bg-brand-burgundy transition-colors disabled:opacity-50"
-            >
-              {loginLoading ? 'Checking…' : 'Log in'}
-            </button>
-          </form>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="fade-in max-w-3xl mx-auto space-y-8 pb-24">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-extrabold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>⚡ Sharp Admin</h1>
+        <h1 className="text-3xl font-extrabold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>âš¡ Sharp Admin</h1>
         <button onClick={handleLogout} className="text-xs font-bold text-slate-400 hover:text-slate-700 uppercase tracking-wide">
           Log out
         </button>
@@ -349,7 +278,7 @@ const AdminSharp: React.FC = () => {
       {error && <div className="bg-rose-50 border border-rose-200 text-rose-700 text-sm rounded-xl px-4 py-3">{error}</div>}
       {success && <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm rounded-xl px-4 py-3">{success}</div>}
 
-      {/* ── Form ───────────────────────────────────────────────── */}
+      {/* â”€â”€ Form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-100 space-y-5">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-slate-800" style={{ fontFamily: 'Syne, sans-serif' }}>
@@ -396,11 +325,11 @@ const AdminSharp: React.FC = () => {
 
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className={labelClass}>Status label override (optional — e.g. "Buying")</label>
+            <label className={labelClass}>Status label override (optional â€” e.g. "Buying")</label>
             <input className={inputClass} value={form.statusLabel} onChange={e => setForm(f => ({ ...f, statusLabel: e.target.value }))} placeholder="Active" />
           </div>
           <div>
-            <label className={labelClass}>Card headline override (optional — e.g. "I Buy Accounts")</label>
+            <label className={labelClass}>Card headline override (optional â€” e.g. "I Buy Accounts")</label>
             <input className={inputClass} value={form.cardHeadline} onChange={e => setForm(f => ({ ...f, cardHeadline: e.target.value }))} placeholder="Defaults to 'Get {reward}'" />
           </div>
         </div>
@@ -479,7 +408,7 @@ const AdminSharp: React.FC = () => {
               </div>
             )}
             <div>
-              <label className={labelClass}>Request form fields (JSON array — copy an existing deal's as a template)</label>
+              <label className={labelClass}>Request form fields (JSON array â€” copy an existing deal's as a template)</label>
               <textarea
                 className={`${inputClass} font-mono text-xs`}
                 rows={6}
@@ -502,7 +431,7 @@ const AdminSharp: React.FC = () => {
         )}
 
         <div>
-          <label className={labelClass}>Feedback form (optional JSON object — copy Uber Eats' as a template)</label>
+          <label className={labelClass}>Feedback form (optional JSON object â€” copy Uber Eats' as a template)</label>
           <textarea
             className={`${inputClass} font-mono text-xs`}
             rows={4}
@@ -530,7 +459,7 @@ const AdminSharp: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-4">
           <div>
             <label className={labelClass}>Placeholder icon (emoji, optional)</label>
-            <input className={inputClass} value={form.thumbnailIcon} onChange={e => setForm(f => ({ ...f, thumbnailIcon: e.target.value }))} placeholder="⚡" />
+            <input className={inputClass} value={form.thumbnailIcon} onChange={e => setForm(f => ({ ...f, thumbnailIcon: e.target.value }))} placeholder="âš¡" />
           </div>
           <div>
             <label className={labelClass}>Placeholder wordmark text (optional)</label>
@@ -543,21 +472,21 @@ const AdminSharp: React.FC = () => {
           disabled={saving}
           className="w-full bg-brand-rose text-brand-navy font-bold py-3 rounded-xl hover:bg-brand-rose transition-colors disabled:opacity-50"
         >
-          {saving ? 'Pushing to GitHub…' : editingSlug ? 'Save changes' : 'Publish deal'}
+          {saving ? 'Pushing to GitHubâ€¦' : editingSlug ? 'Save changes' : 'Publish deal'}
         </button>
       </form>
 
-      {/* ── Existing deals ─────────────────────────────────────── */}
+      {/* â”€â”€ Existing deals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div>
         <h2 className="text-lg font-bold text-slate-800 mb-3" style={{ fontFamily: 'Syne, sans-serif' }}>
-          Existing deals {loading && '· loading…'}
+          Existing deals {loading && 'Â· loadingâ€¦'}
         </h2>
         <div className="space-y-2">
           {[...deals].sort((a, b) => new Date(b.datePosted).getTime() - new Date(a.datePosted).getTime()).map(deal => (
             <div key={deal.slug} className="bg-white rounded-2xl px-5 py-3.5 shadow-sm border border-slate-100 flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <p className="font-bold text-slate-800 truncate">{deal.title}</p>
-                <p className="text-xs text-slate-400">{deal.datePosted} · {deal.category} · {deal.dealType || 'reward'} · /{deal.slug}</p>
+                <p className="text-xs text-slate-400">{deal.datePosted} Â· {deal.category} Â· {deal.dealType || 'reward'} Â· /{deal.slug}</p>
               </div>
               <div className="flex gap-2 shrink-0">
                 <button onClick={() => startEdit(deal)} className="text-xs font-bold text-slate-500 hover:text-brand-primary uppercase tracking-wide px-2">

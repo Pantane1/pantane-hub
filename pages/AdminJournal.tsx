@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useAdminAuth } from '../contexts/AdminAuthContext';
 import { JournalPost, JournalCategory, SocialPlatform } from '../types';
 import { JOURNAL_CATEGORIES } from '../data/journal';
 
@@ -30,8 +31,7 @@ const inputClass = "w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:
 const labelClass = "block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5";
 
 const AdminJournal: React.FC = () => {
-  const [authenticated, setAuthenticated] = useState<boolean | null>(null);
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+  const { csrfToken, logout, refresh } = useAdminAuth();
   const [passwordInput, setPasswordInput] = useState('');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [loginLoading, setLoginLoading] = useState(false);
@@ -59,8 +59,7 @@ const AdminJournal: React.FC = () => {
       setSha(res.data.sha);
     } catch (err: any) {
       if (err?.response?.status === 401) {
-        setAuthenticated(false);
-        setCsrfToken(null);
+        refresh();
       }
       setError(err?.response?.data?.error || 'Failed to load posts.');
     } finally {
@@ -69,54 +68,12 @@ const AdminJournal: React.FC = () => {
   };
 
   useEffect(() => {
-    let active = true;
-    const verifySession = async () => {
-      try {
-        const res = await axios.get(`${apiUrl}/admin/session`, { withCredentials: true });
-        if (!active) return;
-        setCsrfToken(res.data?.csrfToken ?? null);
-        setAuthenticated(true);
-      } catch {
-        if (!active) return;
-        setAuthenticated(false);
-      }
-    };
-    verifySession();
-    return () => {
-      active = false;
-    };
+    loadPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (authenticated) loadPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authenticated]);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoginLoading(true);
-    setLoginError(null);
-    try {
-      const res = await axios.post(`${apiUrl}/admin/login`, { password: passwordInput }, { withCredentials: true });
-      setCsrfToken(res.data?.csrfToken ?? null);
-      setAuthenticated(true);
-      setPasswordInput('');
-    } catch (err: any) {
-      setLoginError(err?.response?.data?.error || 'Login failed.');
-    } finally {
-      setLoginLoading(false);
-    }
-  };
-
   const handleLogout = async () => {
-    try {
-      await axios.post(`${apiUrl}/admin/logout`, {}, { withCredentials: true, headers: authHeaders() });
-    } catch {
-      // Ignore logout transport errors and clear local state anyway.
-    }
-    setAuthenticated(false);
-    setCsrfToken(null);
+    await logout();
     setPosts([]);
     setSha(null);
   };
@@ -246,34 +203,6 @@ const AdminJournal: React.FC = () => {
     }
   };
 
-  if (!authenticated) {
-    return (
-      <div className="fade-in max-w-sm mx-auto mt-20">
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
-          <h1 className="text-2xl font-extrabold text-brand-navy mb-1" style={{ fontFamily: 'Syne, sans-serif' }}>Journal Admin</h1>
-          <p className="text-sm text-slate-500 mb-6">Enter the admin password to continue.</p>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <input
-              type="password"
-              autoFocus
-              className={inputClass}
-              placeholder="Password"
-              value={passwordInput}
-              onChange={e => setPasswordInput(e.target.value)}
-            />
-            {loginError && <p className="text-sm text-rose-600">{loginError}</p>}
-            <button
-              type="submit"
-              disabled={loginLoading || !passwordInput}
-              className="w-full bg-brand-primary text-white font-bold py-2.5 rounded-xl hover:bg-brand-burgundy transition-colors disabled:opacity-50"
-            >
-              {loginLoading ? 'Checking…' : 'Log in'}
-            </button>
-          </form>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="fade-in max-w-3xl mx-auto space-y-8 pb-24">
@@ -287,7 +216,7 @@ const AdminJournal: React.FC = () => {
       {error && <div className="bg-rose-50 border border-rose-200 text-rose-700 text-sm rounded-xl px-4 py-3">{error}</div>}
       {success && <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm rounded-xl px-4 py-3">{success}</div>}
 
-      {/* ── Form ───────────────────────────────────────────────── */}
+      {/* â”€â”€ Form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-100 space-y-5">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-slate-800" style={{ fontFamily: 'Syne, sans-serif' }}>
@@ -345,7 +274,7 @@ const AdminJournal: React.FC = () => {
         </div>
 
         <div>
-          <label className={labelClass}>Links (optional — GitHub, live project, etc.)</label>
+          <label className={labelClass}>Links (optional â€” GitHub, live project, etc.)</label>
           <div className="space-y-2">
             {form.links.map((link, i) => (
               <div key={i} className="grid grid-cols-[1fr_1.4fr_auto] gap-2">
@@ -404,7 +333,7 @@ const AdminJournal: React.FC = () => {
         </div>
 
         <div>
-          <label className={labelClass}>Service CTA text (optional — adds a "Request this service" style button)</label>
+          <label className={labelClass}>Service CTA text (optional â€” adds a "Request this service" style button)</label>
           <input className={inputClass} value={form.serviceCta} onChange={e => setForm(f => ({ ...f, serviceCta: e.target.value }))} placeholder="Request this service" />
         </div>
 
@@ -418,21 +347,21 @@ const AdminJournal: React.FC = () => {
           disabled={saving}
           className="w-full bg-brand-rose text-brand-navy font-bold py-3 rounded-xl hover:bg-brand-rose transition-colors disabled:opacity-50"
         >
-          {saving ? 'Pushing to GitHub…' : editingSlug ? 'Save changes' : 'Publish post'}
+          {saving ? 'Pushing to GitHubâ€¦' : editingSlug ? 'Save changes' : 'Publish post'}
         </button>
       </form>
 
-      {/* ── Existing posts ─────────────────────────────────────── */}
+      {/* â”€â”€ Existing posts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div>
         <h2 className="text-lg font-bold text-slate-800 mb-3" style={{ fontFamily: 'Syne, sans-serif' }}>
-          Existing posts {loading && '· loading…'}
+          Existing posts {loading && 'Â· loadingâ€¦'}
         </h2>
         <div className="space-y-2">
           {[...posts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map(post => (
             <div key={post.slug} className="bg-white rounded-2xl px-5 py-3.5 shadow-sm border border-slate-100 flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <p className="font-bold text-slate-800 truncate">{post.title}</p>
-                <p className="text-xs text-slate-400">{post.date} · {post.category} · /{post.slug}</p>
+                <p className="text-xs text-slate-400">{post.date} Â· {post.category} Â· /{post.slug}</p>
               </div>
               <div className="flex gap-2 shrink-0">
                 <button onClick={() => startEdit(post)} className="text-xs font-bold text-slate-500 hover:text-brand-primary uppercase tracking-wide px-2">
