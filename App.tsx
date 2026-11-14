@@ -16,6 +16,8 @@ import Socials from './pages/Socials';
 import Contact from './pages/Contact';
 import Support from './pages/Support';
 import AdminOverview from './pages/AdminOverview';
+import AdminInquiries from './pages/AdminInquiries';
+import AdminInquiryDetail from './pages/AdminInquiryDetail';
 import AdminJournal from './pages/AdminJournal';
 import AdminSharp from './pages/AdminSharp';
 import AdminPlaceholder from './components/AdminPlaceholder';
@@ -48,7 +50,8 @@ const App: React.FC = () => (
         <Route index element={<AdminOverview />} />
         <Route path="journal" element={<AdminJournal />} />
         <Route path="sharp" element={<AdminSharp />} />
-        <Route path="inquiries" element={<AdminPlaceholder title="Project Inquiries" description="Inquiry management will be connected to the operational database in the next mission stage." />} />
+        <Route path="inquiries" element={<AdminInquiries />} />
+        <Route path="inquiries/:id" element={<AdminInquiryDetail />} />
         <Route path="payments" element={<AdminPlaceholder title="Payments" description="Payment transaction history will be connected to verified provider events in a later stage." />} />
         <Route path="communications" element={<AdminPlaceholder title="Communications" description="Contact message history and notification delivery status will be added in a later stage." />} />
         <Route path="access" element={<AdminPlaceholder title="Access" description="Administrator and session management will be expanded in a later security mission." />} />

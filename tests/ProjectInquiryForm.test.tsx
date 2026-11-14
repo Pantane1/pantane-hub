@@ -1,13 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import emailjs from '@emailjs/browser';
 import ProjectInquiryForm from '../components/ProjectInquiryForm';
-import { EMAILJS_NOTIFY_TEMPLATE_ID, EMAILJS_AUTOREPLY_TEMPLATE_ID } from '../data/emailConfig';
 
-vi.mock('@emailjs/browser', () => ({
-  default: { send: vi.fn() },
-}));
+const fetchMock = vi.fn();
+global.fetch = fetchMock as any;
 
 const VALID_SERVICE = 'Websites & Landing Pages';
 const VALID_DESCRIPTION = 'A'.repeat(20);
@@ -37,12 +34,23 @@ async function fillValidForm() {
   fillStepThree();
 }
 
+function jsonResponse(body: unknown, ok = true, status = ok ? 201 : 400) {
+  return {
+    ok,
+    status,
+    json: async () => body,
+  } as Response;
+}
+
 beforeEach(() => {
   now = 0;
   vi.spyOn(Date, 'now').mockImplementation(() => now);
   localStorage.clear();
-  vi.mocked(emailjs.send).mockReset();
-  vi.mocked(emailjs.send).mockResolvedValue({ status: 200, text: 'OK' } as any);
+  fetchMock.mockReset();
+  fetchMock.mockResolvedValue(jsonResponse({
+    inquiry: { id: 'inq-1', status: 'new' },
+    notification: { owner: { status: 'sent' }, client: { status: 'sent' } },
+  }));
 });
 
 afterEach(() => {
@@ -51,7 +59,7 @@ afterEach(() => {
 });
 
 describe('ProjectInquiryForm reliability', () => {
-  it('shows success only after the owner notification succeeds', async () => {
+  it('shows success after the inquiry is persisted', async () => {
     render(
       <MemoryRouter>
         <ProjectInquiryForm />
@@ -63,10 +71,13 @@ describe('ProjectInquiryForm reliability', () => {
     fireEvent.click(screen.getByRole('button', { name: /send inquiry/i }));
 
     await waitFor(() => expect(screen.getByText(/inquiry received/i)).toBeInTheDocument());
+    expect(fetchMock).toHaveBeenCalled();
+    const request = fetchMock.mock.calls[0];
+    expect(request[0]).toContain('/inquiries');
   });
 
-  it('shows an error and no success when the owner notification fails', async () => {
-    vi.mocked(emailjs.send).mockRejectedValueOnce(new Error('network failure'));
+  it('shows an error when persistence fails', async () => {
+    fetchMock.mockRejectedValueOnce(new Error('network failure'));
 
     render(
       <MemoryRouter>
@@ -83,7 +94,7 @@ describe('ProjectInquiryForm reliability', () => {
   });
 
   it('preserves entered data after a delivery failure', async () => {
-    vi.mocked(emailjs.send).mockRejectedValueOnce(new Error('network failure'));
+    fetchMock.mockRejectedValueOnce(new Error('network failure'));
 
     render(
       <MemoryRouter>
@@ -100,7 +111,7 @@ describe('ProjectInquiryForm reliability', () => {
     expect(screen.getByLabelText(/email address/i)).toHaveValue('test@example.com');
   });
 
-  it('rejects a honeypot-filled submission without sending email', async () => {
+  it('rejects a honeypot-filled submission without calling the backend', async () => {
     render(
       <MemoryRouter>
         <ProjectInquiryForm />
@@ -114,7 +125,7 @@ describe('ProjectInquiryForm reliability', () => {
     fireEvent.click(screen.getByRole('button', { name: /send inquiry/i }));
 
     await waitFor(() => expect(screen.getByText(/could not be submitted/i)).toBeInTheDocument());
-    expect(emailjs.send).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
     expect(screen.queryByText(/inquiry received/i)).not.toBeInTheDocument();
   });
 
@@ -129,12 +140,12 @@ describe('ProjectInquiryForm reliability', () => {
     fireEvent.click(screen.getByRole('button', { name: /send inquiry/i }));
 
     await waitFor(() => expect(screen.getByText(/take a moment to review/i)).toBeInTheDocument());
-    expect(emailjs.send).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
     expect(screen.queryByText(/inquiry received/i)).not.toBeInTheDocument();
   });
 
   it('prevents duplicate submissions while a request is processing', async () => {
-    vi.mocked(emailjs.send).mockImplementation(() => new Promise(() => {}));
+    fetchMock.mockImplementation(() => new Promise(() => {}));
 
     render(
       <MemoryRouter>
@@ -150,13 +161,14 @@ describe('ProjectInquiryForm reliability', () => {
     await waitFor(() => expect(screen.getByText(/sending/i)).toBeInTheDocument());
     fireEvent.submit(form);
 
-    expect(emailjs.send).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
-  it('reports success even if the best-effort auto-reply fails', async () => {
-    vi.mocked(emailjs.send)
-      .mockResolvedValueOnce({ status: 200, text: 'OK' } as any)
-      .mockRejectedValueOnce(new Error('autoreply failed'));
+  it('reports success even if notification delivery fails after persistence', async () => {
+    fetchMock.mockResolvedValueOnce(jsonResponse({
+      inquiry: { id: 'inq-1', status: 'new' },
+      notification: { owner: { status: 'failed', error: 'EmailJS unavailable' }, client: { status: 'skipped' } },
+    }));
 
     render(
       <MemoryRouter>
@@ -169,7 +181,6 @@ describe('ProjectInquiryForm reliability', () => {
     fireEvent.click(screen.getByRole('button', { name: /send inquiry/i }));
 
     await waitFor(() => expect(screen.getByText(/inquiry received/i)).toBeInTheDocument());
-    expect(emailjs.send).toHaveBeenCalledTimes(2);
-    expect(vi.mocked(emailjs.send).mock.calls[1][1]).toBe(EMAILJS_AUTOREPLY_TEMPLATE_ID);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });
