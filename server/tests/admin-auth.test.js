@@ -298,6 +298,21 @@ test('surrounding whitespace in ADMIN_PASSWORD_HASH is tolerated', async () => {
   assert.equal(res.status, 200);
 });
 
+test('CORS allows credentialed requests from the production frontend', async () => {
+  const res = await fetch(`${baseUrl}/admin/login`, {
+    method: 'OPTIONS',
+    headers: {
+      Origin: 'https://www.pantane.is-a.dev',
+      'Access-Control-Request-Method': 'POST',
+      'Access-Control-Request-Headers': 'content-type',
+    },
+  });
+
+  assert.ok(res.status === 200 || res.status === 204);
+  assert.equal(res.headers.get('access-control-allow-credentials'), 'true');
+  assert.equal(res.headers.get('access-control-allow-origin'), 'https://www.pantane.is-a.dev');
+});
+
 test('public health endpoint remains accessible', async () => {
   const res = await request('/');
   assert.equal(res.status, 200);
