@@ -58,7 +58,8 @@ const inputClass = "w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:
 const labelClass = "block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5";
 
 const AdminSharp: React.FC = () => {
-  const [token, setToken] = useState<string | null>(() => sessionStorage.getItem('admin_token'));
+  const [authenticated, setAuthenticated] = useState<boolean | null>(null);
+  const [csrfToken, setCsrfToken] = useState<string | null>(null);
   const [passwordInput, setPasswordInput] = useState('');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [loginLoading, setLoginLoading] = useState(false);
@@ -75,19 +76,19 @@ const AdminSharp: React.FC = () => {
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  const authHeaders = () => ({ Authorization: `Bearer ${token}` });
+  const authHeaders = () => (csrfToken ? { 'X-CSRF-Token': csrfToken } : {});
 
   const loadDeals = async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.get(`${apiUrl}/admin/sharp`, { headers: authHeaders() });
+      const res = await axios.get(`${apiUrl}/admin/sharp`, { withCredentials: true });
       setDeals(res.data.deals);
       setSha(res.data.sha);
     } catch (err: any) {
       if (err?.response?.status === 401) {
-        sessionStorage.removeItem('admin_token');
-        setToken(null);
+        setAuthenticated(false);
+        setCsrfToken(null);
       }
       setError(err?.response?.data?.error || 'Failed to load deals.');
     } finally {
@@ -96,18 +97,39 @@ const AdminSharp: React.FC = () => {
   };
 
   useEffect(() => {
-    if (token) loadDeals();
+    let active = true;
+    const verifySession = async () => {
+      try {
+        const res = await axios.get(`${apiUrl}/admin/session`, { withCredentials: true });
+        if (!active) return;
+        setCsrfToken(res.data?.csrfToken ?? null);
+        setAuthenticated(true);
+      } catch {
+        if (!active) return;
+        setAuthenticated(false);
+      }
+    };
+    verifySession();
+    return () => {
+      active = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, []);
+
+  useEffect(() => {
+    if (authenticated) loadDeals();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authenticated]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginLoading(true);
     setLoginError(null);
     try {
-      await axios.post(`${apiUrl}/admin/login`, {}, { headers: { Authorization: `Bearer ${passwordInput}` } });
-      sessionStorage.setItem('admin_token', passwordInput);
-      setToken(passwordInput);
+      const res = await axios.post(`${apiUrl}/admin/login`, { password: passwordInput }, { withCredentials: true });
+      setCsrfToken(res.data?.csrfToken ?? null);
+      setAuthenticated(true);
+      setPasswordInput('');
     } catch (err: any) {
       setLoginError(err?.response?.data?.error || 'Login failed.');
     } finally {
@@ -115,9 +137,14 @@ const AdminSharp: React.FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('admin_token');
-    setToken(null);
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${apiUrl}/admin/logout`, {}, { withCredentials: true, headers: authHeaders() });
+    } catch {
+      // Ignore logout transport errors and clear local state anyway.
+    }
+    setAuthenticated(false);
+    setCsrfToken(null);
     setDeals([]);
     setSha(null);
   };
@@ -245,7 +272,7 @@ const AdminSharp: React.FC = () => {
       await axios.post(
         `${apiUrl}/admin/sharp`,
         { deals: updatedDeals, sha, message: `${isEditing ? 'Update' : 'Add'} Sharp deal: ${newDeal.title}` },
-        { headers: authHeaders() }
+        { withCredentials: true, headers: authHeaders() }
       );
       setDeals(updatedDeals);
       setSuccess(isEditing ? 'Deal updated and pushed. Vercel will redeploy shortly.' : 'Deal published and pushed. Vercel will redeploy shortly.');
@@ -268,7 +295,7 @@ const AdminSharp: React.FC = () => {
       await axios.post(
         `${apiUrl}/admin/sharp`,
         { deals: updatedDeals, sha, message: `Delete Sharp deal: ${deal.title}` },
-        { headers: authHeaders() }
+        { withCredentials: true, headers: authHeaders() }
       );
       setDeals(updatedDeals);
       setSuccess('Deal deleted and pushed.');
@@ -281,7 +308,7 @@ const AdminSharp: React.FC = () => {
     }
   };
 
-  if (!token) {
+  if (!authenticated) {
     return (
       <div className="fade-in max-w-sm mx-auto mt-20">
         <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">

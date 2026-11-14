@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const stkRoute = require('./routes/stk');
 const webhookRoute = require('./routes/webhook');
+const authRoute = require('./routes/auth');
 const journalRoute = require('./routes/journal');
 const sharpRoute = require('./routes/sharp');
 const reposRoute = require('./routes/repos');
@@ -38,10 +39,29 @@ function createApp() {
     },
   }));
 
+  // Lightweight cookie parser for the HttpOnly admin session cookie.
+  app.use((req, res, next) => {
+    const cookies = {};
+    if (req.headers.cookie) {
+      for (const part of req.headers.cookie.split(';')) {
+        const [rawName, ...rawValue] = part.trim().split('=');
+        if (!rawName) continue;
+        try {
+          cookies[rawName] = decodeURIComponent(rawValue.join('='));
+        } catch (error) {
+          cookies[rawName] = rawValue.join('=');
+        }
+      }
+    }
+    req.cookies = cookies;
+    next();
+  });
+
   app.use('/lipana-webhook', express.raw({ type: 'application/json' }), webhookRoute);
   app.use(express.json());
 
   app.use('/stk-push', stkRoute);
+  app.use('/admin', authRoute);
   app.use('/admin', journalRoute);
   app.use('/admin', sharpRoute);
   app.use('/repos', reposRoute);

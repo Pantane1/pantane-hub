@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const { requireAdmin, requireCsrf } = require('../middleware/adminAuth');
 
 // ── Config ───────────────────────────────────────────────────────────────
 const GITHUB_OWNER = 'Pantane1';
@@ -16,21 +17,6 @@ const githubApi = () => axios.create({
     'X-GitHub-Api-Version': '2022-11-28',
   },
 });
-
-// ── Auth middleware ──────────────────────────────────────────────────────
-// Same shared admin password and Bearer-token scheme as routes/journal.js.
-const requireAdmin = (req, res, next) => {
-  const authHeader = req.headers.authorization || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-
-  if (!process.env.ADMIN_PASSWORD) {
-    return res.status(500).json({ error: 'Admin panel is not configured on the server.' });
-  }
-  if (!token || token !== process.env.ADMIN_PASSWORD) {
-    return res.status(401).json({ error: 'Invalid password.' });
-  }
-  next();
-};
 
 // GET /admin/sharp — fetch current deals (and the file's sha, needed to write later)
 router.get('/sharp', requireAdmin, async (req, res) => {
@@ -48,7 +34,7 @@ router.get('/sharp', requireAdmin, async (req, res) => {
 
 // POST /admin/sharp — save the full deals array, committed straight to the repo
 // Body: { deals: SharpDeal[], sha: string, message?: string }
-router.post('/sharp', requireAdmin, async (req, res) => {
+router.post('/sharp', requireAdmin, requireCsrf, async (req, res) => {
   const { deals, sha, message } = req.body;
 
   if (!Array.isArray(deals)) {
