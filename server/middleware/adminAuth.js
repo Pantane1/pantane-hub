@@ -166,10 +166,48 @@ function resetSessions() {
   sessions.clear();
 }
 
+function normalizePasswordHash(value) {
+  if (typeof value !== 'string') return '';
+  return value.trim().replace(/^['"]+|['"]+$/g, '');
+}
+
+function getAdminPasswordHash() {
+  return normalizePasswordHash(process.env.ADMIN_PASSWORD_HASH);
+}
+
+function isAdminPasswordConfigured() {
+  return Boolean(getAdminPasswordHash());
+}
+
+function getAdminPasswordHashDiagnostics() {
+  const hash = getAdminPasswordHash();
+  const prefixMatch = hash.match(/^\$2[aby]\$(\d{2})\$/);
+  const costFactor = prefixMatch ? Number(prefixMatch[1]) : null;
+  return {
+    configured: Boolean(hash),
+    hashLength: hash.length,
+    hashPrefix: hash ? hash.slice(0, 7) : '',
+    costFactor,
+    formatValid: Boolean(
+      prefixMatch &&
+        hash.length === 60 &&
+        costFactor !== null &&
+        costFactor >= 4 &&
+        costFactor <= 31
+    ),
+  };
+}
+
 async function verifyPassword(password) {
-  const hash = process.env.ADMIN_PASSWORD_HASH;
-  if (!hash) return null;
-  return bcrypt.compare(password, hash);
+  const hash = getAdminPasswordHash();
+  if (!hash) return false;
+
+  try {
+    return await bcrypt.compare(password, hash);
+  } catch (error) {
+    console.error('Admin password hash is malformed or unsupported.', getAdminPasswordHashDiagnostics());
+    return false;
+  }
 }
 
 module.exports = {
@@ -184,4 +222,6 @@ module.exports = {
   clearSessionCookie,
   resetSessions,
   verifyPassword,
+  isAdminPasswordConfigured,
+  getAdminPasswordHashDiagnostics,
 };

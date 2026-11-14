@@ -9,6 +9,8 @@ const {
   setSessionCookie,
   clearSessionCookie,
   verifyPassword,
+  isAdminPasswordConfigured,
+  getAdminPasswordHashDiagnostics,
 } = require('../middleware/adminAuth');
 
 const router = express.Router();
@@ -28,10 +30,11 @@ router.post('/login', loginRateLimiter.middleware, async (req, res) => {
     return res.status(400).json({ error: 'Password is required.' });
   }
 
-  const hashConfigured = Boolean(process.env.ADMIN_PASSWORD_HASH);
+  const hashConfigured = isAdminPasswordConfigured();
   const valid = hashConfigured ? await verifyPassword(password) : false;
 
   if (!valid) {
+    console.warn('Admin login failed.', getAdminPasswordHashDiagnostics());
     return res.status(401).json({ error: 'Invalid credentials.' });
   }
 
@@ -58,6 +61,10 @@ router.post('/logout', requireAdmin, requireCsrf, (req, res) => {
   destroySession(req.adminSession.id);
   clearSessionCookie(res, req);
   return res.json({ authenticated: false });
+});
+
+router.get('/auth-diagnostics', (req, res) => {
+  return res.json(getAdminPasswordHashDiagnostics());
 });
 
 router.resetLoginRateLimit = loginRateLimiter.reset;
