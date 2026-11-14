@@ -36,6 +36,8 @@ const ProjectInquiryForm: React.FC<{ initialService?: string }> = ({ initialServ
   const [errorMsg, setErrorMsg] = useState('');
   const [honeypot, setHoneypot] = useState('');
   const mountedAt = useRef(Date.now());
+  /** Synchronous guard so two submit events can't both pass the `status === 'sending'` check before React re-renders. */
+  const submittingRef = useRef(false);
 
   const set = (k: keyof InquiryValues) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setValues(v => ({ ...v, [k]: e.target.value }));
@@ -56,14 +58,23 @@ const ProjectInquiryForm: React.FC<{ initialService?: string }> = ({ initialServ
   const submit = async (ev: React.FormEvent) => {
     ev.preventDefault();
     if (step < STEP_LABELS.length - 1) return next();
-    if (status === 'sending') return;
+    if (status === 'sending' || submittingRef.current) return;
 
     const problem = validateAll(values);
     if (problem) { setStep(problem.step); setErrors(problem.errors); return; }
 
-    // Bot traps: a filled hidden field, or an impossibly fast fill. Dropped silently — a
-    // real visitor can never trigger either.
-    if (honeypot || Date.now() - mountedAt.current < MIN_FILL_MS) { setStatus('sent'); return; }
+    // Spam traps are never reported as successful delivery. A legitimate visitor who
+    // submits too quickly gets an understandable error instead of a false success.
+    if (honeypot) {
+      setStatus('error');
+      setErrorMsg('Your inquiry could not be submitted. Please try again, or reach me directly on WhatsApp or email.');
+      return;
+    }
+    if (Date.now() - mountedAt.current < MIN_FILL_MS) {
+      setStatus('error');
+      setErrorMsg('Please take a moment to review your inquiry before submitting it.');
+      return;
+    }
 
     try {
       const last = Number(localStorage.getItem(COOLDOWN_KEY) || 0);
@@ -76,6 +87,7 @@ const ProjectInquiryForm: React.FC<{ initialService?: string }> = ({ initialServ
 
     setStatus('sending');
     setErrorMsg('');
+    submittingRef.current = true;
     try {
       await emailjs.send(
         EMAILJS_SERVICE_ID,
@@ -88,6 +100,8 @@ const ProjectInquiryForm: React.FC<{ initialService?: string }> = ({ initialServ
       setStatus('error');
       setErrorMsg("Your inquiry didn't go through. Please try again, or reach me directly on WhatsApp or email.");
       return; // never show success unless the notification actually sent
+    } finally {
+      submittingRef.current = false;
     }
     try { localStorage.setItem(COOLDOWN_KEY, String(Date.now())); } catch { /* ignore */ }
     setStatus('sent');
