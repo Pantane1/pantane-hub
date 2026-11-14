@@ -17,6 +17,7 @@ function createApp() {
   app.set('trust proxy', 1);
 
   app.use(cors({
+    credentials: true,
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
 
