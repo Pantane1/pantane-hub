@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const { requireAdmin, requireCsrf } = require('../middleware/adminAuth');
 
 // ── Config ───────────────────────────────────────────────────────────────
 const GITHUB_OWNER = 'Pantane1';
@@ -15,28 +16,6 @@ const githubApi = () => axios.create({
     Accept: 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28',
   },
-});
-
-// ── Auth middleware ──────────────────────────────────────────────────────
-// Single shared admin password, sent as a Bearer token on every request.
-// Nothing is stored server-side — the frontend keeps it in sessionStorage
-// and resends it each call.
-const requireAdmin = (req, res, next) => {
-  const authHeader = req.headers.authorization || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-
-  if (!process.env.ADMIN_PASSWORD) {
-    return res.status(500).json({ error: 'Admin panel is not configured on the server.' });
-  }
-  if (!token || token !== process.env.ADMIN_PASSWORD) {
-    return res.status(401).json({ error: 'Invalid password.' });
-  }
-  next();
-};
-
-// POST /admin/login — verify password without doing anything else
-router.post('/login', requireAdmin, (req, res) => {
-  res.json({ success: true });
 });
 
 // GET /admin/journal — fetch current posts (and the file's sha, needed to write later)
@@ -55,7 +34,7 @@ router.get('/journal', requireAdmin, async (req, res) => {
 
 // POST /admin/journal — save the full posts array, committed straight to the repo
 // Body: { posts: JournalPost[], sha: string, message?: string }
-router.post('/journal', requireAdmin, async (req, res) => {
+router.post('/journal', requireAdmin, requireCsrf, async (req, res) => {
   const { posts, sha, message } = req.body;
 
   if (!Array.isArray(posts)) {

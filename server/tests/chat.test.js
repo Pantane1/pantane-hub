@@ -45,6 +45,7 @@ function postChat(payload) {
 
 test.beforeEach(async () => {
   process.env.GEMINI_API_KEY = 'test-gemini-key';
+  process.env.SESSION_SECRET = 'test-session-secret';
   chatRoute.resetRateLimit();
   axios.post = async () => geminiResponse('Hello from Gemini');
   await startServer();
@@ -53,6 +54,7 @@ test.beforeEach(async () => {
 test.afterEach(async () => {
   await stopServer();
   delete process.env.GEMINI_API_KEY;
+  delete process.env.SESSION_SECRET;
 });
 
 test('successful chat request returns the Gemini reply', async () => {
