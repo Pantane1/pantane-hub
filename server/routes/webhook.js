@@ -48,6 +48,11 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Invalid JSON body.' });
   }
 
+  if (!process.env.LIPANA_SECRET_KEY) {
+    console.warn('LIPANA_SECRET_KEY is not configured.');
+    return res.status(503).json({ error: 'Webhook verification is not configured.' });
+  }
+
   // Verify signature using Lipana SDK
   const sdk = getLipana();
   let isValid = false;
@@ -74,9 +79,11 @@ router.post('/', async (req, res) => {
         [provider, event || 'unknown', transactionId || null, dedupeKey, isValid, isValid ? 'received' : 'failed', JSON.stringify(payload)]
       );
     } catch (error) {
-      if (error.code !== '23505') {
-        console.error('Webhook event persistence failed:', error.message);
+      if (error.code === '23505') {
+        return res.status(200).json({ received: true, duplicate: true });
       }
+      console.error('Webhook event persistence failed:', error.message);
+      return res.status(500).json({ error: 'Failed to process webhook.' });
     }
   }
 
