@@ -1,10 +1,25 @@
 require('dotenv').config();
 const { createApp } = require('./app');
-const { runMigrations, isDatabaseConfigured } = require('./db');
+const { runMigrations, isDatabaseConfigured, closeDatabase } = require('./db');
+const { startNotificationWorker, stopNotificationWorker } = require('./services/notificationOutbox');
 
 const app = createApp();
 
 const PORT = process.env.PORT || 3000;
+
+async function shutdown(signal, server) {
+  console.log(`${signal} received; shutting down gracefully.`);
+  stopNotificationWorker();
+  server.close(async () => {
+    try {
+      await closeDatabase();
+    } catch (error) {
+      console.error('Database shutdown failed:', error.message);
+    }
+    process.exit(0);
+  });
+  setTimeout(() => process.exit(1), 10000).unref();
+}
 
 async function start() {
   try {
@@ -21,9 +36,13 @@ async function start() {
     process.exit(1);
   }
 
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    startNotificationWorker();
   });
+
+  process.on('SIGTERM', () => shutdown('SIGTERM', server));
+  process.on('SIGINT', () => shutdown('SIGINT', server));
 }
 
 start();

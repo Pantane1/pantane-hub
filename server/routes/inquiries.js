@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const db = require('../db');
 const { validateInquiry, buildInquiryMessage } = require('../lib/inquiryValidation');
 const { recordAdminAction } = require('../lib/auditLog');
-const { attemptInquiryNotifications } = require('../services/inquiryNotifications');
+const { enqueueNotification, processOutboxItem, retryNotification } = require('../services/notificationOutbox');
 const { requireAdmin, requireCsrf } = require('../middleware/adminAuth');
 
 const publicRouter = express.Router();
@@ -123,37 +123,30 @@ publicRouter.post('/', async (req, res) => {
     }
   }
 
-  const notifications = await attemptInquiryNotifications(inquiry);
-  const notificationStatus = notifications.owner.status === 'sent' ? 'sent' : 'failed';
-  const notificationError = notifications.owner.status === 'sent'
-    ? null
-    : notifications.owner.error || 'Owner notification failed.';
-
-  await pool.query(
-    `UPDATE inquiries
-     SET notification_status = $2,
-         notification_error = $3,
-         last_notified_at = CASE WHEN $2 = 'sent' THEN NOW() ELSE last_notified_at END,
-         updated_at = NOW()
-     WHERE id = $1`,
-    [inquiry.id, notificationStatus, notificationError]
-  );
-
-  await insertNotificationAttempt(pool, inquiry.id, 'emailjs-owner', notifications.owner);
-  if (notifications.client.status !== 'skipped') {
-    await insertNotificationAttempt(pool, inquiry.id, 'emailjs-autoreply', notifications.client);
+  let notifications = { owner: { status: 'skipped' }, client: { status: 'skipped' } };
+  try {
+    const outboxItem = await enqueueNotification(pool, {
+      targetType: 'inquiry',
+      targetId: inquiry.id,
+      channel: 'email',
+      payload: { inquiryId: inquiry.id },
+    });
+    await processOutboxItem(pool, outboxItem);
+    const notificationResult = await pool.query('SELECT notification_status, notification_error FROM inquiries WHERE id = $1', [inquiry.id]);
+    notifications = {
+      owner: {
+        status: notificationResult.rows[0]?.notification_status === 'sent' ? 'sent' : 'failed',
+        error: notificationResult.rows[0]?.notification_error || undefined,
+      },
+      client: { status: 'best-effort' },
+    };
+  } catch (error) {
+    console.error('Inquiry notification processing failed:', error.message);
+    notifications = {
+      owner: { status: 'failed', error: 'Notification processing failed.' },
+      client: { status: 'skipped' },
+    };
   }
-
-  await pool.query(
-    `INSERT INTO inquiry_events (inquiry_id, event_type, new_status, metadata)
-     VALUES ($1, $2, $3, $4::jsonb)`,
-    [
-      inquiry.id,
-      notifications.owner.status === 'sent' ? 'notification_sent' : 'notification_failed',
-      inquiry.status,
-      JSON.stringify({ owner: notifications.owner.status, client: notifications.client.status }),
-    ]
-  );
 
   const updated = await pool.query('SELECT * FROM inquiries WHERE id = $1', [inquiry.id]);
 
@@ -335,32 +328,20 @@ adminRouter.post('/inquiries/:id/notify', requireAdmin, requireCsrf, async (req,
     }
     const inquiry = toInquiry(inquiryResult.rows[0]);
 
-    const notifications = await attemptInquiryNotifications(inquiry);
-    const notificationStatus = notifications.owner.status === 'sent' ? 'sent' : 'failed';
-    const notificationError = notifications.owner.status === 'sent'
-      ? null
-      : notifications.owner.error || 'Owner notification failed.';
+    const outboxItem = await enqueueNotification(pool, {
+      targetType: 'inquiry',
+      targetId: inquiry.id,
+      channel: 'email',
+      payload: { inquiryId: inquiry.id },
+    });
+    await processOutboxItem(pool, outboxItem);
 
-    await pool.query(
-      `UPDATE inquiries
-       SET notification_status = $2,
-           notification_error = $3,
-           last_notified_at = CASE WHEN $2 = 'sent' THEN NOW() ELSE last_notified_at END,
-           updated_at = NOW()
-       WHERE id = $1`,
-      [inquiry.id, notificationStatus, notificationError]
-    );
-
-    await insertNotificationAttempt(pool, inquiry.id, 'emailjs-owner', notifications.owner);
-    if (notifications.client.status !== 'skipped') {
-      await insertNotificationAttempt(pool, inquiry.id, 'emailjs-autoreply', notifications.client);
-    }
-
-    await pool.query(
-      `INSERT INTO inquiry_events (inquiry_id, event_type, new_status, metadata)
-       VALUES ($1, 'notification_retried', $2, $3::jsonb)`,
-      [inquiry.id, inquiry.status, JSON.stringify({ owner: notifications.owner.status, client: notifications.client.status })]
-    );
+    const updated = await pool.query('SELECT * FROM inquiries WHERE id = $1', [inquiry.id]);
+    const notificationStatus = updated.rows[0].notification_status;
+    const notifications = {
+      owner: { status: notificationStatus === 'sent' ? 'sent' : 'failed' },
+      client: { status: 'best-effort' },
+    };
 
     await recordAdminAction({
       action: 'inquiry.notification_retried',
@@ -370,7 +351,6 @@ adminRouter.post('/inquiries/:id/notify', requireAdmin, requireCsrf, async (req,
       ipAddress: req.ip,
     });
 
-    const updated = await pool.query('SELECT * FROM inquiries WHERE id = $1', [inquiry.id]);
     return res.json({
       inquiry: toInquiry(updated.rows[0]),
       notification: notifications,

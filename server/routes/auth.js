@@ -1,5 +1,6 @@
 const express = require('express');
 const { createRateLimiter } = require('../middleware/rateLimit');
+const { recordAdminAction } = require('../lib/auditLog');
 const {
   requireAdmin,
   requireCsrf,
@@ -35,11 +36,25 @@ router.post('/login', loginRateLimiter.middleware, async (req, res) => {
 
   if (!valid) {
     console.warn('Admin login failed.', getAdminPasswordHashDiagnostics());
+    await recordAdminAction({
+      action: 'admin.login_failed',
+      targetType: 'admin_session',
+      targetId: null,
+      metadata: getAdminPasswordHashDiagnostics(),
+      ipAddress: req.ip,
+    });
     return res.status(401).json({ error: 'Invalid credentials.' });
   }
 
   const session = createSession();
   setSessionCookie(res, req, session.id);
+  await recordAdminAction({
+    action: 'admin.login',
+    targetType: 'admin_session',
+    targetId: session.id,
+    metadata: { csrfIssued: true },
+    ipAddress: req.ip,
+  });
   return res.json({
     authenticated: true,
     csrfToken: session.csrfToken,
@@ -57,8 +72,16 @@ router.get('/session', (req, res) => {
   });
 });
 
-router.post('/logout', requireAdmin, requireCsrf, (req, res) => {
-  destroySession(req.adminSession.id);
+router.post('/logout', requireAdmin, requireCsrf, async (req, res) => {
+  const sessionId = req.adminSession.id;
+  destroySession(sessionId);
+  await recordAdminAction({
+    action: 'admin.logout',
+    targetType: 'admin_session',
+    targetId: sessionId,
+    metadata: {},
+    ipAddress: req.ip,
+  });
   clearSessionCookie(res, req);
   return res.json({ authenticated: false });
 });

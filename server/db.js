@@ -42,6 +42,8 @@ async function runMigrations(activePool = getPool()) {
   const applied = [];
 
   try {
+    await client.query("SELECT pg_advisory_lock(hashtext('pantanehub:migrations'))");
+
     await client.query(`
       CREATE TABLE IF NOT EXISTS schema_migrations (
         version TEXT PRIMARY KEY,
@@ -78,6 +80,7 @@ async function runMigrations(activePool = getPool()) {
 
     return { applied, skipped: false };
   } finally {
+    await client.query('SELECT pg_advisory_unlock(hashtext(\'pantanehub:migrations\'))').catch(() => {});
     client.release();
   }
 }

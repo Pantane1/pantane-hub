@@ -13,7 +13,7 @@ let baseUrl;
 let state;
 
 function createFakePool() {
-  state = { inquiries: [], events: [], attempts: [], audit: [] };
+  state = { inquiries: [], events: [], attempts: [], audit: [], outbox: [] };
   let idCounter = 1;
 
   function makeId() {
@@ -135,6 +135,21 @@ function createFakePool() {
             event_type: event.sql.includes('status_changed') ? 'status_changed' : event.sql.includes('notification_retried') ? 'notification_retried' : 'created',
           }));
         return { rows };
+      }
+
+      if (/^INSERT INTO notification_outbox/i.test(normalized)) {
+        const row = {
+          id: makeId(),
+          created_at: new Date().toISOString(),
+          target_type: params[0],
+          target_id: params[1],
+          channel: params[2],
+          payload: JSON.parse(params[3]),
+          status: 'pending',
+          attempts: 0,
+        };
+        state.outbox.push(row);
+        return { rows: [clone(row)] };
       }
 
       if (/^INSERT INTO notification_attempts/i.test(normalized)) {

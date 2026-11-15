@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const { requireAdmin, requireCsrf } = require('../middleware/adminAuth');
+const { recordAdminAction } = require('../lib/auditLog');
 
 // ── Config ───────────────────────────────────────────────────────────────
 const GITHUB_OWNER = 'Pantane1';
@@ -64,6 +65,13 @@ router.post('/journal', requireAdmin, requireCsrf, async (req, res) => {
       content: Buffer.from(newContent, 'utf8').toString('base64'),
       sha,
       branch: GITHUB_BRANCH,
+    });
+    await recordAdminAction({
+      action: 'journal.updated',
+      targetType: 'journal',
+      targetId: 'journal.json',
+      metadata: { posts: posts.length, commit: data.commit?.sha || null },
+      ipAddress: req.ip,
     });
     res.json({ success: true, commit: data.commit?.sha });
   } catch (error) {

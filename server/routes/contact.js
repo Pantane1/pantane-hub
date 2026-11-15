@@ -3,6 +3,7 @@ const axios = require('axios');
 const db = require('../db');
 const { requireAdmin, requireCsrf } = require('../middleware/adminAuth');
 const { recordAdminAction } = require('../lib/auditLog');
+const { enqueueNotification, processOutboxItem } = require('../services/notificationOutbox');
 
 const publicRouter = express.Router();
 const adminRouter = express.Router();
@@ -113,32 +114,29 @@ publicRouter.post('/', async (req, res) => {
     return res.status(500).json({ error: 'Failed to save message.' });
   }
 
-  const notifications = await attemptContactNotifications(message);
-  const notificationStatus = notifications.owner.status === 'sent' ? 'sent' : 'failed';
-  const notificationError = notifications.owner.status === 'sent'
-    ? null
-    : notifications.owner.error || 'Owner notification failed.';
-
-  await pool.query(
-    `UPDATE contact_messages
-     SET notification_status = $2,
-         notification_error = $3,
-         last_notified_at = CASE WHEN $2 = 'sent' THEN NOW() ELSE last_notified_at END
-     WHERE id = $1`,
-    [message.id, notificationStatus, notificationError]
-  );
-
-  await pool.query(
-    `INSERT INTO notification_attempts (target_type, target_id, channel, status, error, attempted_at)
-     VALUES ('contact_message', $1, 'emailjs-owner', $2, $3, NOW())`,
-    [message.id, notifications.owner.status, notifications.owner.error || null]
-  );
-  if (notifications.client.status !== 'skipped') {
-    await pool.query(
-      `INSERT INTO notification_attempts (target_type, target_id, channel, status, error, attempted_at)
-       VALUES ('contact_message', $1, 'emailjs-autoreply', $2, $3, NOW())`,
-      [message.id, notifications.client.status, notifications.client.error || null]
-    );
+  let notifications = { owner: { status: 'skipped' }, client: { status: 'skipped' } };
+  try {
+    const outboxItem = await enqueueNotification(pool, {
+      targetType: 'contact_message',
+      targetId: message.id,
+      channel: 'email',
+      payload: { contactMessageId: message.id },
+    });
+    await processOutboxItem(pool, outboxItem);
+    const updatedMessage = await pool.query('SELECT notification_status, notification_error FROM contact_messages WHERE id = $1', [message.id]);
+    notifications = {
+      owner: {
+        status: updatedMessage.rows[0]?.notification_status === 'sent' ? 'sent' : 'failed',
+        error: updatedMessage.rows[0]?.notification_error || undefined,
+      },
+      client: { status: 'best-effort' },
+    };
+  } catch (error) {
+    console.error('Contact notification processing failed:', error.message);
+    notifications = {
+      owner: { status: 'failed', error: 'Notification processing failed.' },
+      client: { status: 'skipped' },
+    };
   }
 
   const updated = await pool.query('SELECT * FROM contact_messages WHERE id = $1', [message.id]);
@@ -223,33 +221,20 @@ adminRouter.post('/communications/:id/notify', requireAdmin, requireCsrf, async 
     }
     const message = messageResult.rows[0];
 
-    const notifications = await attemptContactNotifications(message);
-    const notificationStatus = notifications.owner.status === 'sent' ? 'sent' : 'failed';
-    const notificationError = notifications.owner.status === 'sent'
-      ? null
-      : notifications.owner.error || 'Owner notification failed.';
+    const outboxItem = await enqueueNotification(pool, {
+      targetType: 'contact_message',
+      targetId: message.id,
+      channel: 'email',
+      payload: { contactMessageId: message.id },
+    });
+    await processOutboxItem(pool, outboxItem);
 
-    await pool.query(
-      `UPDATE contact_messages
-       SET notification_status = $2,
-           notification_error = $3,
-           last_notified_at = CASE WHEN $2 = 'sent' THEN NOW() ELSE last_notified_at END
-       WHERE id = $1`,
-      [message.id, notificationStatus, notificationError]
-    );
-
-    await pool.query(
-      `INSERT INTO notification_attempts (target_type, target_id, channel, status, error, attempted_at)
-       VALUES ('contact_message', $1, 'emailjs-owner', $2, $3, NOW())`,
-      [message.id, notifications.owner.status, notifications.owner.error || null]
-    );
-    if (notifications.client.status !== 'skipped') {
-      await pool.query(
-        `INSERT INTO notification_attempts (target_type, target_id, channel, status, error, attempted_at)
-         VALUES ('contact_message', $1, 'emailjs-autoreply', $2, $3, NOW())`,
-        [message.id, notifications.client.status, notifications.client.error || null]
-      );
-    }
+    const updatedMessage = await pool.query('SELECT * FROM contact_messages WHERE id = $1', [message.id]);
+    const notificationStatus = updatedMessage.rows[0].notification_status;
+    const notifications = {
+      owner: { status: notificationStatus === 'sent' ? 'sent' : 'failed' },
+      client: { status: 'best-effort' },
+    };
 
     await recordAdminAction({
       action: 'communication.notification_retried',
@@ -259,8 +244,7 @@ adminRouter.post('/communications/:id/notify', requireAdmin, requireCsrf, async 
       ipAddress: req.ip,
     });
 
-    const updated = await pool.query('SELECT * FROM contact_messages WHERE id = $1', [message.id]);
-    return res.json({ message: updated.rows[0], notification: notifications });
+    return res.json({ message: updatedMessage.rows[0], notification: notifications });
   } catch (error) {
     console.error('Communication notification retry failed:', error.message);
     return res.status(500).json({ error: 'Failed to retry notification.' });
@@ -270,4 +254,5 @@ adminRouter.post('/communications/:id/notify', requireAdmin, requireCsrf, async 
 module.exports = {
   publicRouter,
   adminRouter,
+  attemptContactNotifications,
 };

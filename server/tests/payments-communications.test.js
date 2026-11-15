@@ -33,9 +33,11 @@ function createFakePool() {
     contacts: [],
     attempts: [],
     audit: [],
+    outbox: [],
   };
   let idCounter = 1;
   function makeId() { return `00000000-0000-4000-9000-${String(idCounter++).padStart(12, '0')}`; }
+  function clone(value) { return JSON.parse(JSON.stringify(value)); }
 
   const pool = {
     async query(sql, params = []) {
@@ -191,6 +193,21 @@ function createFakePool() {
           if (params[1] === 'sent') message.last_notified_at = new Date().toISOString();
         }
         return { rows: [] };
+      }
+
+      if (/^INSERT INTO notification_outbox/i.test(normalized)) {
+        const row = {
+          id: makeId(),
+          created_at: new Date().toISOString(),
+          target_type: params[0],
+          target_id: params[1],
+          channel: params[2],
+          payload: JSON.parse(params[3]),
+          status: 'pending',
+          attempts: 0,
+        };
+        state.outbox.push(row);
+        return { rows: [clone(row)] };
       }
 
       if (/^INSERT INTO notification_attempts/i.test(normalized)) {
