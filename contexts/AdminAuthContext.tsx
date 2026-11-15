@@ -11,7 +11,7 @@ interface AdminAuthContextValue {
 
 const AdminAuthContext = createContext<AdminAuthContextValue | null>(null);
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = () => import.meta.env.VITE_API_URL;
 
 export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [status, setStatus] = useState<AdminAuthContextValue['status']>('loading');
@@ -19,7 +19,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const refresh = useCallback(async () => {
     try {
-      const res = await axios.get(`${apiUrl}/admin/session`, { withCredentials: true });
+      const res = await axios.get(`${apiUrl()}/admin/session`, { withCredentials: true });
       setCsrfToken(res.data?.csrfToken ?? null);
       setStatus('authenticated');
     } catch {
@@ -34,7 +34,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const login = useCallback(async (password: string) => {
     try {
-      const res = await axios.post(`${apiUrl}/admin/login`, { password }, { withCredentials: true });
+      const res = await axios.post(`${apiUrl()}/admin/login`, { password }, { withCredentials: true });
       setCsrfToken(res.data?.csrfToken ?? null);
       setStatus('authenticated');
       return true;
@@ -47,7 +47,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const logout = useCallback(async () => {
     try {
-      await axios.post(`${apiUrl}/admin/logout`, {}, {
+      await axios.post(`${apiUrl()}/admin/logout`, {}, {
         withCredentials: true,
         headers: csrfToken ? { 'X-CSRF-Token': csrfToken } : {},
       });

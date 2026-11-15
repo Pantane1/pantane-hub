@@ -313,6 +313,59 @@ test('CORS preflight allows credentialed production admin requests', async () =>
   assert.equal(res.headers.get('access-control-allow-origin'), 'https://www.pantane.is-a.dev');
 });
 
+test('CORS allows the production origin for credentialed requests', async () => {
+  const res = await fetch(`${baseUrl}/admin/session`, {
+    headers: { Origin: 'https://www.pantane.is-a.dev' },
+  });
+
+  assert.equal(res.status, 401);
+  assert.equal(res.headers.get('access-control-allow-origin'), 'https://www.pantane.is-a.dev');
+  assert.equal(res.headers.get('access-control-allow-credentials'), 'true');
+  assert.match(res.headers.get('vary') || '', /Origin/i);
+});
+
+test('CORS rejects an untrusted origin', async () => {
+  const res = await fetch(`${baseUrl}/admin/session`, {
+    headers: { Origin: 'https://evil.example' },
+  });
+
+  assert.equal(res.status, 500);
+  assert.notEqual(res.headers.get('access-control-allow-origin'), 'https://evil.example');
+  assert.notEqual(res.headers.get('access-control-allow-credentials'), 'true');
+});
+
+test('CORS preflight allows credentialed production admin requests', async () => {
+  const res = await fetch(`${baseUrl}/admin/login`, {
+    method: 'OPTIONS',
+    headers: {
+      Origin: 'https://www.pantane.is-a.dev',
+      'Access-Control-Request-Method': 'POST',
+      'Access-Control-Request-Headers': 'content-type',
+    },
+  });
+
+  assert.ok(res.status === 200 || res.status === 204);
+  assert.equal(res.headers.get('access-control-allow-origin'), 'https://www.pantane.is-a.dev');
+  assert.equal(res.headers.get('access-control-allow-credentials'), 'true');
+  assert.match(res.headers.get('vary') || '', /Origin/i);
+  assert.match(res.headers.get('access-control-allow-methods') || '', /POST/i);
+  assert.match(res.headers.get('access-control-allow-headers') || '', /content-type/i);
+});
+
+test('session cookie uses secure attributes in tests', async () => {
+  const res = await request('/admin/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: 'test-password' }),
+  });
+
+  const cookie = res.headers.get('set-cookie') || '';
+  assert.match(cookie, /HttpOnly/i);
+  assert.match(cookie, /SameSite=Lax/i);
+  assert.match(cookie, /Max-Age=/i);
+  assert.doesNotMatch(cookie, /Secure/i);
+});
+
 test('public health endpoint remains accessible', async () => {
   const res = await request('/');
   assert.equal(res.status, 200);
