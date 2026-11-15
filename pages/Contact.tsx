@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import emailjs from '@emailjs/browser';
 import { useSeo } from '../hooks/useSeo';
 import { pageSeo } from '../data/pageSeo';
-import { EMAILJS_SERVICE_ID, EMAILJS_PUBLIC_KEY, EMAILJS_NOTIFY_TEMPLATE_ID, EMAILJS_AUTOREPLY_TEMPLATE_ID } from '../data/emailConfig';
 import ServiceAreaSection from '../components/ServiceAreaSection';
 
 const Contact: React.FC = () => {
@@ -16,37 +14,33 @@ const Contact: React.FC = () => {
     setLoading(true);
     setError(null);
     const form = e.currentTarget;
-    const serviceId  = EMAILJS_SERVICE_ID;
-    const publicKey  = EMAILJS_PUBLIC_KEY;
-    const notifyTemplateId    = EMAILJS_NOTIFY_TEMPLATE_ID;
-    const autoreplyTemplateId = EMAILJS_AUTOREPLY_TEMPLATE_ID;
-
     const formData = new FormData(form);
-    const senderName  = formData.get('from_name')  as string;
-    const senderEmail = formData.get('from_email') as string;
-    const senderMessage = formData.get('message')  as string;
+    const senderName = String(formData.get('from_name') || '').trim();
+    const senderEmail = String(formData.get('from_email') || '').trim();
+    const senderMessage = String(formData.get('message') || '').trim();
 
     try {
-      // 1. Notify me — the message lands in my own inbox
-      await emailjs.sendForm(serviceId, notifyTemplateId, form, publicKey);
-
-      // 2. Autoreply — sends the PANTANEHUB confirmation back to the visitor
-      await emailjs.send(
-        serviceId,
-        autoreplyTemplateId,
-        {
-          to_name: senderName,
-          user_email: senderEmail,
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${apiUrl}/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: senderName,
+          email: senderEmail,
           message: senderMessage,
-        },
-        publicKey
-      );
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message.');
+      }
 
       setSubmitted(true);
       form.reset();
       setTimeout(() => setSubmitted(false), 6000);
     } catch (err) {
-      console.error('Email send failed:', err);
+      console.error('Contact message failed:', err);
       setError('Failed to send message. Please try again or email me directly.');
     } finally {
       setLoading(false);

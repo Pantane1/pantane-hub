@@ -1,11 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import emailjs from '@emailjs/browser';
-import { EMAILJS_SERVICE_ID, EMAILJS_PUBLIC_KEY, EMAILJS_NOTIFY_TEMPLATE_ID, EMAILJS_AUTOREPLY_TEMPLATE_ID } from '../data/emailConfig';
 import { CONTACT_EMAIL, whatsappLink } from '../data/contact';
 import {
   BUDGET_OPTIONS, TIMELINE_OPTIONS, SERVICE_OPTIONS, STEP_LABELS,
-  InquiryValues, InquiryErrors, emptyInquiry, validateStep, validateAll, buildInquiryMessage,
+  InquiryValues, InquiryErrors, emptyInquiry, validateStep, validateAll,
 } from '../data/inquiry';
 
 /** A real person can't read, choose and type across three steps faster than this. */
@@ -38,6 +36,8 @@ const ProjectInquiryForm: React.FC<{ initialService?: string }> = ({ initialServ
   const mountedAt = useRef(Date.now());
   /** Synchronous guard so two submit events can't both pass the `status === 'sending'` check before React re-renders. */
   const submittingRef = useRef(false);
+  /** Stable key for safe retries without creating duplicate inquiries. */
+  const submissionIdRef = useRef<string | null>(null);
 
   const set = (k: keyof InquiryValues) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setValues(v => ({ ...v, [k]: e.target.value }));
@@ -88,30 +88,48 @@ const ProjectInquiryForm: React.FC<{ initialService?: string }> = ({ initialServ
     setStatus('sending');
     setErrorMsg('');
     submittingRef.current = true;
+
+    if (!submissionIdRef.current) {
+      submissionIdRef.current = crypto.randomUUID();
+    }
+
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_NOTIFY_TEMPLATE_ID,
-        { from_name: values.name.trim(), from_email: values.email.trim(), message: buildInquiryMessage(values) },
-        EMAILJS_PUBLIC_KEY,
-      );
+      const response = await fetch(`${apiUrl}/inquiries`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service: values.service,
+          description: values.description.trim(),
+          budget: values.budget,
+          timeline: values.timeline,
+          requirements: values.requirements.trim(),
+          name: values.name.trim(),
+          email: values.email.trim(),
+          phone: values.phone.trim(),
+          business: values.business.trim(),
+          submissionId: submissionIdRef.current,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setStatus('error');
+        setErrorMsg(data.error || "Your inquiry didn't go through. Please try again, or reach me directly on WhatsApp or email.");
+        return; // never show success unless the inquiry was persisted
+      }
     } catch (err) {
-      console.error('Inquiry send failed:', err);
+      console.error('Inquiry submission failed:', err);
       setStatus('error');
       setErrorMsg("Your inquiry didn't go through. Please try again, or reach me directly on WhatsApp or email.");
-      return; // never show success unless the notification actually sent
+      return; // never show success unless the inquiry was persisted
     } finally {
       submittingRef.current = false;
     }
+
     try { localStorage.setItem(COOLDOWN_KEY, String(Date.now())); } catch { /* ignore */ }
     setStatus('sent');
-    // Confirmation email to the client is best-effort: Pantane already has the inquiry.
-    emailjs.send(
-      EMAILJS_SERVICE_ID,
-      EMAILJS_AUTOREPLY_TEMPLATE_ID,
-      { to_name: values.name.trim(), user_email: values.email.trim(), message: `Thanks for your project inquiry about "${values.service}". I've received it and will get back to you soon.` },
-      EMAILJS_PUBLIC_KEY,
-    ).catch(err => console.error('Inquiry autoreply failed:', err));
+    submissionIdRef.current = null;
   };
 
   if (status === 'sent') {

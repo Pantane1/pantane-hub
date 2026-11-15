@@ -57,7 +57,7 @@ test('runMigrations applies and records a new migration', async () => {
   const result = await db.runMigrations(pool);
 
   assert.deepEqual(result, {
-    applied: ['001_initial_admin_operations.sql'],
+    applied: ['001_initial_admin_operations.sql', '002_inquiry_management.sql', '003_notification_outbox_and_audit_immutability.sql'],
     skipped: false,
   });
   assert.ok(queries.some((sql) => sql.includes('CREATE TABLE IF NOT EXISTS inquiries')));
@@ -68,7 +68,11 @@ test('runMigrations skips already applied migrations', async () => {
   const client = {
     async query(sql) {
       if (sql.includes('SELECT version FROM schema_migrations')) {
-        return { rows: [{ version: '001_initial_admin_operations.sql' }] };
+        return { rows: [
+          { version: '001_initial_admin_operations.sql' },
+          { version: '002_inquiry_management.sql' },
+          { version: '003_notification_outbox_and_audit_immutability.sql' },
+        ] };
       }
       return { rows: [] };
     },
