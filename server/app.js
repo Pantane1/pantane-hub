@@ -9,6 +9,8 @@ const sharpRoute = require('./routes/sharp');
 const reposRoute = require('./routes/repos');
 const chatRoute = require('./routes/chat');
 const { publicRouter: inquiryPublicRoute, adminRouter: inquiryAdminRoute } = require('./routes/inquiries');
+const { publicRouter: contactPublicRoute, adminRouter: contactAdminRoute } = require('./routes/contact');
+const paymentsAdminRoute = require('./routes/payments');
 
 function createApp() {
   const app = express();
@@ -69,7 +71,10 @@ function createApp() {
   app.use('/repos', reposRoute);
   app.use('/chat', chatRoute);
   app.use('/inquiries', inquiryPublicRoute);
+  app.use('/contact', contactPublicRoute);
   app.use('/admin', inquiryAdminRoute);
+  app.use('/admin', contactAdminRoute);
+  app.use('/admin', paymentsAdminRoute);
 
   app.get('/', (req, res) => {
     res.json({ status: 'Pantane Hub server running' });

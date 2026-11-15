@@ -1,6 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { Lipana } = require('@lipana/sdk');
+const db = require('../db');
+
+function maskPhone(phone) {
+  if (!phone) return null;
+  const digits = String(phone).replace(/\D/g, '');
+  if (digits.length < 8) return 'masked';
+  return `${digits.slice(0, 4)}****${digits.slice(-2)}`;
+}
 
 // Lazy-initialize Lipana to avoid startup crashes if env vars are missing
 let lipana;
@@ -44,6 +52,22 @@ router.post('/', async (req, res) => {
       phone: normalizedPhone,
       amount: parsedAmount,
     });
+
+    const pool = db.getPool();
+    if (pool && (response.transactionId || response.checkoutRequestID)) {
+      const reference = response.transactionId || response.checkoutRequestID;
+      try {
+        await pool.query(
+          `INSERT INTO payment_transactions
+            (provider, provider_reference, amount, currency, status, payer_phone, metadata)
+           VALUES ($1, $2, $3, $4, 'pending', $5, $6::jsonb)
+           ON CONFLICT (provider, provider_reference) DO NOTHING`,
+          ['mpesa-lipana', reference, parsedAmount, 'KES', maskPhone(normalizedPhone), JSON.stringify({ checkoutRequestID: response.checkoutRequestID || null })]
+        );
+      } catch (dbError) {
+        console.error('Failed to persist payment transaction:', dbError.message);
+      }
+    }
 
     return res.status(200).json({
       success: true,
