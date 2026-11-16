@@ -87,6 +87,27 @@ test('runMigrations skips already applied migrations', async () => {
   assert.deepEqual(result, { applied: [], skipped: false });
 });
 
+test('runMigrations acquires and releases advisory lock', async () => {
+  const queries = [];
+  const client = {
+    async query(sql) {
+      queries.push(sql);
+      if (sql.includes('SELECT version FROM schema_migrations')) {
+        return { rows: [{ version: '001_initial_admin_operations.sql' }, { version: '002_inquiry_management.sql' }, { version: '003_notification_outbox_and_audit_immutability.sql' }] };
+      }
+      return { rows: [] };
+    },
+    release() {},
+  };
+  const pool = { connect: async () => client };
+
+  const result = await db.runMigrations(pool);
+  assert.deepEqual(result, { applied: [], skipped: false });
+  assert.ok(queries.some((sql) => sql.includes('pg_advisory_lock')));
+  assert.ok(queries.some((sql) => sql.includes('pg_advisory_unlock')));
+});
+
 test('migration script syntax is valid', () => {
   require('node:child_process').execFileSync(process.execPath, ['--check', path.join(__dirname, '..', 'scripts', 'migrate.js')]);
+  require('node:child_process').execFileSync(process.execPath, ['--check', path.join(__dirname, '..', 'scripts', 'verify-database.js')]);
 });
