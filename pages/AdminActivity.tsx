@@ -4,11 +4,11 @@ import { useAdminAuth } from '../contexts/AdminAuthContext';
 
 interface AuditEvent {
   id: number;
-  createdAt: string;
+  created_at: string;
   actor: string;
   action: string;
-  targetType: string | null;
-  targetId: string | null;
+  target_type: string | null;
+  target_id: string | null;
   metadata: Record<string, unknown>;
 }
 
@@ -104,9 +104,9 @@ const AdminActivity: React.FC = () => {
               <tbody>
                 {events.map((event) => (
                   <tr key={event.id} className="border-t border-slate-100">
-                    <td className="px-5 py-4 text-slate-500">{new Date(event.createdAt).toLocaleString()}</td>
+                    <td className="px-5 py-4 text-slate-500">{event.created_at ? new Date(event.created_at).toLocaleString() : '—'}</td>
                     <td className="px-5 py-4 font-bold text-slate-700">{event.action}</td>
-                    <td className="px-5 py-4 text-slate-600">{event.targetType || '—'} {event.targetId ? `· ${event.targetId}` : ''}</td>
+                    <td className="px-5 py-4 text-slate-600">{event.target_type || '—'} {event.target_id ? `· ${event.target_id}` : ''}</td>
                     <td className="px-5 py-4 text-slate-500">{event.actor}</td>
                   </tr>
                 ))}

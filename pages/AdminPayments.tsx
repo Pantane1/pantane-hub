@@ -4,10 +4,10 @@ import { useAdminAuth } from '../contexts/AdminAuthContext';
 
 interface PaymentTransaction {
   id: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
   provider: string;
-  providerReference: string;
+  provider_reference: string;
   amount: string | null;
   currency: string;
   status: string;
@@ -107,9 +107,9 @@ const AdminPayments: React.FC = () => {
               <tbody>
                 {transactions.map((transaction) => (
                   <tr key={transaction.id} className="border-t border-slate-100">
-                    <td className="px-5 py-4 text-slate-500">{new Date(transaction.createdAt).toLocaleString()}</td>
+                    <td className="px-5 py-4 text-slate-500">{transaction.created_at ? new Date(transaction.created_at).toLocaleString() : '—'}</td>
                     <td className="px-5 py-4 text-slate-700">{transaction.provider}</td>
-                    <td className="px-5 py-4 font-mono text-xs text-slate-600">{transaction.providerReference}</td>
+                    <td className="px-5 py-4 font-mono text-xs text-slate-600">{transaction.provider_reference || '—'}</td>
                     <td className="px-5 py-4 text-slate-700">{transaction.amount ? `${transaction.amount} ${transaction.currency}` : '—'}</td>
                     <td className="px-5 py-4">
                       <span className="px-2.5 py-1 rounded-full bg-slate-100 text-xs font-bold text-slate-600">{transaction.status}</span>
