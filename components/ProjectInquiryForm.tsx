@@ -90,7 +90,10 @@ const ProjectInquiryForm: React.FC<{ initialService?: string }> = ({ initialServ
     submittingRef.current = true;
 
     if (!submissionIdRef.current) {
-      submissionIdRef.current = crypto.randomUUID();
+      submissionIdRef.current =
+        typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+          ? crypto.randomUUID()
+          : `fallback-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     }
 
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -225,8 +228,19 @@ const ProjectInquiryForm: React.FC<{ initialService?: string }> = ({ initialServ
           </div>
           {/* Honeypot: invisible to people, tempting to bots. */}
           <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' }}>
-            <label htmlFor="inq-company-site">Leave this field empty</label>
-            <input id="inq-company-site" name="company_site" type="text" tabIndex={-1} autoComplete="off" value={honeypot} onChange={e => setHoneypot(e.target.value)} />
+            <label htmlFor="inq-hp-field">Leave this field empty</label>
+            <input
+              id="inq-hp-field"
+              name="hp_field"
+              type="text"
+              tabIndex={-1}
+              autoComplete="new-password"
+              data-lpignore="true"
+              data-1p-ignore="true"
+              aria-hidden="true"
+              value={honeypot}
+              onChange={e => setHoneypot(e.target.value)}
+            />
           </div>
         </div>
       )}

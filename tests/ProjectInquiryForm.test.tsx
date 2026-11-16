@@ -120,7 +120,7 @@ describe('ProjectInquiryForm reliability', () => {
 
     now = 100000;
     await fillValidForm();
-    const honeypot = document.querySelector('input[name="company_site"]') as HTMLInputElement;
+    const honeypot = document.querySelector('input[name="hp_field"]') as HTMLInputElement;
     fireEvent.change(honeypot, { target: { value: 'spam' } });
     fireEvent.click(screen.getByRole('button', { name: /send inquiry/i }));
 
