@@ -4,12 +4,12 @@ import { useAdminAuth } from '../contexts/AdminAuthContext';
 
 interface ContactMessage {
   id: string;
-  createdAt: string;
+  created_at: string;
   name: string;
   email: string;
   message: string;
-  notificationStatus: string;
-  notificationError: string | null;
+  notification_status: string;
+  notification_error: string | null;
 }
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -106,10 +106,10 @@ const AdminCommunications: React.FC = () => {
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                 <div>
                   <p className="font-bold text-brand-navy">{message.name}</p>
-                  <p className="text-xs text-slate-400">{message.email} · {new Date(message.createdAt).toLocaleString()}</p>
+                  <p className="text-xs text-slate-400">{message.email} · {message.created_at ? new Date(message.created_at).toLocaleString() : '—'}</p>
                   <p className="mt-3 text-sm text-slate-700 whitespace-pre-wrap">{message.message}</p>
-                  <p className="mt-3 text-xs font-bold text-slate-500">Notification: {message.notificationStatus}</p>
-                  {message.notificationError && <p className="text-xs text-rose-600">{message.notificationError}</p>}
+                  <p className="mt-3 text-xs font-bold text-slate-500">Notification: {message.notification_status || '—'}</p>
+                  {message.notification_error && <p className="text-xs text-rose-600">{message.notification_error}</p>}
                 </div>
                 <button
                   type="button"
