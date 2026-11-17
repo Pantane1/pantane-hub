@@ -13,31 +13,14 @@ import { serviceCategories } from '../data/services';
 import { QuoteButton } from '../components/CtaButtons';
 
 const DEVTOOLS_URL = 'https://pantane-devtools-web.onrender.com/tools';
+// Bump this whenever a tool is added/removed on the DevTools platform.
 const DEVTOOLS_TOOL_COUNT = 26;
 
-const NavCard = ({ title, description, icon, to }: { title: string; description: string; icon: string; to: string }) => (
-  <Link
-    to={to}
-    className="group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-brand-primary/60 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between min-h-[210px]"
-  >
-    <div>
-      <div className="w-13 h-13 w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-xl mb-5 group-hover:bg-brand-primary group-hover:scale-110 transition-all duration-300">
-        {icon}
-      </div>
-      <h3 className="text-xl font-bold text-brand-navy mb-2" style={{ fontFamily: 'Syne, sans-serif' }}>{title}</h3>
-      <p className="text-slate-500 text-sm leading-relaxed">{description}</p>
-    </div>
-    <div className="mt-5 flex items-center text-slate-400 text-sm font-bold group-hover:text-brand-primary group-hover:translate-x-1.5 transition-all duration-300">
-      Explore <span className="ml-1.5">→</span>
-    </div>
-  </Link>
-);
-
-const SectionHeading: React.FC<{ eyebrow: string; title: string; linkTo?: string; linkLabel?: string }> = ({ eyebrow, title, linkTo, linkLabel }) => (
+const SectionHeading: React.FC<{ id?: string; eyebrow: string; title: string; linkTo?: string; linkLabel?: string }> = ({ id, eyebrow, title, linkTo, linkLabel }) => (
   <div className="flex items-end justify-between gap-4 mb-6 flex-wrap">
     <div>
       <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">{eyebrow}</p>
-      <h2 className="text-2xl md:text-3xl font-extrabold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>{title}</h2>
+      <h2 id={id} className="text-2xl md:text-3xl font-extrabold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>{title}</h2>
     </div>
     {linkTo && (
       <Link to={linkTo} className="text-sm font-bold text-slate-500 hover:text-brand-primary transition-colors whitespace-nowrap flex items-center gap-1">
@@ -54,12 +37,13 @@ const Home: React.FC = () => {
   const latestPost = getAllPosts()[0];
   const featuredDeal = getFeaturedDeal();
   const pinnedRepos = [...repos].sort((a, b) => b.stargazers_count - a.stargazers_count).slice(0, 3);
+  const totalStars = repos.reduce((sum, r) => sum + r.stargazers_count, 0);
 
   return (
   <div className="fade-in space-y-20">
     {/* Hero */}
-    <section className="flex flex-col lg:flex-row items-center gap-12 pt-6 pb-4">
-      <div className="flex-1 space-y-7 text-center lg:text-left">
+    <section className="flex flex-col lg:flex-row items-center gap-12 pt-2 pb-4">
+      <div className="flex-1 space-y-5 text-center lg:text-left">
         <div className="slide-up stagger-1 inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-full text-xs font-bold tracking-widest uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block" />
           Available for new opportunities
@@ -69,22 +53,19 @@ const Home: React.FC = () => {
           Welcome to{' '}
           <span className="relative inline-block">
             <span className="relative z-10 text-brand-primary">Pantane Hub.</span>
-            <span className="absolute -bottom-1 left-0 right-0 h-3 bg-brand-rose/20 -z-0 skew-x-1" />
+            <span className="absolute -bottom-0.5 left-0 w-3/5 h-3 bg-brand-rose/50 rounded-sm" />
           </span>
         </h1>
 
         <p className="slide-up stagger-3 text-lg text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
-          I'm <strong className="text-slate-800 font-semibold">Pantane</strong> — a software developer based in Kenya, driven by curiosity, clean systems, and building things that actually work.
-          This is where I share what I'm building, what I'm learning, and what's next.
-        </p>
-
-        <p className="slide-up stagger-3 text-base text-slate-500 leading-relaxed max-w-xl mx-auto lg:mx-0">
-          My focus is full-stack web development, cloud deployment, and payment integrations for the Kenyan market — M-Pesa and Lipana STK push in particular — along with AI-powered tools and automation. I take on both personal builds and client/freelance work.
+          I'm <strong className="text-slate-800 font-semibold">Pantane</strong> — a software developer based in Kenya,
+          building full-stack systems, cloud deployments, and M-Pesa / Lipana STK integrations, alongside AI-powered
+          tools and automation. This is where I share what I'm building, what I'm learning, and what's next.
         </p>
 
         <div className="slide-up stagger-3 flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1">
           {['Full-Stack Development', 'Cloud & Deployment', 'M-Pesa & Payments', 'AI & Automation'].map(skill => (
-            <span key={skill} className="px-3.5 py-1.5 bg-slate-50 text-slate-600 rounded-full text-xs font-bold">
+            <span key={skill} className="px-3.5 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-full text-xs font-bold">
               {skill}
             </span>
           ))}
@@ -96,7 +77,7 @@ const Home: React.FC = () => {
             href="https://m1wamuhu.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto px-7 py-3.5 bg-brand-navy text-white rounded-2xl font-bold hover:bg-brand-burgundy hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm"
+            className="w-full sm:w-auto px-7 py-3.5 bg-white text-brand-navy border border-slate-200 rounded-2xl font-bold hover:border-slate-400 hover:shadow-md transition-all flex items-center justify-center gap-2 text-sm"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -126,7 +107,7 @@ const Home: React.FC = () => {
     {/* Stats strip — real, live-derived numbers, no invented figures */}
     <section className="grid grid-cols-2 md:grid-cols-4 gap-5">
       {[
-        { label: 'GitHub Repos', value: reposLoading ? '—' : `${repos.length}+` },
+        { label: 'GitHub Stars', value: reposLoading ? '—' : `${totalStars}+` },
         { label: 'Journal Entries', value: `${getAllPosts().length}` },
         { label: 'Sharp Deals Live', value: `${getAllDeals().length}` },
         { label: 'DevTools Shipped', value: `${DEVTOOLS_TOOL_COUNT}` },
@@ -140,8 +121,7 @@ const Home: React.FC = () => {
 
     {/* What I build — the commercial offer, one click from the homepage */}
     <section aria-labelledby="home-services-title">
-      <SectionHeading eyebrow="Services" title="What I Can Build For You" linkTo="/services" linkLabel="All Services" />
-      <h2 id="home-services-title" className="sr-only">Services</h2>
+      <SectionHeading id="home-services-title" eyebrow="Services" title="What I Can Build For You" linkTo="/services" linkLabel="All Services" />
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
         {serviceCategories.map(c => (
           <li key={c.id}>
@@ -244,19 +224,6 @@ const Home: React.FC = () => {
         >
           Open Pantane DevTools <span>→</span>
         </a>
-      </div>
-    </section>
-
-    {/* Navigation cards */}
-    <section>
-      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Explore</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-5">
-        <NavCard title="Projects"  description="Full-stack systems, fintech integrations, and experiments."  icon="🚀" to="/projects" />
-        <NavCard title="Journal"   description="What I'm building, learning, and sharing — documented."      icon="📓" to="/journal" />
-        <NavCard title="Sharp"     description="Deals, rewards, referrals and opportunities, explained."      icon="⚡" to="/sharp" />
-        <NavCard title="Socials"   description="Connect with me across platforms and follow the journey."   icon="🌐" to="/socials" />
-        <NavCard title="Contact"   description="Have a project in mind? Always open to collaborate."         icon="✉️" to="/contact" />
-        <NavCard title="Support"   description="If you like what I build, you can support the journey."      icon="☕" to="/support" />
       </div>
     </section>
   </div>
