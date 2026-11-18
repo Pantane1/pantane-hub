@@ -11,6 +11,7 @@ const chatRoute = require('./routes/chat');
 const { publicRouter: inquiryPublicRoute, adminRouter: inquiryAdminRoute } = require('./routes/inquiries');
 const { publicRouter: contactPublicRoute, adminRouter: contactAdminRoute } = require('./routes/contact');
 const paymentsAdminRoute = require('./routes/payments');
+const { publicRouter: projectsPublicRoute, adminRouter: projectsAdminRoute } = require('./routes/projects');
 const activityRoute = require('./routes/activity');
 const settingsRoute = require('./routes/settings');
 
@@ -64,7 +65,7 @@ function createApp() {
   });
 
   app.use('/lipana-webhook', express.raw({ type: 'application/json' }), webhookRoute);
-  app.use(express.json());
+  app.use(express.json({ limit: '10mb' }));
 
   app.use('/stk-push', stkRoute);
   app.use('/admin', authRoute);
@@ -74,9 +75,11 @@ function createApp() {
   app.use('/chat', chatRoute);
   app.use('/inquiries', inquiryPublicRoute);
   app.use('/contact', contactPublicRoute);
+  app.use('/projects', projectsPublicRoute);
   app.use('/admin', inquiryAdminRoute);
   app.use('/admin', contactAdminRoute);
   app.use('/admin', paymentsAdminRoute);
+  app.use('/admin', projectsAdminRoute);
   app.use('/admin', activityRoute);
   app.use('/admin', settingsRoute);
 

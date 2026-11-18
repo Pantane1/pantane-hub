@@ -11,6 +11,7 @@ const REQUIRED_TABLES = [
   'notification_attempts',
   'notification_outbox',
   'admin_audit_log',
+  'projects',
 ];
 
 async function main() {

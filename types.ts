@@ -10,6 +10,33 @@ export interface GithubRepo {
   updated_at: string;
 }
 
+export interface ProjectGalleryImage {
+  url: string;
+  alt?: string;
+}
+
+export interface Project {
+  id: string;
+  title: string;
+  slug: string;
+  tagline: string;
+  problemSolved: string;
+  solutionSummary: string;
+  highlights: string[];
+  techStack: string[];
+  category: string;
+  coverImage: string;
+  galleryImages: ProjectGalleryImage[];
+  liveUrl: string;
+  repoUrl: string;
+  githubRepoId?: number;
+  isPublished: boolean;
+  isFeatured: boolean;
+  displayOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface SocialLink {
   platform: string;
   username: string;

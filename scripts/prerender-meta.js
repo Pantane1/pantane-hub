@@ -28,6 +28,25 @@ const deals = JSON.parse(
   readFileSync(path.join(__dirname, '..', 'data', 'sharp.json'), 'utf8')
 );
 
+const apiUrl = process.env.VITE_API_URL || process.env.API_URL;
+let curatedProjects = [];
+if (apiUrl) {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    const response = await fetch(`${apiUrl}/projects`, { signal: controller.signal });
+    clearTimeout(timeout);
+    if (response.ok) {
+      const data = await response.json();
+      curatedProjects = Array.isArray(data.projects) ? data.projects : [];
+    } else {
+      console.warn(`prerender-meta: project fetch returned ${response.status}; skipping project pages.`);
+    }
+  } catch (error) {
+    console.warn(`prerender-meta: could not fetch published projects (${error.message}); skipping project pages.`);
+  }
+}
+
 const escapeAttr = (str) =>
   String(str)
     .replace(/&/g, '&amp;')
@@ -144,4 +163,15 @@ for (const deal of deals) {
   }));
 }
 
-console.log(`Prerendered meta tags: Sharp feed + ${deals.length} deal page(s)`);
+for (const project of curatedProjects) {
+  if (typeof project?.slug !== 'string' || !project.slug) continue;
+  writePage(`projects/${project.slug}`, renderPage({
+    title: `${project.title} — Pantane Projects`,
+    description: project.tagline || project.solutionSummary || project.problemSolved || pageSeo.projects.description,
+    url: `${SITE_URL}/projects/${project.slug}`,
+    image: project.coverImage || DEFAULT_OG_IMAGE,
+    ogType: 'article',
+  }));
+}
+
+console.log(`Prerendered meta tags: Sharp feed + ${deals.length} deal page(s) + ${curatedProjects.length} project page(s)`);

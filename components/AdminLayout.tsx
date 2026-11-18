@@ -7,6 +7,7 @@ const navItems = [
   { to: '/admin/inquiries', label: 'Project Inquiries' },
   { to: '/admin/journal', label: 'Journal' },
   { to: '/admin/sharp', label: 'Sharp' },
+  { to: '/admin/projects', label: 'Projects' },
   { to: '/admin/payments', label: 'Payments' },
   { to: '/admin/communications', label: 'Communications' },
   { to: '/admin/access', label: 'Access' },

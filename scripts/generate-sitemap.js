@@ -21,6 +21,25 @@ const deals = JSON.parse(
 
 const today = new Date().toISOString().slice(0, 10);
 
+const apiUrl = process.env.VITE_API_URL || process.env.API_URL;
+let curatedProjects = [];
+if (apiUrl) {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    const response = await fetch(`${apiUrl}/projects`, { signal: controller.signal });
+    clearTimeout(timeout);
+    if (response.ok) {
+      const data = await response.json();
+      curatedProjects = Array.isArray(data.projects) ? data.projects : [];
+    } else {
+      console.warn(`Sitemap: project fetch returned ${response.status}; skipping project URLs.`);
+    }
+  } catch (error) {
+    console.warn(`Sitemap: could not fetch published projects (${error.message}); skipping project URLs.`);
+  }
+}
+
 /** Static routes, newest-content-first isn't relevant here -- priority just
  *  signals relative importance to crawlers, home highest. */
 const staticRoutes = [
@@ -51,6 +70,13 @@ const urls = [
     lastmod: deal.datePosted,
     priority: '0.7',
   })),
+  ...curatedProjects
+    .filter((project) => typeof project?.slug === 'string' && project.slug)
+    .map((project) => ({
+      loc: `${SITE_URL}/projects/${project.slug}`,
+      lastmod: typeof project.updatedAt === 'string' ? project.updatedAt.slice(0, 10) : today,
+      priority: '0.8',
+    })),
 ];
 
 const urlEntries = urls
