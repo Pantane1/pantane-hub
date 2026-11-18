@@ -56,7 +56,7 @@ function createFakePool() {
       const normalized = sql.replace(/\s+/g, ' ').trim();
 
       if (/^SELECT 1$/i.test(normalized)) return { rows: [{ '?column?': 1 }] };
-      if (/^SELECT COUNT\(\*\)::int AS count FROM schema_migrations/i.test(normalized)) return { rows: [{ count: 3 }] };
+      if (/^SELECT COUNT\(\*\)::int AS count FROM schema_migrations/i.test(normalized)) return { rows: [{ count: 4 }] };
       if (/^SELECT \* FROM inquiries WHERE id =/i.test(normalized)) {
         const inquiry = state.inquiries.find((item) => item.id === params[0]);
         return { rows: inquiry ? [clone(inquiry)] : [] };

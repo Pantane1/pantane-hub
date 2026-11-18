@@ -6,6 +6,7 @@ import AdminLayout from './components/AdminLayout';
 import { AdminAuthProvider } from './contexts/AdminAuthContext';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
+import ProjectDetail from './pages/ProjectDetail';
 import Journal from './pages/Journal';
 import JournalPost from './pages/JournalPost';
 import Services from './pages/Services';
@@ -16,6 +17,7 @@ import Socials from './pages/Socials';
 import Contact from './pages/Contact';
 import Support from './pages/Support';
 import AdminOverview from './pages/AdminOverview';
+import AdminProjects from './pages/AdminProjects';
 import AdminInquiries from './pages/AdminInquiries';
 import AdminInquiryDetail from './pages/AdminInquiryDetail';
 import AdminJournal from './pages/AdminJournal';
@@ -40,6 +42,7 @@ const App: React.FC = () => (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/projects" element={<Projects />} />
+      <Route path="/projects/:slug" element={<ProjectDetail />} />
       <Route path="/journal" element={<Journal />} />
       <Route path="/journal/:slug" element={<JournalPost />} />
       <Route path="/services" element={<Services />} />
@@ -54,6 +57,7 @@ const App: React.FC = () => (
         <Route index element={<AdminOverview />} />
         <Route path="journal" element={<AdminJournal />} />
         <Route path="sharp" element={<AdminSharp />} />
+        <Route path="projects" element={<AdminProjects />} />
         <Route path="inquiries" element={<AdminInquiries />} />
         <Route path="inquiries/:id" element={<AdminInquiryDetail />} />
         <Route path="payments" element={<AdminPayments />} />

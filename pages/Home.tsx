@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { GithubIcon } from '../components/Icons';
 import { useSeo } from '../hooks/useSeo';
 import { pageSeo } from '../data/pageSeo';
 import { useGithubRepos } from '../hooks/useGithubRepos';
+import { useCuratedProjects } from '../hooks/useCuratedProjects';
+import { CuratedProjectCard, CuratedProjectSkeletonCard } from '../components/CuratedProjectCard';
 import HeroCarousel from '../components/HeroCarousel';
 import { ProjectCard, ProjectSkeletonCard } from '../components/ProjectCard';
 import { CategoryBadge, formatJournalDate } from '../components/JournalCard';
@@ -33,6 +36,7 @@ const SectionHeading: React.FC<{ id?: string; eyebrow: string; title: string; li
 const Home: React.FC = () => {
   useSeo(pageSeo.home);
   const { repos, loading: reposLoading, error: reposError } = useGithubRepos();
+  const { projects: featuredProjects, loading: featuredProjectsLoading } = useCuratedProjects({ featuredOnly: true });
 
   const latestPost = getAllPosts()[0];
   const featuredDeal = getFeaturedDeal();
@@ -142,17 +146,32 @@ const Home: React.FC = () => {
       </div>
     </section>
 
-    {/* Pinned projects */}
-    {!reposError && (
-      <section>
-        <SectionHeading eyebrow="Portfolio" title="Pinned Projects" linkTo="/projects" linkLabel="All Projects" />
+    {/* Featured curated projects */}
+    <section>
+      <SectionHeading eyebrow="Portfolio" title="Featured Projects" linkTo="/projects" linkLabel="All Projects" />
+      {featuredProjectsLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-          {reposLoading
-            ? [1, 2, 3].map(i => <ProjectSkeletonCard key={i} />)
-            : pinnedRepos.map(r => <ProjectCard key={r.id} repo={r} />)}
+          {[1, 2, 3].map((i) => <CuratedProjectSkeletonCard key={i} />)}
         </div>
-      </section>
-    )}
+      ) : featuredProjects.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
+          {featuredProjects.slice(0, 3).map((project) => <CuratedProjectCard key={project.id} project={project} />)}
+        </div>
+      ) : (
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-8 text-center space-y-4">
+          <p className="text-slate-500 text-sm max-w-md mx-auto">Curated case studies are being prepared. You can still browse all public repositories on GitHub.</p>
+          <a
+            href="https://github.com/pantane1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-5 py-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm text-slate-700 hover:border-slate-400 transition-colors"
+          >
+            <GithubIcon className="w-4 h-4 mr-2" />
+            Browse GitHub Profile
+          </a>
+        </div>
+      )}
+    </section>
 
     {/* Latest Journal entry */}
     {latestPost && (
