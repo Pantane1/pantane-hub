@@ -447,6 +447,7 @@ const AdminProjects: React.FC = () => {
           <div>
             <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Cover image URL</label>
             <input className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm" value={form.coverImage} onChange={(e) => setForm((f) => ({ ...f, coverImage: e.target.value }))} placeholder="https://... or /uploads/projects/..." />
+            <p className="mt-1 text-xs text-slate-400">Recommended: 1600×900 px (16:9), PNG/WebP, max 5 MB. Cover frames use aspect-video on /projects and /projects/:slug.</p>
             <input ref={coverInputRef} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0], 'cover')} />
             <button type="button" onClick={() => coverInputRef.current?.click()} disabled={uploading || !form.slug.trim()} className="mt-2 text-xs font-bold text-brand-primary hover:text-brand-burgundy disabled:opacity-50">
               {uploading ? 'Uploading…' : 'Upload cover image'}
@@ -465,6 +466,7 @@ const AdminProjects: React.FC = () => {
 
         <div>
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Gallery image URLs</label>
+          <p className="mb-2 text-xs text-slate-400">Recommended: 1600×900 px (16:9), PNG/WebP, max 5 MB. Gallery frames use aspect-video with object-contain.</p>
           <div className="space-y-2">
             {form.galleryImages.map((image, index) => (
               <div key={`${image.url}-${index}`} className="flex gap-2">
