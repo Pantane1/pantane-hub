@@ -49,9 +49,15 @@ const PhBot: React.FC = () => {
   const [input, setInput]       = useState('');
   const [loading, setLoading]   = useState(false);
   const [hasOpened, setHasOpened] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(true);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef  = useRef<HTMLInputElement>(null);
   const navigate  = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => setTooltipVisible(false), 5000);
+    return () => clearTimeout(timer);
+  }, []);
 
   /* Auto-scroll */
   useEffect(() => {
@@ -135,7 +141,7 @@ const PhBot: React.FC = () => {
       {/* ── Floating Button ── */}
       <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
         {/* Tooltip — show before first open */}
-        {!hasOpened && !open && (
+        {tooltipVisible && !hasOpened && !open && (
           <div className="bg-brand-primary text-white text-xs font-semibold px-4 py-2 rounded-2xl shadow-lg animate-bounce">
             Ask me anything 👋
           </div>

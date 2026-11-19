@@ -9,6 +9,7 @@ const ProjectDetail: React.FC = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lightboxImage, setLightboxImage] = useState<{ url: string; alt?: string } | null>(null);
 
   useSeo({
     title: project ? `${project.title} — Pantane Projects` : 'Project Not Found | PantaneHub',
@@ -45,6 +46,20 @@ const ProjectDetail: React.FC = () => {
     };
   }, [slug]);
 
+  useEffect(() => {
+    if (!lightboxImage) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setLightboxImage(null);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [lightboxImage]);
+
   if (loading) {
     return <div className="max-w-3xl mx-auto text-sm text-slate-500">Loading project…</div>;
   }
@@ -68,11 +83,11 @@ const ProjectDetail: React.FC = () => {
         ← Back to Projects
       </Link>
 
-      <div className="rounded-3xl overflow-hidden bg-slate-100">
+      <div className="rounded-3xl overflow-hidden bg-[#07111F] border border-slate-800/60 aspect-video flex items-center justify-center">
         {project.coverImage ? (
-          <img src={project.coverImage} alt={project.title} className="w-full aspect-video object-cover" />
+          <img src={project.coverImage} alt={project.title} className="w-full h-full object-contain" />
         ) : (
-          <div className="aspect-video bg-brand-navy flex items-center justify-center">
+          <div className="w-full h-full bg-brand-navy flex items-center justify-center">
             <span className="text-white font-black text-4xl" style={{ fontFamily: 'Syne, sans-serif' }}>{project.title.slice(0, 2).toUpperCase()}</span>
           </div>
         )}
@@ -148,12 +163,48 @@ const ProjectDetail: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {project.galleryImages.map((image, index) => (
               <figure key={`${image.url}-${index}`} className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-                <img src={image.url} alt={image.alt || project.title} loading="lazy" className="w-full aspect-video object-cover" />
+                <button
+                  type="button"
+                  onClick={() => setLightboxImage({ url: image.url, alt: image.alt || project.title })}
+                  className="block w-full bg-[#07111F] aspect-video focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-rose"
+                  aria-label={`Open screenshot ${index + 1} in full screen`}
+                >
+                  <img src={image.url} alt={image.alt || project.title} loading="lazy" className="w-full h-full object-contain" />
+                </button>
                 {image.alt && <figcaption className="p-4 text-sm text-slate-500">{image.alt}</figcaption>}
               </figure>
             ))}
           </div>
         </section>
+      )}
+
+      {lightboxImage && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Screenshot preview"
+          onClick={() => setLightboxImage(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightboxImage(null)}
+            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+            aria-label="Close screenshot preview"
+          >
+            ✕
+          </button>
+          <figure className="max-w-6xl w-full" onClick={(event) => event.stopPropagation()}>
+            <img
+              src={lightboxImage.url}
+              alt={lightboxImage.alt || project.title}
+              className="w-full max-h-[85vh] object-contain rounded-2xl"
+            />
+            {lightboxImage.alt && (
+              <figcaption className="mt-4 text-center text-sm text-slate-300">{lightboxImage.alt}</figcaption>
+            )}
+          </figure>
+        </div>
       )}
 
       <div className="bg-brand-navy rounded-3xl p-8 md:p-10 text-white">

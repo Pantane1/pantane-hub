@@ -275,6 +275,7 @@ const AdminProjects: React.FC = () => {
         isFeatured: false,
         displayOrder: String(project.displayOrder || 0),
       });
+      setEditingId(project.id);
       setImportOpen(false);
       setSuccess(res.data.alreadyImported ? 'Repository already imported. Editing existing draft.' : 'GitHub repository imported as a draft.');
     } catch (err: any) {
