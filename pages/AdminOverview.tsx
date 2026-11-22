@@ -67,13 +67,13 @@ const AdminOverview: React.FC = () => {
         <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
           <h2 className="text-lg font-bold text-brand-navy mb-3" style={{ fontFamily: 'Syne, sans-serif' }}>Quick access</h2>
           <div className="space-y-2">
-            <Link to="/admin/journal" className="block px-4 py-3 rounded-xl bg-slate-50 hover:bg-brand-primary hover:text-white transition-colors font-bold text-sm text-slate-700">
+            <Link to="/journal" className="block px-4 py-3 rounded-xl bg-slate-50 hover:bg-brand-primary hover:text-white transition-colors font-bold text-sm text-slate-700">
               Manage Journal
             </Link>
-            <Link to="/admin/sharp" className="block px-4 py-3 rounded-xl bg-slate-50 hover:bg-brand-primary hover:text-white transition-colors font-bold text-sm text-slate-700">
+            <Link to="/sharp" className="block px-4 py-3 rounded-xl bg-slate-50 hover:bg-brand-primary hover:text-white transition-colors font-bold text-sm text-slate-700">
               Manage Sharp
             </Link>
-            <Link to="/admin/inquiries" className="block px-4 py-3 rounded-xl bg-slate-50 hover:bg-brand-primary hover:text-white transition-colors font-bold text-sm text-slate-700">
+            <Link to="/inquiries" className="block px-4 py-3 rounded-xl bg-slate-50 hover:bg-brand-primary hover:text-white transition-colors font-bold text-sm text-slate-700">
               Project Inquiries
             </Link>
           </div>

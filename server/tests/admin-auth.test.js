@@ -69,7 +69,7 @@ test.afterEach(async () => {
 test('successful login creates a secure session', async () => {
   const res = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
 
@@ -87,7 +87,7 @@ test('successful login creates a secure session', async () => {
 test('incorrect password is rejected with a generic error', async () => {
   const res = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'wrong-password' }),
   });
 
@@ -99,7 +99,7 @@ test('incorrect password is rejected with a generic error', async () => {
 test('missing password is rejected', async () => {
   const res = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({}),
   });
 
@@ -109,7 +109,7 @@ test('missing password is rejected', async () => {
 test('invalid request body is rejected', async () => {
   const res = await fetch(`${baseUrl}/admin/login`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: 'not-json',
   });
 
@@ -119,13 +119,13 @@ test('invalid request body is rejected', async () => {
 test('valid session can be verified', async () => {
   const login = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
   const cookie = cookieFrom(login);
 
   const res = await request('/admin/session', {
-    headers: { Cookie: cookie },
+    headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie },
   });
 
   assert.equal(res.status, 200);
@@ -142,7 +142,7 @@ test('invalid session is rejected', async () => {
 test('logout invalidates the session', async () => {
   const login = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
   const cookie = cookieFrom(login);
@@ -150,12 +150,12 @@ test('logout invalidates the session', async () => {
 
   const logout = await request('/admin/logout', {
     method: 'POST',
-    headers: { Cookie: cookie, 'X-CSRF-Token': csrfToken },
+    headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie, 'X-CSRF-Token': csrfToken },
   });
   assert.equal(logout.status, 200);
 
   const session = await request('/admin/session', {
-    headers: { Cookie: cookie },
+    headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie },
   });
   assert.equal(session.status, 401);
 });
@@ -168,7 +168,7 @@ test('unauthenticated Journal read is rejected', async () => {
 test('unauthenticated Journal write is rejected', async () => {
   const res = await request('/admin/journal', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ posts: [], sha: 'x' }),
   });
   assert.equal(res.status, 401);
@@ -177,7 +177,7 @@ test('unauthenticated Journal write is rejected', async () => {
 test('unauthenticated Sharp write is rejected', async () => {
   const res = await request('/admin/sharp', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ deals: [], sha: 'x' }),
   });
   assert.equal(res.status, 401);
@@ -185,7 +185,7 @@ test('unauthenticated Sharp write is rejected', async () => {
 
 test('legacy bearer password authentication is rejected', async () => {
   const res = await request('/admin/journal', {
-    headers: { Authorization: 'Bearer old-plaintext-password' },
+    headers: { 'Origin': 'http://me.localhost:5173',  Authorization: 'Bearer old-plaintext-password' },
   });
   assert.equal(res.status, 401);
 });
@@ -193,13 +193,13 @@ test('legacy bearer password authentication is rejected', async () => {
 test('authenticated administrator can read Journal content', async () => {
   const login = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
   const cookie = cookieFrom(login);
 
   const res = await request('/admin/journal', {
-    headers: { Cookie: cookie },
+    headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie },
   });
 
   assert.equal(res.status, 200);
@@ -210,7 +210,7 @@ test('authenticated administrator can read Journal content', async () => {
 test('authenticated administrator can write Journal content with CSRF token', async () => {
   const login = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
   const cookie = cookieFrom(login);
@@ -218,7 +218,7 @@ test('authenticated administrator can write Journal content with CSRF token', as
 
   const res = await request('/admin/journal', {
     method: 'POST',
-    headers: {
+    headers: { 'Origin': 'http://me.localhost:5173', 
       'Content-Type': 'application/json',
       Cookie: cookie,
       'X-CSRF-Token': csrfToken,
@@ -232,14 +232,14 @@ test('authenticated administrator can write Journal content with CSRF token', as
 test('authenticated write without CSRF token is rejected', async () => {
   const login = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
   const cookie = cookieFrom(login);
 
   const res = await request('/admin/journal', {
     method: 'POST',
-    headers: {
+    headers: { 'Origin': 'http://me.localhost:5173', 
       'Content-Type': 'application/json',
       Cookie: cookie,
     },
@@ -253,7 +253,7 @@ test('login is rate limited after repeated failures', async () => {
   for (let i = 0; i < 5; i += 1) {
     const res = await request('/admin/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
       body: JSON.stringify({ password: 'wrong-password' }),
     });
     assert.equal(res.status, 401);
@@ -261,7 +261,7 @@ test('login is rate limited after repeated failures', async () => {
 
   const limited = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'wrong-password' }),
   });
   assert.equal(limited.status, 429);
@@ -282,7 +282,7 @@ test('malformed password hash returns 401 instead of 500', async () => {
   process.env.ADMIN_PASSWORD_HASH = 'not-a-valid-bcrypt-hash';
   const res = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
   assert.equal(res.status, 401);
@@ -292,7 +292,7 @@ test('surrounding whitespace in ADMIN_PASSWORD_HASH is tolerated', async () => {
   process.env.ADMIN_PASSWORD_HASH = `  ${bcrypt.hashSync('test-password', 10)}  `;
   const res = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
   assert.equal(res.status, 200);
@@ -301,7 +301,7 @@ test('surrounding whitespace in ADMIN_PASSWORD_HASH is tolerated', async () => {
 test('CORS preflight allows credentialed production admin requests', async () => {
   const res = await fetch(`${baseUrl}/admin/login`, {
     method: 'OPTIONS',
-    headers: {
+    headers: { 'Origin': 'http://me.localhost:5173', 
       Origin: 'https://www.pantane.is-a.dev',
       'Access-Control-Request-Method': 'POST',
       'Access-Control-Request-Headers': 'content-type',
@@ -315,7 +315,7 @@ test('CORS preflight allows credentialed production admin requests', async () =>
 
 test('CORS allows the production origin for credentialed requests', async () => {
   const res = await fetch(`${baseUrl}/admin/session`, {
-    headers: { Origin: 'https://www.pantane.is-a.dev' },
+    headers: { 'Origin': 'http://me.localhost:5173',  Origin: 'https://www.pantane.is-a.dev' },
   });
 
   assert.equal(res.status, 401);
@@ -326,7 +326,7 @@ test('CORS allows the production origin for credentialed requests', async () => 
 
 test('CORS rejects an untrusted origin', async () => {
   const res = await fetch(`${baseUrl}/admin/session`, {
-    headers: { Origin: 'https://evil.example' },
+    headers: { 'Origin': 'http://me.localhost:5173',  Origin: 'https://evil.example' },
   });
 
   assert.equal(res.status, 500);
@@ -337,7 +337,7 @@ test('CORS rejects an untrusted origin', async () => {
 test('CORS preflight allows credentialed production admin requests', async () => {
   const res = await fetch(`${baseUrl}/admin/login`, {
     method: 'OPTIONS',
-    headers: {
+    headers: { 'Origin': 'http://me.localhost:5173', 
       Origin: 'https://www.pantane.is-a.dev',
       'Access-Control-Request-Method': 'POST',
       'Access-Control-Request-Headers': 'content-type',
@@ -355,7 +355,7 @@ test('CORS preflight allows credentialed production admin requests', async () =>
 test('session cookie uses secure attributes in tests', async () => {
   const res = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
 

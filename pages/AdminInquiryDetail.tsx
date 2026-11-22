@@ -125,7 +125,7 @@ const AdminInquiryDetail: React.FC = () => {
     <div className="max-w-4xl space-y-6">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <Link to="/admin/inquiries" className="text-sm font-bold text-slate-400 hover:text-brand-primary">← Back to inquiries</Link>
+          <Link to="/inquiries" className="text-sm font-bold text-slate-400 hover:text-brand-primary">← Back to inquiries</Link>
           <h1 className="text-3xl font-extrabold text-brand-navy mt-2" style={{ fontFamily: 'Syne, sans-serif' }}>{inquiry.name}</h1>
           <p className="text-slate-500">{inquiry.email}</p>
         </div>

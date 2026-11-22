@@ -259,7 +259,7 @@ function request(path, options = {}) {
 async function login() {
   const res = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
   const body = await res.json();
@@ -292,7 +292,7 @@ test.afterEach(async () => {
 test('invalid webhook signature is rejected', async () => {
   const res = await request('/lipana-webhook', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-lipana-signature': 'invalid-signature' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json', 'x-lipana-signature': 'invalid-signature' },
     body: JSON.stringify({ event: 'transaction.success', data: { transactionId: 'txn-1', amount: 500 } }),
   });
 
@@ -304,12 +304,12 @@ test('verified webhook persists a transaction and is idempotent', async () => {
   const payload = { event: 'transaction.success', data: { transactionId: 'txn-1', amount: 500 } };
   const first = await request('/lipana-webhook', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-lipana-signature': 'valid-signature' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json', 'x-lipana-signature': 'valid-signature' },
     body: JSON.stringify(payload),
   });
   const second = await request('/lipana-webhook', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-lipana-signature': 'valid-signature' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json', 'x-lipana-signature': 'valid-signature' },
     body: JSON.stringify(payload),
   });
 
@@ -329,7 +329,7 @@ test('contact message is persisted and notification failure does not remove it',
 
   const res = await request('/contact', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ name: 'Test User', email: 'test@example.com', message: 'Hello' }),
   });
 
@@ -364,12 +364,12 @@ test('admin can list payments and communications', async () => {
 
   const { cookie } = await login();
 
-  const payments = await request('/admin/payments', { headers: { Cookie: cookie } });
+  const payments = await request('/admin/payments', { headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie } });
   assert.equal(payments.status, 200);
   const paymentsBody = await payments.json();
   assert.equal(paymentsBody.total, 1);
 
-  const communications = await request('/admin/communications', { headers: { Cookie: cookie } });
+  const communications = await request('/admin/communications', { headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie } });
   assert.equal(communications.status, 200);
   const communicationsBody = await communications.json();
   assert.equal(communicationsBody.total, 1);
@@ -391,7 +391,7 @@ test('communication notification retry records an additional attempt', async () 
 
   const retry = await request('/admin/communications/33333333-3333-4333-8333-333333333333/notify', {
     method: 'POST',
-    headers: { Cookie: cookie, 'X-CSRF-Token': csrfToken },
+    headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie, 'X-CSRF-Token': csrfToken },
   });
 
   assert.equal(retry.status, 200);
@@ -399,7 +399,7 @@ test('communication notification retry records an additional attempt', async () 
   assert.equal(body.notification.owner.status, 'sent');
 
   const detail = await request('/admin/communications/33333333-3333-4333-8333-333333333333', {
-    headers: { Cookie: cookie },
+    headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie },
   });
   const detailBody = await detail.json();
   assert.ok(detailBody.notificationAttempts.length >= 1);

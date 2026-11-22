@@ -158,7 +158,7 @@ function request(path, options = {}) {
 async function login() {
   const res = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
   const body = await res.json();
@@ -191,10 +191,10 @@ test('admin activity endpoint requires authentication', async () => {
 test('authenticated admin can load activity and settings', async () => {
   const { cookie } = await login();
 
-  const activity = await request('/admin/activity', { headers: { Cookie: cookie } });
+  const activity = await request('/admin/activity', { headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie } });
   assert.equal(activity.status, 200);
 
-  const settings = await request('/admin/settings', { headers: { Cookie: cookie } });
+  const settings = await request('/admin/settings', { headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie } });
   assert.equal(settings.status, 200);
   const body = await settings.json();
   assert.equal(body.database.configured, true);

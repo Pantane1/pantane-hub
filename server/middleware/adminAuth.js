@@ -139,6 +139,30 @@ function requireAdmin(req, res, next) {
   next();
 }
 
+const ADMIN_ALLOWED_ORIGINS = [
+  process.env.ADMIN_FRONTEND_URL,
+  'https://me.pantane.is-a.dev',
+  'http://me.localhost:5173',
+  'http://me.localhost:3000',
+].filter(Boolean);
+
+function isAdminOriginAllowed(origin) {
+  return typeof origin === 'string' && ADMIN_ALLOWED_ORIGINS.includes(origin);
+}
+
+function requireAdminOrigin(req, res, next) {
+  if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
+    return next();
+  }
+
+  const origin = req.headers.origin;
+  if (!isAdminOriginAllowed(origin)) {
+    return res.status(403).json({ error: 'Invalid request origin.' });
+  }
+
+  next();
+}
+
 function requireCsrf(req, res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
     return next();
@@ -214,6 +238,7 @@ module.exports = {
   SESSION_COOKIE,
   SESSION_TTL_MS,
   requireAdmin,
+  requireAdminOrigin,
   requireCsrf,
   getSession,
   createSession,

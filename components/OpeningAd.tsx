@@ -129,7 +129,10 @@ const OpeningAd: React.FC = () => {
   // root, so this doesn't re-fire on client-side route navigation — only
   // on an actual reload, which is the intended behavior.
   useEffect(() => {
-    if (location.pathname.startsWith('/admin')) return;
+    const isAdminHost =
+      window.location.hostname === 'me.pantane.is-a.dev' ||
+      window.location.hostname === 'me.localhost';
+    if (isAdminHost || location.pathname.startsWith('/admin')) return;
     const t = setTimeout(() => setVisible(true), 350);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps

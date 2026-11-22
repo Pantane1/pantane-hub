@@ -8,6 +8,7 @@ const journalRoute = require('./routes/journal');
 const sharpRoute = require('./routes/sharp');
 const reposRoute = require('./routes/repos');
 const chatRoute = require('./routes/chat');
+const { requireAdminOrigin } = require('./middleware/adminAuth');
 const { publicRouter: inquiryPublicRoute, adminRouter: inquiryAdminRoute } = require('./routes/inquiries');
 const { publicRouter: contactPublicRoute, adminRouter: contactAdminRoute } = require('./routes/contact');
 const paymentsAdminRoute = require('./routes/payments');
@@ -33,8 +34,11 @@ function createApp() {
         process.env.FRONTEND_URL?.replace('https://', 'https://www.'),
         'http://localhost:3000',
         'http://localhost:5173',
+        'http://me.localhost:3000',
+        'http://me.localhost:5173',
         'https://pantane.is-a.dev',
         'https://www.pantane.is-a.dev',
+        'https://me.pantane.is-a.dev',
       ].filter(Boolean);
 
       if (allowed.includes(origin)) {
@@ -68,6 +72,7 @@ function createApp() {
   app.use(express.json({ limit: '10mb' }));
 
   app.use('/stk-push', stkRoute);
+  app.use('/admin', requireAdminOrigin);
   app.use('/admin', authRoute);
   app.use('/admin', journalRoute);
   app.use('/admin', sharpRoute);
