@@ -145,7 +145,7 @@ function request(path, options = {}) {
 async function login() {
   const res = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
   const body = await res.json();
@@ -282,7 +282,7 @@ test('admin can create, update and delete a project', async () => {
 
   const create = await request('/admin/projects', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Cookie: cookie, 'X-CSRF-Token': csrfToken },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json', Cookie: cookie, 'X-CSRF-Token': csrfToken },
     body: JSON.stringify({ title: 'New Project', slug: 'new-project', tagline: 'Tagline', isPublished: false }),
   });
   assert.equal(create.status, 201);
@@ -291,7 +291,7 @@ test('admin can create, update and delete a project', async () => {
 
   const update = await request(`/admin/projects/${created.project.id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', Cookie: cookie, 'X-CSRF-Token': csrfToken },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json', Cookie: cookie, 'X-CSRF-Token': csrfToken },
     body: JSON.stringify({ title: 'Updated Project', isPublished: true, coverImage: 'https://example.com/cover.png', tagline: 'Updated' }),
   });
   assert.equal(update.status, 200);
@@ -301,7 +301,7 @@ test('admin can create, update and delete a project', async () => {
 
   const remove = await request(`/admin/projects/${created.project.id}`, {
     method: 'DELETE',
-    headers: { Cookie: cookie, 'X-CSRF-Token': csrfToken },
+    headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie, 'X-CSRF-Token': csrfToken },
   });
   assert.equal(remove.status, 200);
   assert.equal(state.projects.length, 0);
@@ -312,7 +312,7 @@ test('GitHub import creates a draft and prevents duplicates', async () => {
 
   const first = await request('/admin/projects/import/github', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Cookie: cookie, 'X-CSRF-Token': csrfToken },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json', Cookie: cookie, 'X-CSRF-Token': csrfToken },
     body: JSON.stringify({ githubRepoId: 101 }),
   });
   assert.equal(first.status, 201);
@@ -322,7 +322,7 @@ test('GitHub import creates a draft and prevents duplicates', async () => {
 
   const second = await request('/admin/projects/import/github', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Cookie: cookie, 'X-CSRF-Token': csrfToken },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json', Cookie: cookie, 'X-CSRF-Token': csrfToken },
     body: JSON.stringify({ githubRepoId: 101 }),
   });
   assert.equal(second.status, 200);
@@ -336,7 +336,7 @@ test('project image upload commits a GitHub asset and returns a public URL', asy
 
   const res = await request('/admin/projects/assets', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Cookie: cookie, 'X-CSRF-Token': csrfToken },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json', Cookie: cookie, 'X-CSRF-Token': csrfToken },
     body: JSON.stringify({ slug: 'alpha-project', filename: 'cover.png', contentType: 'image/png', data: Buffer.from('fake-image').toString('base64') }),
   });
 

@@ -231,7 +231,7 @@ function request(path, options = {}) {
 async function login() {
   const res = await request('/admin/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ password: 'test-password' }),
   });
   const body = await res.json();
@@ -260,7 +260,7 @@ test.afterEach(async () => {
 test('successful inquiry is persisted', async () => {
   const res = await request('/inquiries', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({
       service: 'Websites & Landing Pages',
       description: 'A'.repeat(20),
@@ -281,7 +281,7 @@ test('successful inquiry is persisted', async () => {
 test('invalid inquiry is rejected', async () => {
   const res = await request('/inquiries', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({ service: 'Websites & Landing Pages', description: 'short' }),
   });
 
@@ -302,12 +302,12 @@ test('duplicate submission does not create a second inquiry', async () => {
 
   const first = await request('/inquiries', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
   const second = await request('/inquiries', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
 
@@ -325,7 +325,7 @@ test('notification failure does not remove a persisted inquiry', async () => {
 
   const res = await request('/inquiries', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({
       service: 'Websites & Landing Pages',
       description: 'A'.repeat(20),
@@ -352,7 +352,7 @@ test('unauthenticated inquiry administration is rejected', async () => {
 test('authenticated administrator can list and update an inquiry', async () => {
   const create = await request('/inquiries', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({
       service: 'Websites & Landing Pages',
       description: 'A'.repeat(20),
@@ -368,20 +368,20 @@ test('authenticated administrator can list and update an inquiry', async () => {
   const { cookie, csrfToken } = await login();
 
   const list = await request('/admin/inquiries', {
-    headers: { Cookie: cookie },
+    headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie },
   });
   assert.equal(list.status, 200);
   const listBody = await list.json();
   assert.equal(listBody.total, 1);
 
   const detail = await request(`/admin/inquiries/${created.inquiry.id}`, {
-    headers: { Cookie: cookie },
+    headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie },
   });
   assert.equal(detail.status, 200);
 
   const update = await request(`/admin/inquiries/${created.inquiry.id}`, {
     method: 'PATCH',
-    headers: {
+    headers: { 'Origin': 'http://me.localhost:5173', 
       'Content-Type': 'application/json',
       Cookie: cookie,
       'X-CSRF-Token': csrfToken,
@@ -397,7 +397,7 @@ test('authenticated administrator can list and update an inquiry', async () => {
 test('inquiry status update requires CSRF token', async () => {
   const create = await request('/inquiries', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({
       service: 'Websites & Landing Pages',
       description: 'A'.repeat(20),
@@ -414,7 +414,7 @@ test('inquiry status update requires CSRF token', async () => {
 
   const res = await request(`/admin/inquiries/${created.inquiry.id}`, {
     method: 'PATCH',
-    headers: {
+    headers: { 'Origin': 'http://me.localhost:5173', 
       'Content-Type': 'application/json',
       Cookie: cookie,
     },
@@ -427,7 +427,7 @@ test('inquiry status update requires CSRF token', async () => {
 test('notification retry records an additional attempt', async () => {
   const create = await request('/inquiries', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({
       service: 'Websites & Landing Pages',
       description: 'A'.repeat(20),
@@ -444,7 +444,7 @@ test('notification retry records an additional attempt', async () => {
 
   const retry = await request(`/admin/inquiries/${created.inquiry.id}/notify`, {
     method: 'POST',
-    headers: {
+    headers: { 'Origin': 'http://me.localhost:5173', 
       Cookie: cookie,
       'X-CSRF-Token': csrfToken,
     },
@@ -455,7 +455,7 @@ test('notification retry records an additional attempt', async () => {
   assert.equal(body.notification.owner.status, 'sent');
 
   const detail = await request(`/admin/inquiries/${created.inquiry.id}`, {
-    headers: { Cookie: cookie },
+    headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie },
   });
   const detailBody = await detail.json();
   assert.ok(detailBody.notificationAttempts.length >= 2);
@@ -464,7 +464,7 @@ test('notification retry records an additional attempt', async () => {
 test('overview statistics reflect persisted inquiries', async () => {
   await request('/inquiries', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify({
       service: 'Websites & Landing Pages',
       description: 'A'.repeat(20),
@@ -478,7 +478,7 @@ test('overview statistics reflect persisted inquiries', async () => {
 
   const { cookie } = await login();
   const res = await request('/admin/overview', {
-    headers: { Cookie: cookie },
+    headers: { 'Origin': 'http://me.localhost:5173',  Cookie: cookie },
   });
 
   assert.equal(res.status, 200);

@@ -3,16 +3,16 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../contexts/AdminAuthContext';
 
 const navItems = [
-  { to: '/admin', label: 'Overview', end: true },
-  { to: '/admin/inquiries', label: 'Project Inquiries' },
-  { to: '/admin/journal', label: 'Journal' },
-  { to: '/admin/sharp', label: 'Sharp' },
-  { to: '/admin/projects', label: 'Projects' },
-  { to: '/admin/payments', label: 'Payments' },
-  { to: '/admin/communications', label: 'Communications' },
-  { to: '/admin/access', label: 'Access' },
-  { to: '/admin/activity', label: 'Activity' },
-  { to: '/admin/settings', label: 'Settings' },
+  { to: '/', label: 'Overview', end: true },
+  { to: '/inquiries', label: 'Project Inquiries' },
+  { to: '/journal', label: 'Journal' },
+  { to: '/sharp', label: 'Sharp' },
+  { to: '/projects', label: 'Projects' },
+  { to: '/payments', label: 'Payments' },
+  { to: '/communications', label: 'Communications' },
+  { to: '/access', label: 'Access' },
+  { to: '/activity', label: 'Activity' },
+  { to: '/settings', label: 'Settings' },
 ];
 
 const AdminLayout: React.FC = () => {
@@ -34,7 +34,7 @@ const AdminLayout: React.FC = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/admin', { replace: true });
+    navigate('/', { replace: true });
   };
 
   return (

@@ -38,7 +38,7 @@ function geminiResponse(text) {
 function postChat(payload) {
   return fetch(`${baseUrl}/chat`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Origin': 'http://me.localhost:5173',  'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
 }
