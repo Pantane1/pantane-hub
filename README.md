@@ -32,7 +32,7 @@
 
 | Method | Provider | Market |
 | :--- | :--- | :--- |
-| **Lipa na M-Pesa** | [Lipana](https://lipana.dev) — STK Push | Kenya 🇰🇪 |
+| **Lipa na M-Pesa** | [Lipana](https://www.pantane.is-a.dev/support) — STK Push | Kenya 🇰🇪 |
 | **PayPal** | PayPal SDK | Global 🌍 |
 | **Paystack** | Paystack Inline | Africa 🌍 |
 | **Buy Me a Coffee** | URI redirect | Global 🌍 |
