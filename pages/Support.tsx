@@ -1,93 +1,347 @@
-import React, { useState } from 'react';
-import { CoffeeIcon, WalletIcon, MpesaIcon } from '../components/Icons';
-import SupportModal from '../components/SupportModal';
-import MpesaModal from '../components/MpesaModal';
-import { SupportProvider } from '../types';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useSeo } from '../hooks/useSeo';
 import { pageSeo } from '../data/pageSeo';
 
+type SupportMode = 'support' | 'invoice';
+type SupportCurrency = 'KES' | 'USD';
+
+interface PaystackReceipt {
+  status: string;
+  reference: string;
+  amount: number | null;
+  currency: string | null;
+  paidAt: string | null;
+  channel: string | null;
+  customerEmail: string | null;
+  customerName: string | null;
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PRESETS: Record<SupportCurrency, number[]> = {
+  KES: [250, 600, 1500, 5000],
+  USD: [5, 15, 50, 100],
+};
+
 const Support: React.FC = () => {
   useSeo(pageSeo.support);
-  const [selectedProvider, setSelectedProvider] = useState<SupportProvider | null>(null);
-  const [mpesaOpen, setMpesaOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [mode, setMode] = useState<SupportMode>('support');
+  const [currency, setCurrency] = useState<SupportCurrency>('KES');
+  const [amount, setAmount] = useState('');
+  const [selectedPreset, setSelectedPreset] = useState<number | null>(null);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [note, setNote] = useState('');
+  const [clientName, setClientName] = useState('');
+  const [invoiceNumber, setInvoiceNumber] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [receipt, setReceipt] = useState<PaystackReceipt | null>(null);
+  const [verifying, setVerifying] = useState(false);
+  const verifiedRef = useRef(false);
 
-  const cards = [
-    {
-      id: SupportProvider.BUymeACoffee,
-      icon: <CoffeeIcon className="w-9 h-9" />,
-      bg: 'bg-brand-rose',
-      badge: 'bg-brand-rose/10 text-brand-burgundy',
-      title: 'Buy Me a Coffee',
-      desc: 'Fuel the late-night coding sessions.',
-      onClick: () => setSelectedProvider(SupportProvider.BUymeACoffee),
-    },
-    {
-      id: 'mpesa',
-      icon: <MpesaIcon className="w-9 h-9" />,
-      bg: 'bg-[#28a745]',
-      badge: 'bg-green-50 text-green-700',
-      title: 'Lipa na M-Pesa',
-      desc: 'Direct STK Push — Kenya only.',
-      onClick: () => setMpesaOpen(true),
-    },
-    {
-      id: SupportProvider.PayPal,
-      icon: (
-        <svg className="w-9 h-9" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M7.076 21.337H2.47a.641.641 0 01-.633-.74L4.944 3.72A1.603 1.603 0 016.525 2.38h7c3.754 0 6.41 1.533 5.405 5.896-.65 3.123-3.085 4.71-5.744 4.71H10.19l-1.34 5.61a.641.641 0 01-.625.535H7.077z"/>
-          <path d="M19.498 7.89c-.7 3.37-2.99 5.5-6.525 5.5H11l-1.528 6.4h2.15a.641.641 0 00.626-.535l1.34-5.61h2.996c2.66 0 5.095-1.587 5.744-4.71.38-1.83.07-3.26-.83-4.045z" opacity=".6"/>
-        </svg>
-      ),
-      bg: 'bg-brand-primary',
-      badge: 'bg-brand-rose/10 text-brand-burgundy',
-      title: 'PayPal',
-      desc: 'Fast and secure for international supporters.',
-      onClick: () => setSelectedProvider(SupportProvider.PayPal),
-    },
-    {
-      id: SupportProvider.Paystack,
-      icon: <WalletIcon className="w-9 h-9" />,
-      bg: 'bg-brand-navy',
-      badge: 'bg-brand-navy/5 text-brand-navy',
-      title: 'Paystack',
-      desc: 'Preferred payment option for Africa.',
-      onClick: () => setSelectedProvider(SupportProvider.Paystack),
-    },
-  ];
+  const amountValue = Number(amount);
+  const amountValid = Number.isFinite(amountValue) && amountValue > 0 && amountValue <= 1000000;
+  const emailValid = EMAIL_RE.test(email.trim());
+  const invoiceValid = mode === 'invoice'
+    ? clientName.trim().length >= 2 && invoiceNumber.trim().length >= 2
+    : true;
+  const canSubmit = amountValid && emailValid && invoiceValid && !loading && !verifying;
+
+  useEffect(() => {
+    const reference = searchParams.get('verify');
+    if (!reference || verifiedRef.current) return;
+
+    verifiedRef.current = true;
+    setVerifying(true);
+    setError(null);
+
+    const verifyPayment = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await fetch(`${apiUrl}/api/paystack/verify/${encodeURIComponent(reference)}`);
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.error || 'Payment verification failed.');
+        }
+        setReceipt(data as PaystackReceipt);
+        setSearchParams({}, { replace: true });
+      } catch (err) {
+        console.error('Paystack verification failed:', err);
+        setError('We could not verify this payment. Please contact Pantane with your payment reference.');
+        sessionStorage.removeItem(`paystack:verified:${reference}`);
+      } finally {
+        setVerifying(false);
+      }
+    };
+
+    const storageKey = `paystack:verified:${reference}`;
+    if (sessionStorage.getItem(storageKey)) return;
+    sessionStorage.setItem(storageKey, '1');
+    verifyPayment();
+  }, [searchParams, setSearchParams]);
+
+  const handlePreset = (preset: number) => {
+    setSelectedPreset(preset);
+    setAmount(String(preset));
+  };
+
+  const handleCurrencyChange = (nextCurrency: SupportCurrency) => {
+    setCurrency(nextCurrency);
+    setAmount('');
+    setSelectedPreset(null);
+  };
+
+  const handleModeChange = (nextMode: SupportMode) => {
+    setMode(nextMode);
+    setAmount('');
+    setSelectedPreset(null);
+    setError(null);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!canSubmit) return;
+
+    setLoading(true);
+    setError(null);
+
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const payload = mode === 'support'
+      ? {
+          mode,
+          amount: amountValue,
+          currency,
+          email: email.trim(),
+          name: name.trim(),
+          note: note.trim(),
+        }
+      : {
+          mode,
+          amount: amountValue,
+          currency,
+          email: email.trim(),
+          clientName: clientName.trim(),
+          invoiceNumber: invoiceNumber.trim(),
+          note: note.trim(),
+        };
+
+    try {
+      const response = await fetch(`${apiUrl}/api/paystack/initialize`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.authorizationUrl) {
+        throw new Error(data.error || 'Unable to start checkout.');
+      }
+      window.location.href = data.authorizationUrl;
+    } catch (err) {
+      console.error('Paystack initialization failed:', err);
+      setError('Unable to start checkout. Please try again or contact Pantane directly.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const receiptTitle = receipt?.status === 'successful'
+    ? 'Payment confirmed'
+    : receipt?.status === 'pending'
+      ? 'Payment pending'
+      : 'Payment not completed';
+
+  const receiptClass = receipt?.status === 'successful'
+    ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+    : receipt?.status === 'pending'
+      ? 'bg-amber-50 border-amber-200 text-amber-700'
+      : 'bg-rose-50 border-rose-200 text-rose-700';
 
   return (
     <div className="fade-in max-w-5xl mx-auto space-y-12">
+      {(receipt || verifying || error) && (
+        <div className={`rounded-[2rem] border px-6 py-5 shadow-sm ${receipt ? receiptClass : 'bg-rose-50 border-rose-200 text-rose-700'}`}>
+          {verifying && <p className="font-bold">Verifying payment…</p>}
+          {receipt && (
+            <div className="space-y-2">
+              <p className="text-xl font-extrabold" style={{ fontFamily: 'Syne, sans-serif' }}>{receiptTitle}</p>
+              <div className="grid sm:grid-cols-2 gap-2 text-sm">
+                <p><span className="font-bold">Reference:</span> {receipt.reference}</p>
+                <p><span className="font-bold">Amount:</span> {receipt.amount !== null ? `${receipt.amount} ${receipt.currency || ''}`.trim() : '—'}</p>
+                <p><span className="font-bold">Email:</span> {receipt.customerEmail || '—'}</p>
+                <p><span className="font-bold">Channel:</span> {receipt.channel || '—'}</p>
+                {receipt.paidAt && <p><span className="font-bold">Paid at:</span> {new Date(receipt.paidAt).toLocaleString()}</p>}
+              </div>
+            </div>
+          )}
+          {error && <p className="font-semibold">{error}</p>}
+        </div>
+      )}
+
       <div className="text-center space-y-4">
         <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Support the work</p>
         <h1 className="text-4xl md:text-5xl font-extrabold text-brand-navy" style={{ fontFamily: 'Syne, sans-serif' }}>
           Support the Journey.
         </h1>
         <p className="text-slate-500 max-w-xl mx-auto leading-relaxed">
-          If you like what I build, any contribution helps me keep building and learning. Pick whichever method works best for you.
+          Support Pantane’s work, or pay a client invoice securely through Paystack.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {cards.map((c) => (
+      <div className="max-w-3xl mx-auto bg-white rounded-[2rem] border border-slate-100 shadow-xl p-6 md:p-8 space-y-6">
+        <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-50 p-1">
           <button
-            key={String(c.id)}
-            onClick={c.onClick}
-            className="group bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center text-center gap-5"
+            type="button"
+            onClick={() => handleModeChange('support')}
+            className={`rounded-xl px-4 py-3 text-sm font-bold transition-colors ${mode === 'support' ? 'bg-brand-primary text-white' : 'text-slate-600 hover:text-brand-primary'}`}
           >
-            <div className={`w-18 w-16 h-16 ${c.bg} rounded-3xl flex items-center justify-center text-white shadow-lg group-hover:rotate-6 group-hover:scale-110 transition-transform duration-300`}>
-              {c.icon}
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-brand-navy mb-1" style={{ fontFamily: 'Syne, sans-serif' }}>{c.title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{c.desc}</p>
-            </div>
-            <span className={`px-4 py-1.5 ${c.badge} rounded-full text-xs font-bold`}>Support Now</span>
+            Support the Work
           </button>
-        ))}
-      </div>
+          <button
+            type="button"
+            onClick={() => handleModeChange('invoice')}
+            className={`rounded-xl px-4 py-3 text-sm font-bold transition-colors ${mode === 'invoice' ? 'bg-brand-primary text-white' : 'text-slate-600 hover:text-brand-primary'}`}
+          >
+            Pay Client Invoice
+          </button>
+        </div>
 
-      <SupportModal isOpen={!!selectedProvider} onClose={() => setSelectedProvider(null)} provider={selectedProvider} />
-      <MpesaModal   isOpen={mpesaOpen}           onClose={() => setMpesaOpen(false)} />
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Currency">
+          {(['KES', 'USD'] as SupportCurrency[]).map((option) => (
+            <button
+              key={option}
+              type="button"
+              onClick={() => handleCurrencyChange(option)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wide transition-colors ${currency === option ? 'bg-brand-navy text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+          {mode === 'support' && (
+            <>
+              <div className="space-y-2">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Quick amount</p>
+                <div className="flex flex-wrap gap-2">
+                  {PRESETS[currency].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => handlePreset(preset)}
+                      className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${selectedPreset === preset ? 'bg-brand-primary text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
+                    >
+                      {currency} {preset.toLocaleString()}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Amount</label>
+                <input
+                  type="number"
+                  min="1"
+                  step="any"
+                  value={amount}
+                  onChange={(e) => {
+                    setAmount(e.target.value);
+                    setSelectedPreset(null);
+                  }}
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
+                  placeholder={`Enter amount in ${currency}`}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Name (optional)</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
+                  placeholder="Your name"
+                />
+              </div>
+            </>
+          )}
+
+          {mode === 'invoice' && (
+            <>
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Amount</label>
+                <input
+                  type="number"
+                  min="1"
+                  step="any"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
+                  placeholder={`Enter invoice amount in ${currency}`}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Client / company name</label>
+                <input
+                  type="text"
+                  value={clientName}
+                  onChange={(e) => setClientName(e.target.value)}
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
+                  placeholder="Client or company name"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Invoice number / project scope</label>
+                <input
+                  type="text"
+                  value={invoiceNumber}
+                  onChange={(e) => setInvoiceNumber(e.target.value)}
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
+                  placeholder="Invoice # or project scope"
+                />
+              </div>
+            </>
+          )}
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Receipt email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
+              placeholder="you@example.com"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Note (optional)</label>
+            <textarea
+              rows={3}
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all resize-none"
+              placeholder="Anything you would like Pantane to know"
+            />
+          </div>
+
+          {error && <p className="text-red-500 text-xs bg-red-50 px-4 py-3 rounded-xl font-semibold">{error}</p>}
+
+          <button
+            type="submit"
+            disabled={!canSubmit}
+            className="w-full py-4 bg-brand-primary text-white rounded-2xl font-bold text-sm hover:bg-brand-burgundy transition-all active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Redirecting to Paystack…' : mode === 'support' ? 'Support Pantane' : 'Pay Invoice'}
+          </button>
+        </form>
+
+        <p className="text-center text-[10px] text-slate-300 uppercase font-black tracking-[0.3em]">Secured via Paystack</p>
+      </div>
     </div>
   );
 };

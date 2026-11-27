@@ -8,6 +8,7 @@ const journalRoute = require('./routes/journal');
 const sharpRoute = require('./routes/sharp');
 const reposRoute = require('./routes/repos');
 const chatRoute = require('./routes/chat');
+const paystackRoute = require('./routes/paystack');
 const { requireAdminOrigin } = require('./middleware/adminAuth');
 const { publicRouter: inquiryPublicRoute, adminRouter: inquiryAdminRoute } = require('./routes/inquiries');
 const { publicRouter: contactPublicRoute, adminRouter: contactAdminRoute } = require('./routes/contact');
@@ -78,6 +79,7 @@ function createApp() {
   app.use('/admin', sharpRoute);
   app.use('/repos', reposRoute);
   app.use('/chat', chatRoute);
+  app.use('/api/paystack', paystackRoute);
   app.use('/inquiries', inquiryPublicRoute);
   app.use('/contact', contactPublicRoute);
   app.use('/projects', projectsPublicRoute);
